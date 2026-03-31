@@ -221,6 +221,7 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
         <label class="filter-label">Quick Range</label>
         <div class="date-quickpicks">
           <button class="qp-btn active" id="qp-all" onclick="setQuickPick('all')">All</button>
+          <button class="qp-btn" id="qp-year" onclick="setQuickPick('year')">This Year</button>
           <button class="qp-btn" id="qp-month" onclick="setQuickPick('month')">This Month</button>
           <button class="qp-btn" id="qp-last" onclick="setQuickPick('last')">Last Month</button>
         </div>
@@ -541,6 +542,11 @@ function setQuickPick(mode){
   if(mode==='all'){
     document.getElementById('filter-date-from').value='';
     document.getElementById('filter-date-to').value='';
+  } else if(mode==='year'){
+    const from=new Date(now.getFullYear(),0,1);
+    const to=new Date(now.getFullYear(),11,31);
+    document.getElementById('filter-date-from').value=fmt(from);
+    document.getElementById('filter-date-to').value=fmt(to);
   } else if(mode==='month'){
     const from=new Date(now.getFullYear(),now.getMonth(),1);
     const to=new Date(now.getFullYear(),now.getMonth()+1,0);
