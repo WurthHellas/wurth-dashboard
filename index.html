@@ -390,9 +390,11 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
       <div class="table-section">
         <div class="table-header">
           <h3>Coverage by Rep <span id="cov-status-label" style="color:var(--text3);font-size:11px;font-weight:400;margin-left:8px"></span></h3>
-          <div class="table-controls">
-            <input class="table-search" id="cov-search" placeholder="Search rep, RSM, ASM…" oninput="renderCovTable()">
-            <button class="btn btn-reset-inline" onclick="document.getElementById('cov-search').value='';renderCovTable()">✕ Clear</button>
+          <div class="table-controls" style="flex-wrap:wrap;gap:6px">
+            <input class="table-search" id="cov-search" placeholder="Search rep…" oninput="renderCovTable()" style="width:130px">
+            <select id="cov-filter-rsm" onchange="renderCovTable()" style="width:110px;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:6px 9px;border-radius:6px;font-size:12px;outline:none;cursor:pointer"><option value="">All RSMs</option></select>
+            <select id="cov-filter-asm" onchange="renderCovTable()" style="width:110px;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:6px 9px;border-radius:6px;font-size:12px;outline:none;cursor:pointer"><option value="">All ASMs</option></select>
+            <button class="btn btn-reset-inline" onclick="resetCovFilters()">✕ Clear</button>
           </div>
         </div>
         <div class="table-wrap">
@@ -450,7 +452,7 @@ let repSortCol='visits',repSortDir=-1;
 let activeKpiFilter={cardId:null,field:null,value:null};
 let COV_DATA=[];
 let covSortCol='pct',covSortDir=1;
-let drillData=null,drillPage=1;
+let drillData=null,drillPage=1,drillSortCol='lastVisited',drillSortDir=-1;
 const PAGE_SIZE=25,DRILL_SIZE=50;
 
 window.addEventListener('DOMContentLoaded',()=>{attachListeners();fetchLive();});
@@ -496,7 +498,15 @@ async function fetchCoverageSummary(){
     const r=await fetch(SCRIPT_URL+'?action=coverage_summary');
     if(!r.ok)return;
     COV_DATA=await r.json();
-    updateCovKPIs();renderCovTable();
+    updateCovKPIs();
+  // Populate RSM/ASM dropdowns
+  const rsmVals=[...new Set(COV_DATA.map(d=>d.rsm).filter(Boolean))].sort();
+  const asmVals=[...new Set(COV_DATA.map(d=>d.asm).filter(Boolean))].sort();
+  const rsmSel=document.getElementById('cov-filter-rsm');
+  const asmSel=document.getElementById('cov-filter-asm');
+  if(rsmSel){while(rsmSel.options.length>1)rsmSel.remove(1);rsmVals.forEach(v=>{const o=document.createElement('option');o.value=o.textContent=v;rsmSel.appendChild(o);});}
+  if(asmSel){while(asmSel.options.length>1)asmSel.remove(1);asmVals.forEach(v=>{const o=document.createElement('option');o.value=o.textContent=v;asmSel.appendChild(o);});}
+  renderCovTable();
     document.getElementById('cov-status-label').textContent='';
   }catch(e){
     document.getElementById('cov-status-label').textContent='⚠ Could not load coverage data';
@@ -870,6 +880,12 @@ function updateCovKPIs(){
   document.getElementById('cov-kpi-unvisited').textContent=(total-visited).toLocaleString();
   document.getElementById('cov-kpi-pct').textContent=(total?Math.round(visited/total*100):0)+'%';
 }
+function resetCovFilters(){
+  const s=document.getElementById('cov-search');if(s)s.value='';
+  const r=document.getElementById('cov-filter-rsm');if(r)r.value='';
+  const a=document.getElementById('cov-filter-asm');if(a)a.value='';
+  renderCovTable();
+}
 function sortCov(col){
   if(covSortCol===col)covSortDir*=-1;
   else{covSortCol=col;covSortDir=(col==='rep'||col==='rsm'||col==='asm')?1:-1;}
@@ -881,8 +897,12 @@ function sortCov(col){
 }
 function renderCovTable(){
   const search=document.getElementById('cov-search').value.toLowerCase();
+  const rsmF=(document.getElementById('cov-filter-rsm')||{}).value||'';
+  const asmF=(document.getElementById('cov-filter-asm')||{}).value||'';
   let rows=[...COV_DATA];
   if(search)rows=rows.filter(d=>(d.rep+d.rsm+d.asm).toLowerCase().includes(search));
+  if(rsmF)rows=rows.filter(d=>d.rsm===rsmF);
+  if(asmF)rows=rows.filter(d=>d.asm===asmF);
   rows.sort((a,b)=>{
     let va=a[covSortCol],vb=b[covSortCol];
     if(typeof va==='string')return va.localeCompare(vb)*covSortDir;
@@ -912,8 +932,9 @@ async function openDrill(repName){
   document.getElementById('drill-title').textContent='Loading '+repName+'…';
   document.getElementById('drill-body').innerHTML='<div class="drill-empty"><span class="spinner"></span> Loading customer list…</div>';
   document.getElementById('drill-division').innerHTML='<option value="">All Divisions</option>';
-  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
-  drillData=null;drillPage=1;
+  drillData=null;drillPage=1;drillSortCol='lastVisited';drillSortDir=-1;
+  // Scroll to panel immediately so user sees the spinner
+  panel.scrollIntoView({behavior:'smooth',block:'start'});
   try{
     const r=await fetch(SCRIPT_URL+'?action=coverage&rep='+encodeURIComponent(repName));
     if(!r.ok)throw new Error('HTTP '+r.status);
@@ -924,9 +945,16 @@ async function openDrill(repName){
     const sel=document.getElementById('drill-division');
     divs.forEach(div=>{const o=document.createElement('option');o.value=o.textContent=div;sel.appendChild(o);});
     renderDrill();
+    // Scroll again after content is rendered so the full table is in view
+    setTimeout(()=>panel.scrollIntoView({behavior:'smooth',block:'start'}),50);
   }catch(e){
     document.getElementById('drill-body').innerHTML=`<div class="drill-empty">⚠ ${e.message}</div>`;
   }
+}
+function sortDrill(col){
+  if(drillSortCol===col)drillSortDir*=-1;
+  else{drillSortCol=col;drillSortDir=col==='lastVisited'?-1:1;}
+  drillPage=1;renderDrill();
 }
 function closeDrill(){document.getElementById('drill-panel').style.display='none';drillData=null;}
 function renderDrill(){
@@ -936,6 +964,19 @@ function renderDrill(){
   const search=document.getElementById('drill-search').value.toLowerCase();
   const visitedSet=new Set(drillData.visited.map(c=>c.num));
   let rows=showMode==='all'?[...drillData.unvisited,...drillData.visited]:[...drillData.unvisited];
+  // Sort drill rows
+  rows.sort((a,b)=>{
+    let va='',vb='';
+    if(drillSortCol==='status'){va=drillData.visited.map(c=>c.num).includes(a.num)?'visited':'unvisited';vb=drillData.visited.map(c=>c.num).includes(b.num)?'visited':'unvisited';}
+    else if(drillSortCol==='lastVisited'){
+      const pa=a.lastVisited?a.lastVisited.split('/'):null,pb=b.lastVisited?b.lastVisited.split('/'):null;
+      va=pa?new Date(+pa[2],+pa[1]-1,+pa[0]):new Date(0);
+      vb=pb?new Date(+pb[2],+pb[1]-1,+pb[0]):new Date(0);
+      return va<vb?-drillSortDir:va>vb?drillSortDir:0;
+    }
+    else{va=String(a[drillSortCol]||'').toLowerCase();vb=String(b[drillSortCol]||'').toLowerCase();}
+    return va<vb?-drillSortDir:va>vb?drillSortDir:0;
+  });
   if(divFilter)rows=rows.filter(c=>c.division===divFilter);
   if(search)rows=rows.filter(c=>(c.num+c.name+c.division).toLowerCase().includes(search));
   const total=rows.length,pages=Math.max(1,Math.ceil(total/DRILL_SIZE));
@@ -945,6 +986,11 @@ function renderDrill(){
     ?`${drillData.rep} — ${drillData.visitedCount} visited · ${drillData.unvisitedCount} unvisited`
     :`${drillData.rep} — ${drillData.unvisitedCount} Unvisited Customers`;
   document.getElementById('drill-title').textContent=label;
+  // Update sort indicators
+  ['num','name','division','lastVisited','status'].forEach(c=>{
+    const el=document.getElementById('dh-'+c);
+    if(el)el.textContent=drillSortCol===c?(drillSortDir===1?'↑':'↓'):'';
+  });
   if(!rows.length){
     document.getElementById('drill-body').innerHTML='<div class="drill-empty" style="color:var(--green)">✓ All customers visited for this filter!</div>';
     document.getElementById('drill-page-info').textContent='';
@@ -952,7 +998,7 @@ function renderDrill(){
     return;
   }
   document.getElementById('drill-body').innerHTML=`<div class="table-wrap"><table class="drill-table"><thead><tr>
-    <th>Customer #</th><th>Company Name</th><th>Division</th><th>Last Visited</th><th>Status</th>
+    <th onclick="sortDrill('num')" style="cursor:pointer">Customer # <span id="dh-num"></span></th><th onclick="sortDrill('name')" style="cursor:pointer">Company Name <span id="dh-name"></span></th><th onclick="sortDrill('division')" style="cursor:pointer">Division <span id="dh-division"></span></th><th onclick="sortDrill('lastVisited')" style="cursor:pointer">Last Visited <span id="dh-lastVisited">↓</span></th><th onclick="sortDrill('status')" style="cursor:pointer">Status <span id="dh-status"></span></th>
   </tr></thead><tbody>${rows.slice(start,end).map(c=>{
     const wasVisited=visitedSet.has(c.num);
     const lv=c.lastVisited||'';
