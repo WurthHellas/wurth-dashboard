@@ -44,24 +44,20 @@ select:hover,select:focus,input:focus{border-color:var(--accent);}
 input[type=text]::placeholder,input[type=number]::placeholder{color:var(--text3);}
 .range-row{display:grid;grid-template-columns:1fr 1fr;gap:5px;}.range-row input{background-image:none;}
 .reset-btn{width:100%;padding:8px;background:transparent;border:1px solid var(--border);color:var(--text2);border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;transition:all .2s;}.reset-btn:hover{border-color:var(--accent);color:var(--accent);}
-.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:11px;margin-bottom:20px;}
-.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px;position:relative;overflow:hidden;transition:transform .2s,border-color .2s,box-shadow .2s;}.kpi-card:hover{transform:translateY(-2px);border-color:var(--accent);}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:11px;margin-bottom:20px;}
+.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px;position:relative;overflow:hidden;transition:transform .2s,border-color .2s,box-shadow .2s;}
+.kpi-card:hover{transform:translateY(-2px);border-color:var(--accent);}
 .kpi-card.clickable{cursor:pointer;}.kpi-card.clickable:hover{box-shadow:0 4px 20px rgba(230,57,70,0.2);}
 .kpi-card.active-filter{border-color:var(--card-accent,var(--accent));box-shadow:0 0 0 2px var(--card-accent,var(--accent));background:var(--surface2);}
 .kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--card-accent,var(--accent));}
 .kpi-click-hint{font-size:9px;color:var(--text3);margin-top:4px;letter-spacing:.5px;}
 .kpi-card.active-filter .kpi-click-hint{color:var(--card-accent,var(--accent));}
-.rep-table th{background:var(--surface2);padding:9px 12px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2);text-align:left;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;white-space:nowrap;transition:color .2s;}
-.rep-table th:hover{color:var(--accent);}
-.rep-table th.rep-sort-asc::after{content:' ↑';color:var(--accent);}
-.rep-table th.rep-sort-desc::after{content:' ↓';color:var(--accent);}
-.rep-table tr.top-rep td{background:rgba(6,214,160,0.04);}
-.date-quickpicks{display:flex;gap:4px;margin-bottom:8px;}
-.qp-btn{padding:4px 10px;border-radius:5px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;letter-spacing:.3px;}
-.qp-btn:hover,.qp-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
 .kpi-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);margin-bottom:5px;}
 .kpi-value{font-family:var(--font-display);font-size:28px;font-weight:800;color:var(--card-accent,var(--text));line-height:1;}
 .kpi-sub{font-size:10px;color:var(--text3);margin-top:3px;}
+.date-quickpicks{display:flex;gap:4px;margin-bottom:8px;}
+.qp-btn{padding:4px 10px;border-radius:5px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;letter-spacing:.3px;}
+.qp-btn:hover,.qp-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
 .charts-grid{display:grid;gap:14px;margin-bottom:14px;}
 .chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:15px;}
 .chart-title{font-family:var(--font-display);font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2);margin-bottom:12px;display:flex;align-items:center;gap:7px;}
@@ -71,12 +67,15 @@ input[type=text]::placeholder,input[type=number]::placeholder{color:var(--text3)
 .table-header h3{font-family:var(--font-display);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
 .table-controls{display:flex;align-items:center;gap:8px;}
 .table-search{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:6px 11px;border-radius:6px;font-size:12px;outline:none;width:200px;}.table-search:focus{border-color:var(--accent);}
+.table-search::placeholder{color:var(--text3);}
 .table-wrap{overflow-x:auto;}
 table{width:100%;border-collapse:collapse;}
 thead th{background:var(--surface2);padding:8px 10px;text-align:left;font-family:var(--font-display);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);white-space:nowrap;cursor:pointer;user-select:none;border-bottom:1px solid var(--border);transition:color .2s;}
 thead th:hover{color:var(--accent);}
-thead th.sort-asc::after{content:' ↑';color:var(--accent);}thead th.sort-desc::after{content:' ↓';color:var(--accent);}
-tbody tr{border-bottom:1px solid var(--border);transition:background .15s;cursor:pointer;}tbody tr:hover{background:var(--surface2);}
+thead th.sort-asc::after{content:' ↑';color:var(--accent);}
+thead th.sort-desc::after{content:' ↓';color:var(--accent);}
+tbody tr{border-bottom:1px solid var(--border);transition:background .15s;cursor:pointer;}
+tbody tr:hover{background:var(--surface2);}
 tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;overflow:hidden;text-overflow:ellipsis;}
 .badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;}
 .by{background:rgba(6,214,160,.15);color:var(--green);border:1px solid rgba(6,214,160,.3);}
@@ -108,27 +107,63 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
 .modal-notes{background:var(--surface2);border-radius:6px;padding:11px;font-size:12px;line-height:1.7;border-left:3px solid var(--accent);}
 .modal-notes-label{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:6px;}
 .tabs{display:flex;gap:3px;margin-bottom:18px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:4px;width:fit-content;}
-.tab{padding:7px 17px;border-radius:7px;cursor:pointer;font-size:12px;font-weight:600;color:var(--text2);transition:all .2s;}.tab.active{background:var(--accent);color:#fff;}
+.tab{padding:7px 17px;border-radius:7px;cursor:pointer;font-size:12px;font-weight:600;color:var(--text2);transition:all .2s;}
+.tab.active{background:var(--accent);color:#fff;}
 .tab-content{display:none;}.tab-content.active{display:block;}
+/* Rep table */
 .rep-table{width:100%;border-collapse:collapse;}
-.rep-table th{background:var(--surface2);padding:9px 12px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2);text-align:left;border-bottom:1px solid var(--border);}
+.rep-table th{background:var(--surface2);padding:9px 12px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2);text-align:left;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;white-space:nowrap;transition:color .2s;}
+.rep-table th:hover{color:var(--accent);}
+.rep-table th.rep-sort-asc::after{content:' ↑';color:var(--accent);}
+.rep-table th.rep-sort-desc::after{content:' ↓';color:var(--accent);}
 .rep-table td{padding:9px 12px;border-bottom:1px solid var(--border);font-size:12px;}
 .rep-table tr:hover td{background:var(--surface2);}
-.rep-table tr.top-rep:hover td{background:rgba(6,214,160,0.08);}
-::-webkit-scrollbar{width:5px;height:5px;}::-webkit-scrollbar-track{background:var(--surface);}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}::-webkit-scrollbar-thumb:hover{background:var(--accent);}
-@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
-.kpi-card,.chart-card,.table-section{animation:fadeIn .35s ease both;}
-
-/* ── MOBILE FILTER DRAWER ─────────────────────────────────────── */
+/* Coverage */
+.cov-kpi-row{display:flex;gap:11px;margin-bottom:16px;flex-wrap:wrap;}
+.cov-kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;flex:1;min-width:130px;position:relative;overflow:hidden;}
+.cov-kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--card-accent,var(--accent));}
+.cov-kpi-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);margin-bottom:5px;}
+.cov-kpi-value{font-family:var(--font-display);font-size:26px;font-weight:800;color:var(--card-accent,var(--text));line-height:1;}
+.cov-kpi-sub{font-size:10px;color:var(--text3);margin-top:2px;}
+.cov-table{width:100%;border-collapse:collapse;}
+.cov-table th{background:var(--surface2);padding:9px 12px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2);text-align:left;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;white-space:nowrap;transition:color .2s;}
+.cov-table th:hover{color:var(--accent);}
+.cov-table th.cov-sort-asc::after{content:' ↑';color:var(--accent);}
+.cov-table th.cov-sort-desc::after{content:' ↓';color:var(--accent);}
+.cov-table td{padding:9px 12px;border-bottom:1px solid var(--border);font-size:12px;}
+.cov-table tr:hover td{background:var(--surface2);}
+.cov-bar-wrap{display:flex;align-items:center;gap:8px;}
+.cov-bar-bg{flex:1;height:7px;background:var(--surface3);border-radius:4px;min-width:80px;}
+.cov-bar-fill{height:100%;border-radius:4px;}
+.cov-pct-label{font-size:11px;font-weight:700;min-width:34px;text-align:right;}
+/* Drill panel */
+.drill-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-top:16px;}
+.drill-header{padding:13px 17px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.drill-header h3{font-family:var(--font-display);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+.drill-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.drill-filter{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 28px 5px 9px;border-radius:6px;font-size:12px;outline:none;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238892a4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;}
+.drill-filter:focus{border-color:var(--accent);}
+.drill-search{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 9px;border-radius:6px;font-size:12px;outline:none;width:150px;}
+.drill-search::placeholder{color:var(--text3);}
+.drill-search:focus{border-color:var(--accent);}
+.drill-table{width:100%;border-collapse:collapse;}
+.drill-table th{background:var(--surface2);padding:7px 10px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2);text-align:left;border-bottom:1px solid var(--border);}
+.drill-table td{padding:7px 10px;border-bottom:1px solid var(--border);font-size:12px;}
+.drill-table tr:hover td{background:var(--surface2);}
+.drill-empty{padding:32px;text-align:center;color:var(--text3);font-size:13px;}
+/* Filter drawer */
 .filter-toggle{display:none;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:14px;}
-.filter-toggle .filter-count{background:var(--accent);color:#fff;border-radius:10px;padding:1px 7px;font-size:11px;font-weight:700;display:none;}
-.filter-toggle .filter-count.has-filters{display:inline;}
+.filter-count{background:var(--accent);color:#fff;border-radius:10px;padding:1px 7px;font-size:11px;font-weight:700;display:none;}
+.filter-count.has-filters{display:inline;}
 .drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:150;}
 .drawer-overlay.open{display:block;}
 .sidebar.drawer-open{transform:translateX(0)!important;}
-
-/* ── RESPONSIVE ───────────────────────────────────────────────── */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--surface);}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--accent);}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.kpi-card,.chart-card,.table-section,.cov-kpi,.drill-panel{animation:fadeIn .35s ease both;}
 @media(max-width:768px){
   .header{padding:10px 14px;}
   .header-logo .bar{height:28px;}
@@ -137,52 +172,36 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
   .live-badge{display:none;}
   .total-badge{font-size:13px;}
   .total-badge span{font-size:16px;}
-
   .sync-bar{padding:7px 14px;gap:7px;flex-wrap:wrap;}
   .btn{padding:6px 12px;font-size:11px;}
   .sync-status{width:100%;margin-left:0;font-size:10px;}
-
   .app{grid-template-columns:1fr;}
-
-  .sidebar{
-    position:fixed;top:0;left:0;height:100vh;width:290px;z-index:160;
-    transform:translateX(-100%);transition:transform .3s ease;
-    max-height:100vh;padding-top:56px;
-  }
+  .sidebar{position:fixed;top:0;left:0;height:100vh;width:290px;z-index:160;transform:translateX(-100%);transition:transform .3s ease;max-height:100vh;padding-top:56px;}
   .sidebar-close{display:flex!important;}
   .filter-toggle{display:flex;}
-
   .main{padding:12px;}
-
   .tabs{width:100%;border-radius:8px;}
-  .tab{flex:1;text-align:center;padding:8px 6px;font-size:11px;}
-
+  .tab{flex:1;text-align:center;padding:8px 4px;font-size:11px;}
   .kpi-grid{grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
   .kpi-value{font-size:24px;}
   .kpi-card{padding:10px;}
-
   .charts-grid{grid-template-columns:1fr!important;}
-
   .table-header{flex-direction:column;align-items:flex-start;gap:8px;}
   .table-controls{width:100%;flex-wrap:wrap;}
   .table-search{width:100%;}
-
   .modal{width:100%;max-width:100%;border-radius:16px 16px 0 0;position:fixed;bottom:0;left:0;right:0;max-height:90vh;padding:20px 16px;}
   .modal-overlay{align-items:flex-end;}
   .modal-grid{grid-template-columns:1fr 1fr;}
-
   .pagination{flex-direction:column;gap:8px;align-items:center;}
-
-  /* sticky first column in tables on mobile */
   .table-wrap{-webkit-overflow-scrolling:touch;}
-  tbody td:first-child, thead th:first-child{position:sticky;left:0;background:var(--surface);z-index:1;}
+  tbody td:first-child,thead th:first-child{position:sticky;left:0;background:var(--surface);z-index:1;}
   thead th:first-child{background:var(--surface2);}
-
-  /* rep table sticky first col */
   .rep-table td:first-child{position:sticky;left:0;background:var(--surface);z-index:1;}
   .rep-table th:first-child{position:sticky;left:0;background:var(--surface2);z-index:1;}
+  .cov-kpi-row{flex-direction:column;}
+  .drill-controls{width:100%;}
+  .drill-search{width:100%;}
 }
-
 @media(max-width:400px){
   .kpi-grid{grid-template-columns:1fr 1fr;}
   .kpi-value{font-size:20px;}
@@ -198,7 +217,7 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
   </div>
   <div class="header-right">
     <div class="live-badge">GOOGLE SHEETS LIVE</div>
-    <div class="total-badge"><span id="shown-reps">—</span> reps · <span id="shown-ridealongs">—</span> ride-alongs · <span id="shown-count">—</span> visits</div>
+    <div class="total-badge"><span id="shown-reps">—</span> reps · <span id="shown-count">—</span> visits</div>
   </div>
 </header>
 <div class="sync-bar">
@@ -221,13 +240,18 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
         <label class="filter-label">Quick Range</label>
         <div class="date-quickpicks">
           <button class="qp-btn active" id="qp-all" onclick="setQuickPick('all')">All</button>
-          <button class="qp-btn" id="qp-year" onclick="setQuickPick('year')">This Year</button>
           <button class="qp-btn" id="qp-month" onclick="setQuickPick('month')">This Month</button>
           <button class="qp-btn" id="qp-last" onclick="setQuickPick('last')">Last Month</button>
         </div>
       </div>
       <div class="filter-group"><label class="filter-label">Date From</label><input type="text" id="filter-date-from" placeholder="dd/mm/yyyy"></div>
       <div class="filter-group"><label class="filter-label">Date To</label><input type="text" id="filter-date-to" placeholder="dd/mm/yyyy"></div>
+    </div>
+    <div class="filter-section">
+      <div class="filter-section-title">🏢 Territory</div>
+      <div class="filter-group"><label class="filter-label">RSM</label><select id="filter-rsm"><option value="">All RSMs</option></select></div>
+      <div class="filter-group"><label class="filter-label">ASM</label><select id="filter-asm"><option value="">All ASMs</option></select></div>
+      <div class="filter-group"><label class="filter-label">Division</label><select id="filter-division"><option value="">All Divisions</option></select></div>
     </div>
     <div class="filter-section">
       <div class="filter-section-title">🏷 Account Status</div>
@@ -260,13 +284,15 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
       <div class="tab active" onclick="switchTab('overview')">Overview</div>
       <div class="tab" onclick="switchTab('data')">Data Table</div>
       <div class="tab" onclick="switchTab('reps')">Rep Performance</div>
+      <div class="tab" onclick="switchTab('coverage')">Coverage</div>
     </div>
+
+    <!-- ── OVERVIEW ── -->
     <div id="tab-overview" class="tab-content active">
       <div class="kpi-grid">
         <div class="kpi-card" style="--card-accent:var(--accent)"><div class="kpi-label">Total Visits</div><div class="kpi-value" id="kpi-total">—</div><div class="kpi-sub">filtered records</div></div>
         <div class="kpi-card" style="--card-accent:#a78bfa"><div class="kpi-label">Sales Reps</div><div class="kpi-value" id="kpi-reps">—</div><div class="kpi-sub">with ride-alongs</div></div>
         <div class="kpi-card" style="--card-accent:#38bdf8"><div class="kpi-label">Customers Visited</div><div class="kpi-value" id="kpi-customers">—</div><div class="kpi-sub">unique accounts</div></div>
-        <div class="kpi-card" style="--card-accent:#f4a261"><div class="kpi-label">Ride-Alongs</div><div class="kpi-value" id="kpi-ridealongs">—</div><div class="kpi-sub">unique rep · day pairs</div></div>
         <div class="kpi-card clickable" id="kpicard-opened" style="--card-accent:var(--green)" onclick="kpiFilter('kpicard-opened','Opened During Visit','Yes')"><div class="kpi-label">Accounts Opened</div><div class="kpi-value" id="kpi-opened">—</div><div class="kpi-sub" id="kpi-opened-pct">—</div><div class="kpi-click-hint">▶ click to filter</div></div>
         <div class="kpi-card clickable" id="kpicard-had" style="--card-accent:#06d6a0" onclick="kpiFilter('kpicard-had','Already Eshop Account','Yes')"><div class="kpi-label">Had Account</div><div class="kpi-value" id="kpi-had">—</div><div class="kpi-sub" id="kpi-had-pct">—</div><div class="kpi-click-hint">▶ click to filter</div></div>
         <div class="kpi-card clickable" id="kpicard-app" style="--card-accent:var(--blue)" onclick="kpiFilter('kpicard-app','App Engaged','Yes')"><div class="kpi-label">App Engaged</div><div class="kpi-value" id="kpi-app">—</div><div class="kpi-sub" id="kpi-app-pct">—</div><div class="kpi-click-hint">▶ click to filter</div></div>
@@ -289,33 +315,55 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
         <div class="chart-card"><div class="chart-title"><span class="dot" style="background:var(--green)"></span>Follow-Up Priority</div><div style="height:185px"><canvas id="chart-followup"></canvas></div></div>
       </div>
     </div>
+
+    <!-- ── DATA TABLE ── -->
     <div id="tab-data" class="tab-content">
       <div class="table-section">
         <div class="table-header">
           <h3>Visit Records <span id="table-count-label" style="color:var(--text2);font-size:12px;font-weight:400"></span></h3>
-          <div class="table-controls"><input class="table-search" id="table-search" placeholder="Search in results…" oninput="renderTable()"><span style="font-size:11px;color:var(--text2)" id="page-info-top"></span><button class="btn btn-reset-inline" onclick="resetFilters()">✕ Reset Filters</button></div>
+          <div class="table-controls">
+            <input class="table-search" id="table-search" placeholder="Search in results…" oninput="renderTable()">
+            <span style="font-size:11px;color:var(--text2)" id="page-info-top"></span>
+            <button class="btn btn-reset-inline" onclick="resetFilters()">✕ Reset Filters</button>
+          </div>
         </div>
         <div class="table-wrap">
           <table><thead><tr>
-            <th onclick="sortBy('Date')">Date</th><th onclick="sortBy('Sales Rep')">Sales Rep</th>
-            <th onclick="sortBy('Customer Number')">Customer #</th><th onclick="sortBy('Company Name')">Company</th><th onclick="sortBy('Already Eshop Account')">Had Acct</th>
-            <th onclick="sortBy('Opened During Visit')">Opened</th><th onclick="sortBy('App Engaged')">App</th>
-            <th onclick="sortBy('Tech Savvy Level')">Tech</th><th onclick="sortBy('Digital Behaviour')">Behaviour</th>
-            <th onclick="sortBy('Interest Level')">Interest</th><th onclick="sortBy('Opportunity Type')">Opportunity</th>
-            <th onclick="sortBy('Barrier Type')">Barrier</th><th onclick="sortBy('Follow Up Priority')">Follow-Up</th>
-            <th onclick="sortBy('Potential Score')">Score</th><th onclick="sortBy('Digital Maturity Stage')">Maturity</th><th>Notes</th>
+            <th onclick="sortBy('Date')">Date</th>
+            <th onclick="sortBy('Sales Rep')">Sales Rep</th>
+            <th onclick="sortBy('Customer Number')">Customer #</th>
+            <th onclick="sortBy('Company Name')">Company</th>
+            <th onclick="sortBy('RSM')">RSM</th>
+            <th onclick="sortBy('ASM')">ASM</th>
+            <th onclick="sortBy('Division')">Division</th>
+            <th onclick="sortBy('Already Eshop Account')">Had Acct</th>
+            <th onclick="sortBy('Opened During Visit')">Opened</th>
+            <th onclick="sortBy('App Engaged')">App</th>
+            <th onclick="sortBy('Tech Savvy Level')">Tech</th>
+            <th onclick="sortBy('Digital Behaviour')">Behaviour</th>
+            <th onclick="sortBy('Interest Level')">Interest</th>
+            <th onclick="sortBy('Opportunity Type')">Opportunity</th>
+            <th onclick="sortBy('Barrier Type')">Barrier</th>
+            <th onclick="sortBy('Follow Up Priority')">Follow-Up</th>
+            <th onclick="sortBy('Potential Score')">Score</th>
+            <th onclick="sortBy('Digital Maturity Stage')">Maturity</th>
+            <th>Notes</th>
           </tr></thead><tbody id="table-body"></tbody></table>
         </div>
-        <div class="pagination"><span id="page-info" style="font-size:11px;color:var(--text2)"></span><div class="pagination-btns" id="pagination-btns"></div></div>
+        <div class="pagination">
+          <span id="page-info" style="font-size:11px;color:var(--text2)"></span>
+          <div class="pagination-btns" id="pagination-btns"></div>
+        </div>
       </div>
     </div>
+
+    <!-- ── REP PERFORMANCE ── -->
     <div id="tab-reps" class="tab-content">
       <div class="table-section">
         <div class="table-header"><h3>Sales Rep Performance</h3><button class="btn btn-reset-inline" onclick="resetFilters()">✕ Reset Filters</button></div>
         <div class="table-wrap">
           <table class="rep-table"><thead><tr>
             <th onclick="sortRep('name')">Sales Rep</th>
-            <th onclick="sortRep('ridealongs')">Ride-Alongs</th>
             <th onclick="sortRep('visits')" class="rep-sort-desc">Visits</th>
             <th onclick="sortRep('opened')">Opened</th>
             <th onclick="sortRep('app')">App</th>
@@ -325,29 +373,89 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
             <th onclick="sortRep('avg')">Avg Score</th>
             <th onclick="sortRep('sr')">Success Rate</th>
           </tr></thead>
-          <tbody id="rep-tbody"></tbody></table>
+          <tbody id="rep-tbody"></tbody>
+          </table>
         </div>
       </div>
     </div>
+
+    <!-- ── COVERAGE ── -->
+    <div id="tab-coverage" class="tab-content">
+      <div class="cov-kpi-row">
+        <div class="cov-kpi" style="--card-accent:var(--accent)"><div class="cov-kpi-label">Total Customers</div><div class="cov-kpi-value" id="cov-kpi-total">—</div><div class="cov-kpi-sub">in Customers sheet</div></div>
+        <div class="cov-kpi" style="--card-accent:var(--green)"><div class="cov-kpi-label">Visited</div><div class="cov-kpi-value" id="cov-kpi-visited">—</div><div class="cov-kpi-sub">at least once</div></div>
+        <div class="cov-kpi" style="--card-accent:var(--accent3)"><div class="cov-kpi-label">Unvisited</div><div class="cov-kpi-value" id="cov-kpi-unvisited">—</div><div class="cov-kpi-sub">never visited</div></div>
+        <div class="cov-kpi" style="--card-accent:var(--blue)"><div class="cov-kpi-label">Overall Coverage</div><div class="cov-kpi-value" id="cov-kpi-pct">—</div><div class="cov-kpi-sub">of total base</div></div>
+      </div>
+      <div class="table-section">
+        <div class="table-header">
+          <h3>Coverage by Rep <span id="cov-status-label" style="color:var(--text3);font-size:11px;font-weight:400;margin-left:8px"></span></h3>
+          <div class="table-controls">
+            <input class="table-search" id="cov-search" placeholder="Search rep, RSM, ASM…" oninput="renderCovTable()">
+            <button class="btn btn-reset-inline" onclick="document.getElementById('cov-search').value='';renderCovTable()">✕ Clear</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="cov-table"><thead><tr>
+            <th onclick="sortCov('rep')">Sales Rep</th>
+            <th onclick="sortCov('rsm')">RSM</th>
+            <th onclick="sortCov('asm')">ASM</th>
+            <th onclick="sortCov('total')">Total</th>
+            <th onclick="sortCov('visited')">Visited</th>
+            <th onclick="sortCov('unvisited')">Unvisited</th>
+            <th onclick="sortCov('pct')" class="cov-sort-asc">Coverage %</th>
+          </tr></thead>
+          <tbody id="cov-tbody"></tbody></table>
+        </div>
+      </div>
+      <div class="drill-panel" id="drill-panel" style="display:none">
+        <div class="drill-header">
+          <h3 id="drill-title">Customers</h3>
+          <div class="drill-controls">
+            <select class="drill-filter" id="drill-division" onchange="renderDrill()"><option value="">All Divisions</option></select>
+            <select class="drill-filter" id="drill-show" onchange="renderDrill()">
+              <option value="unvisited">Unvisited only</option>
+              <option value="all">All customers</option>
+            </select>
+            <input class="drill-search" id="drill-search" placeholder="Search…" oninput="renderDrill()">
+            <button class="btn btn-reset-inline" onclick="closeDrill()">✕ Close</button>
+          </div>
+        </div>
+        <div id="drill-body"><div class="drill-empty"><span class="spinner"></span> Loading…</div></div>
+        <div class="pagination" id="drill-pagination">
+          <span id="drill-page-info" style="font-size:11px;color:var(--text2)"></span>
+          <div class="pagination-btns" id="drill-page-btns"></div>
+        </div>
+      </div>
+    </div>
+
   </main>
 </div>
+
 <div class="modal-overlay" id="modal" onclick="closeModal(event)">
   <div class="modal">
     <button class="modal-close" onclick="document.getElementById('modal').classList.remove('open')">✕</button>
-    <div class="modal-title" id="modal-title"></div><div class="modal-sub" id="modal-sub"></div>
+    <div class="modal-title" id="modal-title"></div>
+    <div class="modal-sub" id="modal-sub"></div>
     <div class="modal-grid" id="modal-grid"></div>
-    <div class="modal-notes-label">Notes</div><div class="modal-notes" id="modal-notes"></div>
+    <div class="modal-notes-label">Notes</div>
+    <div class="modal-notes" id="modal-notes"></div>
   </div>
 </div>
+
 <script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwaY-kNAECM1LgNxtksRkYZtWap0i9Q7B4URusdngRIl1i9l6uEp7h3e6i5Y9zwpKUkQQ/exec';
+const SCRIPT_URL = '<?= scriptUrl ?>';
 let ALL_DATA=[],filtered=[],sortCol='Date',sortDir=1,currentPage=1,charts={};
 let repSortCol='visits',repSortDir=-1;
 let activeKpiFilter={cardId:null,field:null,value:null};
-const PAGE_SIZE=25;
+let COV_DATA=[];
+let covSortCol='pct',covSortDir=1;
+let drillData=null,drillPage=1;
+const PAGE_SIZE=25,DRILL_SIZE=50;
 
 window.addEventListener('DOMContentLoaded',()=>{attachListeners();fetchLive();});
 
+// ── DRAWER ────────────────────────────────────────────────────────────────
 function openDrawer(){
   document.getElementById('sidebar').classList.add('drawer-open');
   document.getElementById('drawer-overlay').classList.add('open');
@@ -358,32 +466,50 @@ function closeDrawer(){
   document.getElementById('drawer-overlay').classList.remove('open');
 }
 function countActiveFilters(){
-  const fields=['filter-rep','filter-already','filter-opened','filter-app','filter-tech','filter-behaviour','filter-interest','filter-opp','filter-barrier','filter-followup','filter-maturity','filter-date-from','filter-date-to','score-min','score-max','search-input'];
-  return fields.filter(id=>{const el=document.getElementById(id);return el&&el.value!=='';}).length;
+  const ids=['filter-rep','filter-already','filter-opened','filter-app','filter-tech','filter-behaviour',
+    'filter-interest','filter-opp','filter-barrier','filter-followup','filter-maturity',
+    'filter-rsm','filter-asm','filter-division','filter-date-from','filter-date-to',
+    'score-min','score-max','search-input'];
+  return ids.filter(id=>{const el=document.getElementById(id);return el&&el.value!=='';}).length;
 }
 function updateFilterBadge(){
-  const n=countActiveFilters();
-  const el=document.getElementById('filter-count');
+  const n=countActiveFilters(),el=document.getElementById('filter-count');
   if(el){el.textContent=n;el.classList.toggle('has-filters',n>0);}
 }
 
+// ── DATA FETCH ────────────────────────────────────────────────────────────
 async function fetchLive(){
   setStatus('loading','<span class="spinner"></span> Fetching from Google Sheets…');
   try{
-    const r=await fetch(SCRIPT_URL+'?action=data',{redirect:'follow'});
-    if(!r.ok) throw new Error('HTTP '+r.status);
+    const r=await fetch(SCRIPT_URL+'?action=data');
+    if(!r.ok)throw new Error('HTTP '+r.status);
     const d=await r.json();
-    if(d.error) throw new Error(d.error);
+    if(d.error)throw new Error(d.error);
     ALL_DATA=d;
     setStatus('ok','✓ '+d.length+' records — '+new Date().toLocaleString('el-GR'));
     populateDropdowns();applyFilters();
+    fetchCoverageSummary();
   }catch(e){setStatus('err','✗ '+e.message);}
 }
-
+async function fetchCoverageSummary(){
+  try{
+    const r=await fetch(SCRIPT_URL+'?action=coverage_summary');
+    if(!r.ok)return;
+    COV_DATA=await r.json();
+    updateCovKPIs();renderCovTable();
+    document.getElementById('cov-status-label').textContent='';
+  }catch(e){
+    document.getElementById('cov-status-label').textContent='⚠ Could not load coverage data';
+  }
+}
 function setStatus(cls,html){const el=document.getElementById('sync-status');el.className='sync-status '+cls;el.innerHTML=html;}
 
+// ── EXPORT ────────────────────────────────────────────────────────────────
 function exportCSV(){
-  const cols=['Date','Sales Rep','Customer Number','Company Name','Already Eshop Account','Opened During Visit','App Engaged','Tech Savvy Level','Digital Behaviour','Interest Level','Opportunity Type','Barrier Type','Follow Up Priority','Potential Score','Digital Maturity Stage','Notes'];
+  const cols=['Date','Sales Rep','Customer Number','Company Name','RSM','ASM','Division',
+    'Already Eshop Account','Opened During Visit','App Engaged','Tech Savvy Level',
+    'Digital Behaviour','Interest Level','Opportunity Type','Barrier Type',
+    'Follow Up Priority','Potential Score','Digital Maturity Stage','Notes'];
   const esc=v=>'"'+String(v||'').replace(/"/g,'""')+'"';
   const rows=[cols.map(esc).join(',')];
   filtered.forEach(r=>rows.push(cols.map(c=>esc(r[c])).join(',')));
@@ -392,45 +518,50 @@ function exportCSV(){
   a.download='Wurth_RideAlong_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
 }
 
+// ── DROPDOWNS ─────────────────────────────────────────────────────────────
 function populateDropdowns(){
   const vals=k=>[...new Set(ALL_DATA.map(r=>r[k]).filter(v=>v&&v!==''))].sort();
-  const fill=(id,vs)=>{const s=document.getElementById(id);while(s.options.length>1)s.remove(1);vs.forEach(v=>{const o=document.createElement('option');o.value=o.textContent=v;s.appendChild(o);});};
+  const fill=(id,vs)=>{const s=document.getElementById(id);while(s.options.length>1)s.remove(1);
+    vs.forEach(v=>{const o=document.createElement('option');o.value=o.textContent=v;s.appendChild(o);});};
   fill('filter-rep',vals('Sales Rep'));fill('filter-behaviour',vals('Digital Behaviour'));
   fill('filter-opp',vals('Opportunity Type'));fill('filter-barrier',vals('Barrier Type'));
   fill('filter-maturity',vals('Digital Maturity Stage'));
+  fill('filter-rsm',vals('RSM'));fill('filter-asm',vals('ASM'));fill('filter-division',vals('Division'));
 }
 
+// ── LISTENERS ─────────────────────────────────────────────────────────────
 function attachListeners(){
-  ['filter-rep','filter-already','filter-opened','filter-app','filter-tech','filter-behaviour','filter-interest','filter-opp','filter-barrier','filter-followup','filter-maturity']
-    .forEach(id=>document.getElementById(id).addEventListener('change',()=>{
-      // if user manually changes a filter that matches an active KPI card, deactivate card
+  ['filter-rep','filter-already','filter-opened','filter-app','filter-tech','filter-behaviour',
+   'filter-interest','filter-opp','filter-barrier','filter-followup','filter-maturity',
+   'filter-rsm','filter-asm','filter-division'].forEach(id=>{
+    document.getElementById(id).addEventListener('change',()=>{
       if(activeKpiFilter.cardId){
         const sid=fieldToFilterId(activeKpiFilter.field);
         if(sid===id){
-          const el=document.getElementById(activeKpiFilter.cardId);
-          if(el)el.classList.remove('active-filter');
+          document.getElementById(activeKpiFilter.cardId)?.classList.remove('active-filter');
           activeKpiFilter={cardId:null,field:null,value:null};
         }
       }
       applyFilters();
-    }));
-  ['search-input','score-min','score-max','filter-date-from','filter-date-to']
-    .forEach(id=>document.getElementById(id).addEventListener('input',()=>{
-      // clear quick pick active state when dates typed manually
-      if(id==='filter-date-from'||id==='filter-date-to'){
+    });
+  });
+  ['search-input','score-min','score-max','filter-date-from','filter-date-to'].forEach(id=>{
+    document.getElementById(id).addEventListener('input',()=>{
+      if(id==='filter-date-from'||id==='filter-date-to')
         document.querySelectorAll('.qp-btn').forEach(b=>b.classList.remove('active'));
-      }
       applyFilters();
-    }));
+    });
+  });
 }
+function pd(s){if(!s)return null;const p=s.split('/');return p.length===3?new Date(+p[2],+p[1]-1,+p[0]):null;}
 
-function pd(s){if(!s)return null;const p=s.split('/');return p.length===3?new Date(+p[2],+p[1]-1,+p[0]):new Date(s);}
-
+// ── APPLY FILTERS ─────────────────────────────────────────────────────────
 function applyFilters(){
   const g=id=>document.getElementById(id).value;
   const rep=g('filter-rep'),already=g('filter-already'),opened=g('filter-opened'),app=g('filter-app'),
     tech=g('filter-tech'),beh=g('filter-behaviour'),interest=g('filter-interest'),opp=g('filter-opp'),
     barrier=g('filter-barrier'),followup=g('filter-followup'),maturity=g('filter-maturity'),
+    rsm=g('filter-rsm'),asm=g('filter-asm'),division=g('filter-division'),
     search=g('search-input').toLowerCase(),scMin=g('score-min'),scMax=g('score-max'),
     dfrom=g('filter-date-from'),dto=g('filter-date-to');
   const dFrom=dfrom?pd(dfrom):null,dTo=dto?pd(dto):null;
@@ -446,6 +577,9 @@ function applyFilters(){
     if(barrier&&r['Barrier Type']!==barrier)return false;
     if(followup&&r['Follow Up Priority']!==followup)return false;
     if(maturity&&r['Digital Maturity Stage']!==maturity)return false;
+    if(rsm&&r['RSM']!==rsm)return false;
+    if(asm&&r['ASM']!==asm)return false;
+    if(division&&r['Division']!==division)return false;
     if(scMin&&+r['Potential Score']<+scMin)return false;
     if(scMax&&+r['Potential Score']>+scMax)return false;
     if(dFrom){const d=pd(r['Date']);if(!d||d<dFrom)return false;}
@@ -458,25 +592,42 @@ function applyFilters(){
 }
 
 function resetFilters(){
-  ['filter-rep','filter-already','filter-opened','filter-app','filter-tech','filter-behaviour','filter-interest','filter-opp','filter-barrier','filter-followup','filter-maturity']
-    .forEach(id=>document.getElementById(id).value='');
+  ['filter-rep','filter-already','filter-opened','filter-app','filter-tech','filter-behaviour',
+   'filter-interest','filter-opp','filter-barrier','filter-followup','filter-maturity',
+   'filter-rsm','filter-asm','filter-division'].forEach(id=>document.getElementById(id).value='');
   ['search-input','score-min','score-max','filter-date-from','filter-date-to']
     .forEach(id=>document.getElementById(id).value='');
-  // clear active KPI filter
   if(activeKpiFilter.cardId){
-    const el=document.getElementById(activeKpiFilter.cardId);
-    if(el)el.classList.remove('active-filter');
+    document.getElementById(activeKpiFilter.cardId)?.classList.remove('active-filter');
     activeKpiFilter={cardId:null,field:null,value:null};
   }
-  // reset quick pick to All
   document.querySelectorAll('.qp-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('qp-all').classList.add('active');
   applyFilters();
 }
 
+// ── QUICK PICKS ───────────────────────────────────────────────────────────
+function setQuickPick(mode){
+  document.querySelectorAll('.qp-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('qp-'+mode).classList.add('active');
+  const now=new Date(),p2=n=>n<10?'0'+n:String(n);
+  const fmt=d=>p2(d.getDate())+'/'+p2(d.getMonth()+1)+'/'+d.getFullYear();
+  if(mode==='all'){document.getElementById('filter-date-from').value='';document.getElementById('filter-date-to').value='';}
+  else if(mode==='month'){
+    document.getElementById('filter-date-from').value=fmt(new Date(now.getFullYear(),now.getMonth(),1));
+    document.getElementById('filter-date-to').value=fmt(new Date(now.getFullYear(),now.getMonth()+1,0));
+  }else if(mode==='last'){
+    document.getElementById('filter-date-from').value=fmt(new Date(now.getFullYear(),now.getMonth()-1,1));
+    document.getElementById('filter-date-to').value=fmt(new Date(now.getFullYear(),now.getMonth(),0));
+  }
+  applyFilters();
+}
+
+// ── KPIs ──────────────────────────────────────────────────────────────────
 function pct(n,t){return t?Math.round(n/t*100)+'%':'0%';}
 function updateKPIs(){
-  const n=filtered.length,opened=filtered.filter(r=>r['Opened During Visit']==='Yes').length,
+  const n=filtered.length,
+    opened=filtered.filter(r=>r['Opened During Visit']==='Yes').length,
     had=filtered.filter(r=>r['Already Eshop Account']==='Yes').length,
     app=filtered.filter(r=>r['App Engaged']==='Yes').length,
     highFU=filtered.filter(r=>r['Follow Up Priority']==='High').length,
@@ -485,82 +636,50 @@ function updateKPIs(){
     avg=scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length):0,
     highInt=filtered.filter(r=>r['Interest Level']==='High').length,
     repsCount=[...new Set(filtered.map(r=>r['Sales Rep']).filter(Boolean))].length,
-    customersCount=[...new Set(filtered.map(r=>r['Customer Number']).filter(Boolean))].length;
+    custsCount=[...new Set(filtered.map(r=>r['Customer Number']).filter(Boolean))].length;
   document.getElementById('kpi-total').textContent=n.toLocaleString();
   document.getElementById('kpi-reps').textContent=repsCount;
-  document.getElementById('kpi-customers').textContent=customersCount.toLocaleString();
-  document.getElementById('kpi-opened').textContent=opened;document.getElementById('kpi-opened-pct').textContent=pct(opened,n)+' of visits';
-  document.getElementById('kpi-had').textContent=had;document.getElementById('kpi-had-pct').textContent=pct(had,n)+' of visits';
-  document.getElementById('kpi-app').textContent=app;document.getElementById('kpi-app-pct').textContent=pct(app,n)+' of visits';
-  document.getElementById('kpi-highfu').textContent=highFU;document.getElementById('kpi-eproc').textContent=eproc;
+  document.getElementById('kpi-customers').textContent=custsCount.toLocaleString();
+  document.getElementById('kpi-opened').textContent=opened;
+  document.getElementById('kpi-opened-pct').textContent=pct(opened,n)+' of visits';
+  document.getElementById('kpi-had').textContent=had;
+  document.getElementById('kpi-had-pct').textContent=pct(had,n)+' of visits';
+  document.getElementById('kpi-app').textContent=app;
+  document.getElementById('kpi-app-pct').textContent=pct(app,n)+' of visits';
+  document.getElementById('kpi-highfu').textContent=highFU;
+  document.getElementById('kpi-eproc').textContent=eproc;
   document.getElementById('kpi-avg-score').textContent=avg;
-  document.getElementById('kpi-high-int').textContent=highInt;document.getElementById('kpi-high-int-pct').textContent=pct(highInt,n)+' of visits';
+  document.getElementById('kpi-high-int').textContent=highInt;
+  document.getElementById('kpi-high-int-pct').textContent=pct(highInt,n)+' of visits';
   document.getElementById('shown-count').textContent=n.toLocaleString();
   document.getElementById('shown-reps').textContent=repsCount;
-  const ridealongs=[...new Set(filtered.map(r=>r['Sales Rep']&&r['Date']?r['Sales Rep']+'|'+r['Date']:'').filter(Boolean))].length;
-  document.getElementById('kpi-ridealongs').textContent=ridealongs;
-  document.getElementById('shown-ridealongs').textContent=ridealongs;
 }
-
-// ── KPI CARD CLICK FILTER ─────────────────────────────────────────────────
 function kpiFilter(cardId,field,value){
   const el=document.getElementById(cardId);
   if(activeKpiFilter.cardId===cardId){
-    // toggle off
     activeKpiFilter={cardId:null,field:null,value:null};
     el.classList.remove('active-filter');
-    // clear the sidebar filter too
     const sel=document.getElementById(fieldToFilterId(field));
     if(sel){sel.value='';applyFilters();}
     return;
   }
-  // clear previous active card
   if(activeKpiFilter.cardId){
-    const prev=document.getElementById(activeKpiFilter.cardId);
-    if(prev)prev.classList.remove('active-filter');
-    const prevSel=document.getElementById(fieldToFilterId(activeKpiFilter.field));
-    if(prevSel)prevSel.value='';
+    document.getElementById(activeKpiFilter.cardId)?.classList.remove('active-filter');
+    const ps=document.getElementById(fieldToFilterId(activeKpiFilter.field));
+    if(ps)ps.value='';
   }
   activeKpiFilter={cardId,field,value};
   el.classList.add('active-filter');
   const sel=document.getElementById(fieldToFilterId(field));
   if(sel){sel.value=value;applyFilters();}
 }
-function fieldToFilterId(field){
-  const m={'Opened During Visit':'filter-opened','Already Eshop Account':'filter-already',
+function fieldToFilterId(f){
+  return{'Opened During Visit':'filter-opened','Already Eshop Account':'filter-already',
     'App Engaged':'filter-app','Follow Up Priority':'filter-followup',
-    'Opportunity Type':'filter-opp','Interest Level':'filter-interest'};
-  return m[field]||'';
+    'Opportunity Type':'filter-opp','Interest Level':'filter-interest'}[f]||'';
 }
 
-// ── DATE QUICK PICKS ──────────────────────────────────────────────────────
-function setQuickPick(mode){
-  document.querySelectorAll('.qp-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('qp-'+mode).classList.add('active');
-  const now=new Date(),pad=n=>n<10?'0'+n:String(n);
-  const fmt=d=>pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear();
-  if(mode==='all'){
-    document.getElementById('filter-date-from').value='';
-    document.getElementById('filter-date-to').value='';
-  } else if(mode==='year'){
-    const from=new Date(now.getFullYear(),0,1);
-    const to=new Date(now.getFullYear(),11,31);
-    document.getElementById('filter-date-from').value=fmt(from);
-    document.getElementById('filter-date-to').value=fmt(to);
-  } else if(mode==='month'){
-    const from=new Date(now.getFullYear(),now.getMonth(),1);
-    const to=new Date(now.getFullYear(),now.getMonth()+1,0);
-    document.getElementById('filter-date-from').value=fmt(from);
-    document.getElementById('filter-date-to').value=fmt(to);
-  } else if(mode==='last'){
-    const from=new Date(now.getFullYear(),now.getMonth()-1,1);
-    const to=new Date(now.getFullYear(),now.getMonth(),0);
-    document.getElementById('filter-date-from').value=fmt(from);
-    document.getElementById('filter-date-to').value=fmt(to);
-  }
-  applyFilters();
-}
-
+// ── CHARTS ────────────────────────────────────────────────────────────────
 function mkBarH(id,labels,data,colors){
   if(charts[id])charts[id].destroy();
   charts[id]=new Chart(document.getElementById(id),{type:'bar',data:{labels,datasets:[{data,backgroundColor:colors,borderRadius:4,borderSkipped:false}]},
@@ -590,12 +709,10 @@ function updateCharts(){
   const mM={};mV.forEach(v=>mM[v]=0);filtered.forEach(r=>{if(mM[r['Digital Maturity Stage']]!==undefined)mM[r['Digital Maturity Stage']]++;});
   const nzM=mV.map((v,i)=>({v,c:mM[v],col:mC[i]})).filter(x=>x.c>0);
   mkPie('chart-maturity',nzM.map(x=>x.v.replace('- ','')),nzM.map(x=>x.c),nzM.map(x=>x.col));
-  const bV=['Prefers Personal','No Time','Not Interested','Absent','Pricing / Stock','Contract / Agreement','Technical','Company Change'];
-  const bC=['#e63946','#ffd166','#ff6b6b','#4a526a','#118ab2','#9b5de5','#06d6a0','#f4a261'];
+  const bV=['Prefers Personal','No Time','Not Interested','Absent','Pricing / Stock','Contract / Agreement','Technical','Company Change'],bC=['#e63946','#ffd166','#ff6b6b','#4a526a','#118ab2','#9b5de5','#06d6a0','#f4a261'];
   const bP=bV.map((b,i)=>({b,c:filtered.filter(r=>r['Barrier Type']===b).length,col:bC[i]})).filter(x=>x.c>0).sort((a,b)=>b.c-a.c);
   mkBarH('chart-barriers',bP.map(x=>x.b),bP.map(x=>x.c),bP.map(x=>x.col));
-  const oV=['e-Shop Order','New Registration','App Adoption','Re-Engagement','Quote Request','e-Procurement'];
-  const oC=['#06d6a0','#118ab2','#ffd166','#9b5de5','#f4a261','#e63946'];
+  const oV=['e-Shop Order','New Registration','App Adoption','Re-Engagement','Quote Request','e-Procurement'],oC=['#06d6a0','#118ab2','#ffd166','#9b5de5','#f4a261','#e63946'];
   const oP=oV.map((o,i)=>({o,c:filtered.filter(r=>r['Opportunity Type']===o).length,col:oC[i]})).filter(x=>x.c>0).sort((a,b)=>b.c-a.c);
   mkBarH('chart-opps',oP.map(x=>x.o),oP.map(x=>x.c),oP.map(x=>x.col));
   const monthly={};filtered.forEach(r=>{if(!r['Date'])return;const p=r['Date'].split('/');if(p.length<3)return;const k=p[2]+'-'+p[1];monthly[k]=(monthly[k]||0)+1;});
@@ -607,11 +724,16 @@ function updateCharts(){
   mkPie('chart-followup',['High','Medium','Low'],['High','Medium','Low'].map(f=>filtered.filter(r=>r['Follow Up Priority']===f).length),['#e63946','#ffd166','#4a526a']);
 }
 
+// ── DATA TABLE ────────────────────────────────────────────────────────────
 function sortBy(col){
   if(sortCol===col)sortDir*=-1;else{sortCol=col;sortDir=1;}
   document.querySelectorAll('thead th').forEach(th=>th.classList.remove('sort-asc','sort-desc'));
-  const cols=['Date','Sales Rep','Customer Number','Company Name','Already Eshop Account','Opened During Visit','App Engaged','Tech Savvy Level','Digital Behaviour','Interest Level','Opportunity Type','Barrier Type','Follow Up Priority','Potential Score','Digital Maturity Stage','Notes'];
-  const idx=cols.indexOf(col);if(idx>=0)document.querySelectorAll('thead th')[idx].classList.add(sortDir===1?'sort-asc':'sort-desc');
+  const cols=['Date','Sales Rep','Customer Number','Company Name','RSM','ASM','Division',
+    'Already Eshop Account','Opened During Visit','App Engaged','Tech Savvy Level',
+    'Digital Behaviour','Interest Level','Opportunity Type','Barrier Type',
+    'Follow Up Priority','Potential Score','Digital Maturity Stage','Notes'];
+  const idx=cols.indexOf(col);
+  if(idx>=0)document.querySelectorAll('thead th')[idx].classList.add(sortDir===1?'sort-asc':'sort-desc');
   renderTable();
 }
 const bYN=v=>v==='Yes'?'<span class="badge by">Yes</span>':'<span class="badge bn">No</span>';
@@ -623,10 +745,12 @@ function renderTable(){
   const ts=document.getElementById('table-search').value.toLowerCase();
   let rows=[...filtered];
   if(ts)rows=rows.filter(r=>Object.values(r).join(' ').toLowerCase().includes(ts));
-  rows.sort((a,b)=>{let va=a[sortCol]||'',vb=b[sortCol]||'';
+  rows.sort((a,b)=>{
+    let va=a[sortCol]||'',vb=b[sortCol]||'';
     if(sortCol==='Potential Score'){va=+va;vb=+vb;}
     if(sortCol==='Date'){va=pd(va)||new Date(0);vb=pd(vb)||new Date(0);}
-    return va<vb?-sortDir:va>vb?sortDir:0;});
+    return va<vb?-sortDir:va>vb?sortDir:0;
+  });
   const total=rows.length,pages=Math.max(1,Math.ceil(total/PAGE_SIZE));
   if(currentPage>pages)currentPage=1;
   const start=(currentPage-1)*PAGE_SIZE,end=Math.min(start+PAGE_SIZE,total);
@@ -635,77 +759,94 @@ function renderTable(){
   document.getElementById('table-count-label').textContent='('+total+' records)';
   document.getElementById('table-body').innerHTML=rows.slice(start,end).map(r=>`
     <tr onclick="openModal(${filtered.indexOf(r)})">
-      <td>${r['Date']}</td><td title="${r['Sales Rep']}">${r['Sales Rep']}</td>
+      <td>${r['Date']}</td>
+      <td title="${r['Sales Rep']}">${r['Sales Rep']}</td>
       <td style="font-family:monospace;font-size:11px">${r['Customer Number']}</td>
       <td style="font-weight:500" title="${r['Company Name']||''}">${r['Company Name']||'—'}</td>
-      <td>${bYN(r['Already Eshop Account'])}</td><td>${bYN(r['Opened During Visit'])}</td><td>${bYN(r['App Engaged'])}</td>
+      <td style="color:var(--text2)">${r['RSM']||'—'}</td>
+      <td style="color:var(--text2)">${r['ASM']||'—'}</td>
+      <td style="color:var(--text2)">${r['Division']||'—'}</td>
+      <td>${bYN(r['Already Eshop Account'])}</td>
+      <td>${bYN(r['Opened During Visit'])}</td>
+      <td>${bYN(r['App Engaged'])}</td>
       <td style="color:${r['Tech Savvy Level']==='High'?'#06d6a0':r['Tech Savvy Level']==='Low'?'#e63946':'#ffd166'};font-weight:600">${r['Tech Savvy Level']||'—'}</td>
       <td style="color:var(--text2)">${r['Digital Behaviour']||'—'}</td>
-      <td>${bInt(r['Interest Level'])}</td><td style="color:var(--text2)">${r['Opportunity Type']||'—'}</td>
-      <td style="color:var(--text2)">${r['Barrier Type']||'—'}</td><td>${bFU(r['Follow Up Priority'])}</td>
+      <td>${bInt(r['Interest Level'])}</td>
+      <td style="color:var(--text2)">${r['Opportunity Type']||'—'}</td>
+      <td style="color:var(--text2)">${r['Barrier Type']||'—'}</td>
+      <td>${bFU(r['Follow Up Priority'])}</td>
       <td>${bSc(r['Potential Score'])}</td>
       <td style="font-size:10px;color:var(--text2)">${r['Digital Maturity Stage']||'—'}</td>
       <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis" title="${(r['Notes']||'').replace(/"/g,'&quot;')}">${r['Notes']||'—'}</td>
     </tr>`).join('');
-  const pb=document.getElementById('pagination-btns');pb.innerHTML='';
-  const add=(lbl,pg,act,dis)=>{const b=document.createElement('button');b.className='page-btn'+(act?' active':'');b.textContent=lbl;if(!dis)b.onclick=()=>{currentPage=pg;renderTable();};else b.disabled=true;pb.appendChild(b);};
-  add('‹',currentPage-1,false,currentPage<=1);
-  const range=[];
-  if(pages<=7){for(let i=1;i<=pages;i++)range.push(i);}
-  else{range.push(1);if(currentPage>3)range.push('…');for(let i=Math.max(2,currentPage-1);i<=Math.min(pages-1,currentPage+1);i++)range.push(i);if(currentPage<pages-2)range.push('…');range.push(pages);}
-  range.forEach(p=>{if(p==='…'){const s=document.createElement('span');s.textContent='…';s.style.cssText='padding:4px 5px;color:var(--text3)';pb.appendChild(s);}else add(p,p,p===currentPage,false);});
-  add('›',currentPage+1,false,currentPage>=pages);
+  renderPagination('pagination-btns',currentPage,pages,p=>{currentPage=p;renderTable();});
 }
 
+// ── PAGINATION HELPER ─────────────────────────────────────────────────────
+function renderPagination(containerId,cur,pages,cb){
+  const pb=document.getElementById(containerId);pb.innerHTML='';
+  const add=(lbl,pg,act,dis)=>{const b=document.createElement('button');b.className='page-btn'+(act?' active':'');b.textContent=lbl;if(!dis)b.onclick=()=>cb(pg);else b.disabled=true;pb.appendChild(b);};
+  add('‹',cur-1,false,cur<=1);
+  const range=[];
+  if(pages<=7){for(let i=1;i<=pages;i++)range.push(i);}
+  else{range.push(1);if(cur>3)range.push('…');for(let i=Math.max(2,cur-1);i<=Math.min(pages-1,cur+1);i++)range.push(i);if(cur<pages-2)range.push('…');range.push(pages);}
+  range.forEach(p=>{if(p==='…'){const s=document.createElement('span');s.textContent='…';s.style.cssText='padding:4px 5px;color:var(--text3)';pb.appendChild(s);}else add(p,p,p===cur,false);});
+  add('›',cur+1,false,cur>=pages);
+}
+
+// ── MODAL ─────────────────────────────────────────────────────────────────
 function openModal(idx){
   const r=filtered[idx];if(!r)return;
-  document.getElementById('modal-title').textContent=(r['Company Name']||'Customer '+r['Customer Number']);
+  document.getElementById('modal-title').textContent=r['Company Name']||'Customer '+r['Customer Number'];
   document.getElementById('modal-sub').textContent=r['Customer Number']+'  ·  '+r['Sales Rep']+'  ·  '+r['Date'];
-  const fields=[['Company Name',r['Company Name']],['Had Account',r['Already Eshop Account']],['Opened During Visit',r['Opened During Visit']],['App Engaged',r['App Engaged']],['Tech Savvy Level',r['Tech Savvy Level']],['Digital Behaviour',r['Digital Behaviour']],['Interest Level',r['Interest Level']],['Opportunity Type',r['Opportunity Type']],['Barrier Type',r['Barrier Type']],['Follow-Up Priority',r['Follow Up Priority']],['Potential Score',(r['Potential Score']||0)+' / 100'],['Digital Maturity',r['Digital Maturity Stage']]];
+  const fields=[
+    ['Company Name',r['Company Name']],['RSM',r['RSM']],['ASM',r['ASM']],['Division',r['Division']],
+    ['Had Account',r['Already Eshop Account']],['Opened During Visit',r['Opened During Visit']],
+    ['App Engaged',r['App Engaged']],['Tech Savvy Level',r['Tech Savvy Level']],
+    ['Digital Behaviour',r['Digital Behaviour']],['Interest Level',r['Interest Level']],
+    ['Opportunity Type',r['Opportunity Type']],['Barrier Type',r['Barrier Type']],
+    ['Follow-Up Priority',r['Follow Up Priority']],['Potential Score',(r['Potential Score']||0)+' / 100'],
+    ['Digital Maturity',r['Digital Maturity Stage']]
+  ];
   document.getElementById('modal-grid').innerHTML=fields.map(([l,v])=>`<div class="modal-field"><label>${l}</label><span>${v||'—'}</span></div>`).join('');
   document.getElementById('modal-notes').textContent=r['Notes']||'No notes recorded.';
   document.getElementById('modal').classList.add('open');
 }
 function closeModal(e){if(e.target===document.getElementById('modal'))document.getElementById('modal').classList.remove('open');}
 
-function filterByRep(repName){
-  document.getElementById('filter-rep').value=repName;
-  applyFilters();
-  switchTab('data');
-}
-
+// ── REP PERFORMANCE ───────────────────────────────────────────────────────
+function filterByRep(name){document.getElementById('filter-rep').value=name;applyFilters();switchTab('data');}
 function sortRep(col){
-  if(repSortCol===col) repSortDir*=-1; else{repSortCol=col;repSortDir=col==='name'?1:-1;}
+  if(repSortCol===col)repSortDir*=-1;else{repSortCol=col;repSortDir=col==='name'?1:-1;}
   document.querySelectorAll('.rep-table th').forEach(th=>th.classList.remove('rep-sort-asc','rep-sort-desc'));
-  const cols=['name','ridealongs','visits','opened','app','highInt','highFU','eproc','avg','sr'];
+  const cols=['name','visits','opened','app','highInt','highFU','eproc','avg','sr'];
   const idx=cols.indexOf(col);
   if(idx>=0)document.querySelectorAll('.rep-table th')[idx].classList.add(repSortDir===1?'rep-sort-asc':'rep-sort-desc');
   renderRepTable();
 }
-
 function renderRepTable(){
   const reps=[...new Set(filtered.map(r=>r['Sales Rep']).filter(Boolean))];
-  const repData=reps.map(rep=>{
+  const data=reps.map(rep=>{
     const v=filtered.filter(r=>r['Sales Rep']===rep),n=v.length;
-    const opened=v.filter(r=>r['Opened During Visit']==='Yes').length,app=v.filter(r=>r['App Engaged']==='Yes').length;
-    const hI=v.filter(r=>r['Interest Level']==='High').length,hFU=v.filter(r=>r['Follow Up Priority']==='High').length;
+    const opened=v.filter(r=>r['Opened During Visit']==='Yes').length;
+    const app=v.filter(r=>r['App Engaged']==='Yes').length;
+    const hI=v.filter(r=>r['Interest Level']==='High').length;
+    const hFU=v.filter(r=>r['Follow Up Priority']==='High').length;
     const ep=v.filter(r=>r['Opportunity Type']==='e-Procurement').length;
     const sc=v.map(r=>+r['Potential Score']).filter(s=>s>0);
-    const avg=sc.length?Math.round(sc.reduce((a,b)=>a+b,0)/sc.length):0,sr=n?Math.round((opened+hI)/n*100):0;
-    const ra=[...new Set(v.map(r=>r['Date']).filter(Boolean))].length;
-    return{name:rep,ridealongs:ra,visits:n,opened,app,highInt:hI,highFU:hFU,eproc:ep,avg,sr};
+    const avg=sc.length?Math.round(sc.reduce((a,b)=>a+b,0)/sc.length):0;
+    const sr=n?Math.round((opened+hI)/n*100):0;
+    return{name:rep,visits:n,opened,app,highInt:hI,highFU:hFU,eproc:ep,avg,sr};
   });
-  repData.sort((a,b)=>{
+  data.sort((a,b)=>{
     let va=a[repSortCol],vb=b[repSortCol];
     if(typeof va==='string')return va.localeCompare(vb)*repSortDir;
     return(va-vb)*repSortDir;
   });
-  // mark top rep by success rate instead of visits
-  document.getElementById('rep-tbody').innerHTML=repData.map(d=>{
-    return`<tr style="cursor:pointer" onclick="filterByRep('${d.name.replace(/'/g,"\\'")}')">
+  document.getElementById('rep-tbody').innerHTML=data.map(d=>`
+    <tr style="cursor:pointer" onclick="filterByRep('${d.name.replace(/'/g,"\\'")}')">
       <td style="font-weight:600">${d.name}</td>
-      <td style="text-align:center;font-weight:700;color:#f4a261">${d.ridealongs}</td>
-      <td style="text-align:center;font-weight:700;color:var(--text)">${d.visits}</td>
+      <td style="text-align:center;font-weight:700">${d.visits}</td>
       <td style="text-align:center"><span style="color:var(--green);font-weight:600">${d.opened}</span><span style="color:var(--text3);font-size:10px"> (${d.visits?Math.round(d.opened/d.visits*100):0}%)</span></td>
       <td style="text-align:center">${d.app}</td>
       <td style="text-align:center;color:var(--green);font-weight:600">${d.highInt}</td>
@@ -713,20 +854,129 @@ function renderRepTable(){
       <td style="text-align:center;color:${d.eproc>0?'var(--purple)':'var(--text3)'};font-weight:600">${d.eproc}</td>
       <td style="text-align:center;font-weight:700;color:${d.avg>=60?'var(--green)':d.avg>=35?'var(--accent3)':'var(--accent)'}">${d.avg}</td>
       <td><div style="display:flex;align-items:center;gap:7px"><div style="flex:1;height:5px;background:var(--surface3);border-radius:3px"><div style="width:${d.sr}%;height:100%;background:var(--green);border-radius:3px"></div></div><span style="font-size:10px;color:var(--text2)">${d.sr}%</span></div></td>
-    </tr>`;}).join('');
-  // update header sort indicators - default is visits desc
+    </tr>`).join('');
   document.querySelectorAll('.rep-table th').forEach(th=>th.classList.remove('rep-sort-asc','rep-sort-desc'));
-  const cols=['name','ridealongs','visits','opened','app','highInt','highFU','eproc','avg','sr'];
+  const cols=['name','visits','opened','app','highInt','highFU','eproc','avg','sr'];
   const idx=cols.indexOf(repSortCol);
   if(idx>=0)document.querySelectorAll('.rep-table th')[idx].classList.add(repSortDir===1?'rep-sort-asc':'rep-sort-desc');
 }
 
+// ── COVERAGE ──────────────────────────────────────────────────────────────
+function updateCovKPIs(){
+  const total=COV_DATA.reduce((s,d)=>s+d.total,0);
+  const visited=COV_DATA.reduce((s,d)=>s+d.visited,0);
+  document.getElementById('cov-kpi-total').textContent=total.toLocaleString();
+  document.getElementById('cov-kpi-visited').textContent=visited.toLocaleString();
+  document.getElementById('cov-kpi-unvisited').textContent=(total-visited).toLocaleString();
+  document.getElementById('cov-kpi-pct').textContent=(total?Math.round(visited/total*100):0)+'%';
+}
+function sortCov(col){
+  if(covSortCol===col)covSortDir*=-1;
+  else{covSortCol=col;covSortDir=(col==='rep'||col==='rsm'||col==='asm')?1:-1;}
+  document.querySelectorAll('.cov-table th').forEach(th=>th.classList.remove('cov-sort-asc','cov-sort-desc'));
+  const cols=['rep','rsm','asm','total','visited','unvisited','pct'];
+  const idx=cols.indexOf(col);
+  if(idx>=0)document.querySelectorAll('.cov-table th')[idx].classList.add(covSortDir===1?'cov-sort-asc':'cov-sort-desc');
+  renderCovTable();
+}
+function renderCovTable(){
+  const search=document.getElementById('cov-search').value.toLowerCase();
+  let rows=[...COV_DATA];
+  if(search)rows=rows.filter(d=>(d.rep+d.rsm+d.asm).toLowerCase().includes(search));
+  rows.sort((a,b)=>{
+    let va=a[covSortCol],vb=b[covSortCol];
+    if(typeof va==='string')return va.localeCompare(vb)*covSortDir;
+    return(va-vb)*covSortDir;
+  });
+  if(!rows.length){
+    document.getElementById('cov-tbody').innerHTML='<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--text3)">No coverage data. Click Refresh to load from Customers sheet.</td></tr>';
+    return;
+  }
+  document.getElementById('cov-tbody').innerHTML=rows.map(d=>{
+    const c=d.pct>=75?'var(--green)':d.pct>=40?'var(--accent3)':'var(--accent)';
+    return`<tr style="cursor:pointer" onclick="openDrill('${d.rep.replace(/'/g,"\\'")}')">
+      <td style="font-weight:600">${d.rep}</td>
+      <td style="color:var(--text2)">${d.rsm||'—'}</td>
+      <td style="color:var(--text2)">${d.asm||'—'}</td>
+      <td style="text-align:center;font-weight:600">${d.total.toLocaleString()}</td>
+      <td style="text-align:center;color:var(--green);font-weight:600">${d.visited.toLocaleString()}</td>
+      <td style="text-align:center;color:${d.unvisited>0?'var(--accent3)':'var(--text3)'};font-weight:600">${d.unvisited.toLocaleString()}</td>
+      <td><div class="cov-bar-wrap"><div class="cov-bar-bg"><div class="cov-bar-fill" style="width:${d.pct}%;background:${c}"></div></div><span class="cov-pct-label" style="color:${c}">${d.pct}%</span></div></td>
+    </tr>`;}).join('');
+}
+
+// ── DRILL DOWN ────────────────────────────────────────────────────────────
+async function openDrill(repName){
+  const panel=document.getElementById('drill-panel');
+  panel.style.display='block';
+  document.getElementById('drill-title').textContent='Loading '+repName+'…';
+  document.getElementById('drill-body').innerHTML='<div class="drill-empty"><span class="spinner"></span> Loading customer list…</div>';
+  document.getElementById('drill-division').innerHTML='<option value="">All Divisions</option>';
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+  drillData=null;drillPage=1;
+  try{
+    const r=await fetch(SCRIPT_URL+'?action=coverage&rep='+encodeURIComponent(repName));
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const d=await r.json();
+    if(d.error)throw new Error(d.error);
+    drillData=d;
+    const divs=[...new Set([...d.unvisited,...d.visited].map(c=>c.division).filter(Boolean))].sort();
+    const sel=document.getElementById('drill-division');
+    divs.forEach(div=>{const o=document.createElement('option');o.value=o.textContent=div;sel.appendChild(o);});
+    renderDrill();
+  }catch(e){
+    document.getElementById('drill-body').innerHTML=`<div class="drill-empty">⚠ ${e.message}</div>`;
+  }
+}
+function closeDrill(){document.getElementById('drill-panel').style.display='none';drillData=null;}
+function renderDrill(){
+  if(!drillData)return;
+  const showMode=document.getElementById('drill-show').value;
+  const divFilter=document.getElementById('drill-division').value;
+  const search=document.getElementById('drill-search').value.toLowerCase();
+  const visitedSet=new Set(drillData.visited.map(c=>c.num));
+  let rows=showMode==='all'?[...drillData.unvisited,...drillData.visited]:[...drillData.unvisited];
+  if(divFilter)rows=rows.filter(c=>c.division===divFilter);
+  if(search)rows=rows.filter(c=>(c.num+c.name+c.division).toLowerCase().includes(search));
+  const total=rows.length,pages=Math.max(1,Math.ceil(total/DRILL_SIZE));
+  if(drillPage>pages)drillPage=1;
+  const start=(drillPage-1)*DRILL_SIZE,end=Math.min(start+DRILL_SIZE,total);
+  const label=showMode==='all'
+    ?`${drillData.rep} — ${drillData.visitedCount} visited · ${drillData.unvisitedCount} unvisited`
+    :`${drillData.rep} — ${drillData.unvisitedCount} Unvisited Customers`;
+  document.getElementById('drill-title').textContent=label;
+  if(!rows.length){
+    document.getElementById('drill-body').innerHTML='<div class="drill-empty" style="color:var(--green)">✓ All customers visited for this filter!</div>';
+    document.getElementById('drill-page-info').textContent='';
+    document.getElementById('drill-page-btns').innerHTML='';
+    return;
+  }
+  document.getElementById('drill-body').innerHTML=`<div class="table-wrap"><table class="drill-table"><thead><tr>
+    <th>Customer #</th><th>Company Name</th><th>Division</th><th>Last Visited</th><th>Status</th>
+  </tr></thead><tbody>${rows.slice(start,end).map(c=>{
+    const wasVisited=visitedSet.has(c.num);
+    const lv=c.lastVisited||'';
+    let daysAgo='',stale=false;
+    if(lv){const parts=lv.split('/');if(parts.length===3){daysAgo=Math.floor((new Date()-new Date(+parts[2],+parts[1]-1,+parts[0]))/86400000);stale=daysAgo>180;}}
+    return`<tr>
+      <td style="font-family:monospace;font-size:11px">${c.num}</td>
+      <td style="font-weight:500">${c.name||'—'}</td>
+      <td style="color:var(--text2)">${c.division||'—'}</td>
+      <td style="color:${stale?'var(--accent)':lv?'var(--green)':'var(--text3)'}">${lv||'Never'}${stale?' ⚠':''}${daysAgo!==''?` <span style="font-size:10px;color:var(--text3)">(${daysAgo}d ago)</span>`:''}</td>
+      <td>${wasVisited?'<span class="badge by">Visited</span>':'<span class="badge bni">Not Visited</span>'}</td>
+    </tr>`;}).join('')}</tbody></table></div>`;
+  document.getElementById('drill-page-info').textContent=`Showing ${start+1}–${end} of ${total}`;
+  renderPagination('drill-page-btns',drillPage,pages,p=>{drillPage=p;renderDrill();});
+}
+
+// ── TAB SWITCH ────────────────────────────────────────────────────────────
 function switchTab(name){
-  const names=['overview','data','reps'];
+  const names=['overview','data','reps','coverage'];
   document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',names[i]===name));
   document.querySelectorAll('.tab-content').forEach(tc=>tc.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
   if(name==='data')renderTable();
+  if(name==='coverage'&&COV_DATA.length===0)fetchCoverageSummary();
 }
 </script>
 </body>
