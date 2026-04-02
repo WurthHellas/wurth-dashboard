@@ -925,8 +925,7 @@ function updateKPIs(){
   document.getElementById('kpi-avg-score').textContent=avg;
   document.getElementById('kpi-high-int').textContent=highInt;
   document.getElementById('kpi-high-int-pct').textContent=pct(highInt,n)+' of visits';
-  document.getElementById('shown-count').textContent=n.toLocaleString();
-  document.getElementById('shown-reps').textContent=repsCount;
+  document.getElementById('shown-total').textContent=ALL_DATA.length.toLocaleString();
 }
 
 function renderOverviewOrderKPIs(){
