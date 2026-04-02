@@ -10,6 +10,8 @@
 :root{--bg:#0d0f14;--surface:#13161e;--surface2:#1a1e2a;--surface3:#21263a;--border:#2a2f45;--accent:#e63946;--accent2:#ff6b6b;--accent3:#ffd166;--green:#06d6a0;--blue:#118ab2;--purple:#9b5de5;--text:#e8eaf0;--text2:#8892a4;--text3:#4a526a;--font-display:"Barlow Condensed",sans-serif;--font-body:"Barlow",sans-serif;--radius:10px;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:14px;min-height:100vh;}
+
+/* ── HEADER ── */
 .header{background:linear-gradient(135deg,#0d0f14 0%,#1a1e2a 50%,#0d0f14 100%);border-bottom:2px solid var(--accent);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 30px rgba(230,57,70,0.15);}
 .header-logo{display:flex;align-items:center;gap:14px;}
 .header-logo .bar{width:4px;height:36px;background:var(--accent);border-radius:2px;}
@@ -22,6 +24,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-si
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
 .total-badge{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--text2);}
 .total-badge span{color:var(--accent);font-size:20px;}
+
+/* ── SYNC BAR ── */
 .sync-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:8px 28px;display:flex;align-items:center;gap:10px;}
 .btn{padding:7px 16px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .2s;letter-spacing:.5px;display:inline-flex;align-items:center;gap:6px;}
 .btn-primary{background:var(--accent);color:#fff;}.btn-primary:hover{background:#c0303b;}
@@ -31,12 +35,31 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-si
 .sync-status.ok{color:var(--green);}.sync-status.err{color:var(--accent);}.sync-status.loading{color:var(--accent3);}
 .spinner{display:inline-block;width:12px;height:12px;border:2px solid var(--border);border-top-color:var(--accent3);border-radius:50%;animation:spin .7s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.app{display:grid;grid-template-columns:265px 1fr;min-height:calc(100vh - 102px);}
-.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:16px 13px;overflow-y:auto;max-height:calc(100vh - 102px);position:sticky;top:102px;}
-.main{padding:20px;overflow-x:hidden;}
-.filter-section{margin-bottom:16px;}
+
+/* ── TOP FILTER BAR ── */
+.top-filter-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 28px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;position:sticky;top:0;z-index:90;}
+.top-filter-bar .tfb-group{display:flex;align-items:center;gap:6px;}
+.top-filter-bar .tfb-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);white-space:nowrap;}
+.tfb-select{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 28px 5px 9px;border-radius:6px;font-family:var(--font-body);font-size:12px;outline:none;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238892a4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;cursor:pointer;transition:border-color .2s;min-width:110px;}
+.tfb-select:hover,.tfb-select:focus{border-color:var(--accent);}
+.tfb-input{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 9px;border-radius:6px;font-family:var(--font-body);font-size:12px;outline:none;width:105px;transition:border-color .2s;}
+.tfb-input:focus{border-color:var(--accent);}
+.tfb-input::placeholder{color:var(--text3);}
+.tfb-divider{width:1px;height:22px;background:var(--border);margin:0 4px;}
+.tfb-qp{display:flex;gap:3px;}
+.qp-btn{padding:4px 10px;border-radius:5px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;letter-spacing:.3px;white-space:nowrap;}
+.qp-btn:hover,.qp-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+.tfb-clear{margin-left:auto;}
+
+/* ── LAYOUT ── */
+.app{display:grid;grid-template-columns:245px 1fr;min-height:calc(100vh - 140px);}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:14px 12px;overflow-y:auto;max-height:calc(100vh - 140px);position:sticky;top:140px;}
+.main{padding:18px;overflow-x:hidden;}
+
+/* ── SIDEBAR FILTERS ── */
+.filter-section{margin-bottom:14px;}
 .filter-section-title{font-family:var(--font-display);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:7px;padding-bottom:5px;border-bottom:1px solid var(--border);}
-.filter-group{margin-bottom:9px;}
+.filter-group{margin-bottom:8px;}
 .filter-label{font-size:11px;font-weight:600;color:var(--text2);margin-bottom:3px;display:block;}
 select,input[type=text],input[type=number]{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:6px 9px;border-radius:6px;font-family:var(--font-body);font-size:12px;outline:none;appearance:none;-webkit-appearance:none;transition:border-color .2s;}
 select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238892a4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;cursor:pointer;}
@@ -44,7 +67,9 @@ select:hover,select:focus,input:focus{border-color:var(--accent);}
 input[type=text]::placeholder,input[type=number]::placeholder{color:var(--text3);}
 .range-row{display:grid;grid-template-columns:1fr 1fr;gap:5px;}.range-row input{background-image:none;}
 .reset-btn{width:100%;padding:8px;background:transparent;border:1px solid var(--border);color:var(--text2);border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;transition:all .2s;}.reset-btn:hover{border-color:var(--accent);color:var(--accent);}
-.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:11px;margin-bottom:20px;}
+
+/* ── KPI CARDS ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:11px;margin-bottom:18px;}
 .kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px;position:relative;overflow:hidden;transition:transform .2s,border-color .2s,box-shadow .2s;}
 .kpi-card:hover{transform:translateY(-2px);border-color:var(--accent);}
 .kpi-card.clickable{cursor:pointer;}.kpi-card.clickable:hover{box-shadow:0 4px 20px rgba(230,57,70,0.2);}
@@ -55,18 +80,22 @@ input[type=text]::placeholder,input[type=number]::placeholder{color:var(--text3)
 .kpi-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);margin-bottom:5px;}
 .kpi-value{font-family:var(--font-display);font-size:28px;font-weight:800;color:var(--card-accent,var(--text));line-height:1;}
 .kpi-sub{font-size:10px;color:var(--text3);margin-top:3px;}
-.date-quickpicks{display:flex;gap:4px;margin-bottom:8px;}
-.qp-btn{padding:4px 10px;border-radius:5px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;letter-spacing:.3px;}
-.qp-btn:hover,.qp-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+
+/* ── SECTION DIVIDER ── */
+.section-divider{font-family:var(--font-display);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin:18px 0 10px;padding-bottom:5px;border-bottom:1px solid var(--border);}
+
+/* ── CHARTS ── */
 .charts-grid{display:grid;gap:14px;margin-bottom:14px;}
 .chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:15px;}
 .chart-title{font-family:var(--font-display);font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2);margin-bottom:12px;display:flex;align-items:center;gap:7px;}
 .chart-title .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+
+/* ── TABLES ── */
 .table-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:20px;}
-.table-header{padding:13px 17px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
+.table-header{padding:13px 17px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px;}
 .table-header h3{font-family:var(--font-display);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
-.table-controls{display:flex;align-items:center;gap:8px;}
-.table-search{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:6px 11px;border-radius:6px;font-size:12px;outline:none;width:200px;}.table-search:focus{border-color:var(--accent);}
+.table-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.table-search{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:6px 11px;border-radius:6px;font-size:12px;outline:none;width:190px;}.table-search:focus{border-color:var(--accent);}
 .table-search::placeholder{color:var(--text3);}
 .table-wrap{overflow-x:auto;}
 table{width:100%;border-collapse:collapse;}
@@ -77,6 +106,8 @@ thead th.sort-desc::after{content:' ↓';color:var(--accent);}
 tbody tr{border-bottom:1px solid var(--border);transition:background .15s;cursor:pointer;}
 tbody tr:hover{background:var(--surface2);}
 tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;overflow:hidden;text-overflow:ellipsis;}
+
+/* ── BADGES ── */
 .badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;}
 .by{background:rgba(6,214,160,.15);color:var(--green);border:1px solid rgba(6,214,160,.3);}
 .bn{background:rgba(255,255,255,.04);color:var(--text3);border:1px solid var(--border);}
@@ -91,13 +122,17 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
 .score-bar{display:flex;align-items:center;gap:5px;}
 .score-bar-bg{flex:1;height:5px;background:var(--surface3);border-radius:3px;min-width:45px;}
 .score-bar-fill{height:100%;border-radius:3px;}
+
+/* ── PAGINATION ── */
 .pagination{padding:9px 17px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border);}
 .pagination-btns{display:flex;gap:3px;}
 .page-btn{background:var(--surface2);border:1px solid var(--border);color:var(--text2);padding:4px 8px;border-radius:5px;cursor:pointer;font-size:12px;transition:all .15s;}
 .page-btn:hover,.page-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+
+/* ── MODAL ── */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center;}
 .modal-overlay.open{display:flex;}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;width:560px;max-height:80vh;overflow-y:auto;position:relative;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;width:580px;max-height:82vh;overflow-y:auto;position:relative;}
 .modal-close{position:absolute;top:14px;right:14px;background:none;border:none;color:var(--text2);font-size:20px;cursor:pointer;}
 .modal-title{font-family:var(--font-display);font-size:20px;font-weight:800;margin-bottom:3px;}
 .modal-sub{font-size:12px;color:var(--text2);margin-bottom:16px;}
@@ -106,11 +141,23 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
 .modal-field label{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text3);display:block;margin-bottom:3px;}
 .modal-notes{background:var(--surface2);border-radius:6px;padding:11px;font-size:12px;line-height:1.7;border-left:3px solid var(--accent);}
 .modal-notes-label{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:6px;}
-.tabs{display:flex;gap:3px;margin-bottom:18px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:4px;width:fit-content;}
+.modal-orders-section{margin-top:16px;}
+.modal-orders-label{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;}
+.modal-orders-kpis{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+.modal-order-kpi{background:var(--surface2);border-radius:6px;padding:8px 12px;flex:1;min-width:80px;}
+.modal-order-kpi-label{font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:2px;}
+.modal-order-kpi-value{font-family:var(--font-display);font-size:18px;font-weight:800;color:var(--green);}
+.modal-orders-table{width:100%;border-collapse:collapse;font-size:11px;}
+.modal-orders-table th{background:var(--surface3);padding:5px 8px;text-align:left;color:var(--text3);font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+.modal-orders-table td{padding:5px 8px;border-bottom:1px solid var(--border);color:var(--text2);}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:3px;margin-bottom:14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:4px;width:fit-content;}
 .tab{padding:7px 17px;border-radius:7px;cursor:pointer;font-size:12px;font-weight:600;color:var(--text2);transition:all .2s;}
 .tab.active{background:var(--accent);color:#fff;}
 .tab-content{display:none;}.tab-content.active{display:block;}
-/* Rep table */
+
+/* ── REP TABLE ── */
 .rep-table{width:100%;border-collapse:collapse;}
 .rep-table th{background:var(--surface2);padding:9px 12px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2);text-align:left;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;white-space:nowrap;transition:color .2s;}
 .rep-table th:hover{color:var(--accent);}
@@ -118,9 +165,10 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
 .rep-table th.rep-sort-desc::after{content:' ↓';color:var(--accent);}
 .rep-table td{padding:9px 12px;border-bottom:1px solid var(--border);font-size:12px;}
 .rep-table tr:hover td{background:var(--surface2);}
-/* Coverage */
+
+/* ── COVERAGE ── */
 .cov-kpi-row{display:flex;gap:11px;margin-bottom:16px;flex-wrap:wrap;}
-.cov-kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;flex:1;min-width:130px;position:relative;overflow:hidden;}
+.cov-kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;flex:1;min-width:120px;position:relative;overflow:hidden;}
 .cov-kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--card-accent,var(--accent));}
 .cov-kpi-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);margin-bottom:5px;}
 .cov-kpi-value{font-family:var(--font-display);font-size:26px;font-weight:800;color:var(--card-accent,var(--text));line-height:1;}
@@ -133,10 +181,11 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
 .cov-table td{padding:9px 12px;border-bottom:1px solid var(--border);font-size:12px;}
 .cov-table tr:hover td{background:var(--surface2);}
 .cov-bar-wrap{display:flex;align-items:center;gap:8px;}
-.cov-bar-bg{flex:1;height:7px;background:var(--surface3);border-radius:4px;min-width:80px;}
+.cov-bar-bg{flex:1;height:7px;background:var(--surface3);border-radius:4px;min-width:70px;}
 .cov-bar-fill{height:100%;border-radius:4px;}
 .cov-pct-label{font-size:11px;font-weight:700;min-width:34px;text-align:right;}
-/* Drill panel */
+
+/* ── DRILL PANEL ── */
 .drill-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-top:16px;}
 .drill-header{padding:13px 17px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
 .drill-header h3{font-family:var(--font-display);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
@@ -147,23 +196,52 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
 .drill-search::placeholder{color:var(--text3);}
 .drill-search:focus{border-color:var(--accent);}
 .drill-table{width:100%;border-collapse:collapse;}
-.drill-table th{background:var(--surface2);padding:7px 10px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2);text-align:left;border-bottom:1px solid var(--border);}
+.drill-table th{background:var(--surface2);padding:7px 10px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2);text-align:left;border-bottom:1px solid var(--border);cursor:pointer;white-space:nowrap;}
 .drill-table td{padding:7px 10px;border-bottom:1px solid var(--border);font-size:12px;}
 .drill-table tr:hover td{background:var(--surface2);}
 .drill-empty{padding:32px;text-align:center;color:var(--text3);font-size:13px;}
-/* Filter drawer */
-.filter-toggle{display:none;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:14px;}
+
+/* ── ORDERS TAB ── */
+.ord-kpi-row{display:flex;gap:11px;margin-bottom:16px;flex-wrap:wrap;}
+.ord-kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;flex:1;min-width:120px;position:relative;overflow:hidden;}
+.ord-kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--card-accent,var(--accent));}
+.ord-kpi-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);margin-bottom:5px;}
+.ord-kpi-value{font-family:var(--font-display);font-size:26px;font-weight:800;color:var(--card-accent,var(--text));line-height:1;}
+.ord-kpi-sub{font-size:10px;color:var(--text3);margin-top:2px;}
+.ord-table{width:100%;border-collapse:collapse;}
+.ord-table th{background:var(--surface2);padding:9px 12px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2);text-align:left;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;white-space:nowrap;transition:color .2s;}
+.ord-table th:hover{color:var(--accent);}
+.ord-table th.ord-sort-asc::after{content:' ↑';color:var(--accent);}
+.ord-table th.ord-sort-desc::after{content:' ↓';color:var(--accent);}
+.ord-table td{padding:9px 12px;border-bottom:1px solid var(--border);font-size:12px;}
+.ord-table tr:hover td{background:var(--surface2);}
+
+/* ── VISIT STATUS TOGGLE ── */
+.visit-status-toggle{display:flex;gap:4px;}
+.vs-btn{padding:5px 12px;border-radius:5px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;}
+.vs-btn:hover,.vs-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+
+/* ── MOBILE FILTER DRAWER ── */
+.filter-toggle{display:none;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:12px;}
 .filter-count{background:var(--accent);color:#fff;border-radius:10px;padding:1px 7px;font-size:11px;font-weight:700;display:none;}
 .filter-count.has-filters{display:inline;}
 .drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:150;}
 .drawer-overlay.open{display:block;}
 .sidebar.drawer-open{transform:translateX(0)!important;}
+
+/* ── MISC ── */
 ::-webkit-scrollbar{width:5px;height:5px;}
 ::-webkit-scrollbar-track{background:var(--surface);}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
 ::-webkit-scrollbar-thumb:hover{background:var(--accent);}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
-.kpi-card,.chart-card,.table-section,.cov-kpi,.drill-panel{animation:fadeIn .35s ease both;}
+.kpi-card,.chart-card,.table-section,.cov-kpi,.drill-panel,.ord-kpi{animation:fadeIn .35s ease both;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .top-filter-bar{padding:8px 14px;}
+  .tfb-divider{display:none;}
+}
 @media(max-width:768px){
   .header{padding:10px 14px;}
   .header-logo .bar{height:28px;}
@@ -175,19 +253,22 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
   .sync-bar{padding:7px 14px;gap:7px;flex-wrap:wrap;}
   .btn{padding:6px 12px;font-size:11px;}
   .sync-status{width:100%;margin-left:0;font-size:10px;}
+  .top-filter-bar{padding:8px 12px;gap:7px;}
+  .tfb-select,.tfb-input{min-width:90px;font-size:11px;}
+  .tfb-clear{margin-left:0;}
   .app{grid-template-columns:1fr;}
-  .sidebar{position:fixed;top:0;left:0;height:100vh;width:290px;z-index:160;transform:translateX(-100%);transition:transform .3s ease;max-height:100vh;padding-top:56px;}
+  .sidebar{position:fixed;top:0;left:0;height:100vh;width:280px;z-index:160;transform:translateX(-100%);transition:transform .3s ease;max-height:100vh;padding-top:56px;}
   .sidebar-close{display:flex!important;}
   .filter-toggle{display:flex;}
-  .main{padding:12px;}
+  .main{padding:10px;}
   .tabs{width:100%;border-radius:8px;}
-  .tab{flex:1;text-align:center;padding:8px 4px;font-size:11px;}
-  .kpi-grid{grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+  .tab{flex:1;text-align:center;padding:8px 3px;font-size:10px;}
+  .kpi-grid{grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
   .kpi-value{font-size:24px;}
   .kpi-card{padding:10px;}
   .charts-grid{grid-template-columns:1fr!important;}
-  .table-header{flex-direction:column;align-items:flex-start;gap:8px;}
-  .table-controls{width:100%;flex-wrap:wrap;}
+  .table-header{flex-direction:column;align-items:flex-start;}
+  .table-controls{width:100%;}
   .table-search{width:100%;}
   .modal{width:100%;max-width:100%;border-radius:16px 16px 0 0;position:fixed;bottom:0;left:0;right:0;max-height:90vh;padding:20px 16px;}
   .modal-overlay{align-items:flex-end;}
@@ -198,7 +279,7 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
   thead th:first-child{background:var(--surface2);}
   .rep-table td:first-child{position:sticky;left:0;background:var(--surface);z-index:1;}
   .rep-table th:first-child{position:sticky;left:0;background:var(--surface2);z-index:1;}
-  .cov-kpi-row{flex-direction:column;}
+  .cov-kpi-row,.ord-kpi-row{flex-direction:column;}
   .drill-controls{width:100%;}
   .drill-search{width:100%;}
 }
@@ -210,6 +291,8 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
 </style>
 </head>
 <body>
+
+<!-- ── HEADER ── -->
 <header class="header">
   <div class="header-logo">
     <div class="bar"></div>
@@ -220,38 +303,53 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
     <div class="total-badge"><span id="shown-reps">—</span> reps · <span id="shown-count">—</span> visits</div>
   </div>
 </header>
+
+<!-- ── SYNC BAR ── -->
 <div class="sync-bar">
   <button class="btn btn-primary" onclick="fetchLive()">⟳ Refresh Data</button>
   <button class="btn btn-export" onclick="exportCSV()">↓ Export CSV</button>
   <div class="sync-status" id="sync-status"><span class="spinner"></span> Loading…</div>
 </div>
+
+<!-- ── TOP FILTER BAR ── -->
+<div class="top-filter-bar" id="top-filter-bar">
+  <div class="tfb-group">
+    <span class="tfb-label">RSM</span>
+    <select class="tfb-select" id="tf-rsm" onchange="onTopFilterChange('rsm')"><option value="">All</option></select>
+  </div>
+  <div class="tfb-group">
+    <span class="tfb-label">ASM</span>
+    <select class="tfb-select" id="tf-asm" onchange="onTopFilterChange('asm')"><option value="">All</option></select>
+  </div>
+  <div class="tfb-group">
+    <span class="tfb-label">Rep</span>
+    <select class="tfb-select" id="tf-rep" onchange="onTopFilterChange('rep')"><option value="">All</option></select>
+  </div>
+  <div class="tfb-divider"></div>
+  <div class="tfb-group">
+    <span class="tfb-label">Period</span>
+    <div class="tfb-qp">
+      <button class="qp-btn active" id="qp-all" onclick="setQuickPick('all')">All</button>
+      <button class="qp-btn" id="qp-month" onclick="setQuickPick('month')">This Month</button>
+      <button class="qp-btn" id="qp-last" onclick="setQuickPick('last')">Last Month</button>
+    </div>
+  </div>
+  <div class="tfb-group">
+    <input class="tfb-input" type="text" id="tf-date-from" placeholder="From dd/mm/yyyy" oninput="onDateInput()">
+    <input class="tfb-input" type="text" id="tf-date-to" placeholder="To dd/mm/yyyy" oninput="onDateInput()">
+  </div>
+  <button class="btn btn-reset-inline tfb-clear" onclick="resetAllFilters()">✕ Clear All</button>
+</div>
+
 <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+
 <div class="app">
+  <!-- ── SIDEBAR (classification filters only) ── -->
   <aside class="sidebar" id="sidebar">
     <button class="sidebar-close" id="sidebar-close" onclick="closeDrawer()" style="display:none;position:absolute;top:12px;right:12px;background:none;border:none;color:var(--text2);font-size:22px;cursor:pointer;z-index:10;">✕</button>
     <div class="filter-section">
       <div class="filter-section-title">🔍 Search</div>
       <div class="filter-group"><input type="text" id="search-input" placeholder="Customer #, rep, notes…"></div>
-    </div>
-    <div class="filter-section">
-      <div class="filter-section-title">📅 Visit Info</div>
-      <div class="filter-group"><label class="filter-label">Sales Rep</label><select id="filter-rep"><option value="">All Reps</option></select></div>
-      <div class="filter-group">
-        <label class="filter-label">Quick Range</label>
-        <div class="date-quickpicks">
-          <button class="qp-btn active" id="qp-all" onclick="setQuickPick('all')">All</button>
-          <button class="qp-btn" id="qp-month" onclick="setQuickPick('month')">This Month</button>
-          <button class="qp-btn" id="qp-last" onclick="setQuickPick('last')">Last Month</button>
-        </div>
-      </div>
-      <div class="filter-group"><label class="filter-label">Date From</label><input type="text" id="filter-date-from" placeholder="dd/mm/yyyy"></div>
-      <div class="filter-group"><label class="filter-label">Date To</label><input type="text" id="filter-date-to" placeholder="dd/mm/yyyy"></div>
-    </div>
-    <div class="filter-section">
-      <div class="filter-section-title">🏢 Territory</div>
-      <div class="filter-group"><label class="filter-label">RSM</label><select id="filter-rsm"><option value="">All RSMs</option></select></div>
-      <div class="filter-group"><label class="filter-label">ASM</label><select id="filter-asm"><option value="">All ASMs</option></select></div>
-      <div class="filter-group"><label class="filter-label">Division</label><select id="filter-division"><option value="">All Divisions</option></select></div>
     </div>
     <div class="filter-section">
       <div class="filter-section-title">🏷 Account Status</div>
@@ -264,6 +362,7 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
       <div class="filter-group"><label class="filter-label">Tech Savvy Level</label><select id="filter-tech"><option value="">All</option><option>High</option><option>Medium</option><option>Low</option></select></div>
       <div class="filter-group"><label class="filter-label">Digital Behaviour</label><select id="filter-behaviour"><option value="">All</option></select></div>
       <div class="filter-group"><label class="filter-label">Interest Level</label><select id="filter-interest"><option value="">All</option><option>High</option><option>Medium</option><option>Pending</option><option>Not Interested</option><option>N/A</option></select></div>
+      <div class="filter-group"><label class="filter-label">Division</label><select id="filter-division"><option value="">All</option></select></div>
     </div>
     <div class="filter-section">
       <div class="filter-section-title">🎯 Opportunity</div>
@@ -276,19 +375,23 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
       <div class="filter-section-title">⚡ Potential Score</div>
       <div class="filter-group"><div class="range-row"><input type="number" id="score-min" placeholder="Min" min="0" max="100"><input type="number" id="score-max" placeholder="Max" min="0" max="100"></div></div>
     </div>
-    <button class="reset-btn" onclick="resetFilters()">✕ Reset All Filters</button>
+    <button class="reset-btn" onclick="resetSidebarFilters()">✕ Reset Classification Filters</button>
   </aside>
+
   <main class="main">
     <button class="filter-toggle" onclick="openDrawer()">⚙ Filters <span class="filter-count" id="filter-count">0</span></button>
+
     <div class="tabs">
       <div class="tab active" onclick="switchTab('overview')">Overview</div>
       <div class="tab" onclick="switchTab('data')">Data Table</div>
       <div class="tab" onclick="switchTab('reps')">Rep Performance</div>
       <div class="tab" onclick="switchTab('coverage')">Coverage</div>
+      <div class="tab" onclick="switchTab('orders')">Orders</div>
     </div>
 
-    <!-- ── OVERVIEW ── -->
+    <!-- ══ OVERVIEW ══ -->
     <div id="tab-overview" class="tab-content active">
+      <div class="section-divider">📊 Visit Metrics</div>
       <div class="kpi-grid">
         <div class="kpi-card" style="--card-accent:var(--accent)"><div class="kpi-label">Total Visits</div><div class="kpi-value" id="kpi-total">—</div><div class="kpi-sub">filtered records</div></div>
         <div class="kpi-card" style="--card-accent:#a78bfa"><div class="kpi-label">Sales Reps</div><div class="kpi-value" id="kpi-reps">—</div><div class="kpi-sub">with ride-alongs</div></div>
@@ -301,6 +404,17 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
         <div class="kpi-card" style="--card-accent:var(--accent)"><div class="kpi-label">Avg Potential</div><div class="kpi-value" id="kpi-avg-score">—</div><div class="kpi-sub">out of 100</div></div>
         <div class="kpi-card clickable" id="kpicard-highint" style="--card-accent:var(--green)" onclick="kpiFilter('kpicard-highint','Interest Level','High')"><div class="kpi-label">High Interest</div><div class="kpi-value" id="kpi-high-int">—</div><div class="kpi-sub" id="kpi-high-int-pct">—</div><div class="kpi-click-hint">▶ click to filter</div></div>
       </div>
+
+      <div class="section-divider">🛒 Order Metrics <span id="ord-kpi-status" style="font-weight:400;font-size:10px;color:var(--text3);margin-left:6px"></span></div>
+      <div class="kpi-grid">
+        <div class="kpi-card" style="--card-accent:var(--green)"><div class="kpi-label">Digital Orders</div><div class="kpi-value" id="ord-kpi-total">—</div><div class="kpi-sub">from visited customers</div></div>
+        <div class="kpi-card" style="--card-accent:var(--accent3)"><div class="kpi-label">Avg Order Value</div><div class="kpi-value" id="ord-kpi-avg">—</div><div class="kpi-sub">€ per order</div></div>
+        <div class="kpi-card" style="--card-accent:var(--blue)"><div class="kpi-label">Converted</div><div class="kpi-value" id="ord-kpi-converted">—</div><div class="kpi-sub" id="ord-kpi-converted-pct">visit → order ≤45d</div></div>
+        <div class="kpi-card" style="--card-accent:var(--green)"><div class="kpi-label">e-Shop Orders</div><div class="kpi-value" id="ord-kpi-eshop">—</div><div class="kpi-sub">channel 015</div></div>
+        <div class="kpi-card" style="--card-accent:var(--purple)"><div class="kpi-label">OCI / e-Proc</div><div class="kpi-value" id="ord-kpi-oci">—</div><div class="kpi-sub">channel 315</div></div>
+        <div class="kpi-card" style="--card-accent:var(--accent2)"><div class="kpi-label">App Orders</div><div class="kpi-value" id="ord-kpi-app">—</div><div class="kpi-sub">channels 303 & 304</div></div>
+      </div>
+
       <div class="charts-grid" style="grid-template-columns:1.2fr 0.8fr">
         <div class="chart-card"><div class="chart-title"><span class="dot" style="background:var(--blue)"></span>Interest Level</div><div style="height:200px"><canvas id="chart-interest"></canvas></div></div>
         <div class="chart-card"><div class="chart-title"><span class="dot" style="background:var(--green)"></span>Digital Maturity</div><div style="height:200px"><canvas id="chart-maturity"></canvas></div></div>
@@ -316,7 +430,7 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
       </div>
     </div>
 
-    <!-- ── DATA TABLE ── -->
+    <!-- ══ DATA TABLE ══ -->
     <div id="tab-data" class="tab-content">
       <div class="table-section">
         <div class="table-header">
@@ -324,7 +438,7 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
           <div class="table-controls">
             <input class="table-search" id="table-search" placeholder="Search in results…" oninput="renderTable()">
             <span style="font-size:11px;color:var(--text2)" id="page-info-top"></span>
-            <button class="btn btn-reset-inline" onclick="resetFilters()">✕ Reset Filters</button>
+            <button class="btn btn-reset-inline" onclick="resetAllFilters()">✕ Reset All</button>
           </div>
         </div>
         <div class="table-wrap">
@@ -357,10 +471,13 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
       </div>
     </div>
 
-    <!-- ── REP PERFORMANCE ── -->
+    <!-- ══ REP PERFORMANCE ══ -->
     <div id="tab-reps" class="tab-content">
       <div class="table-section">
-        <div class="table-header"><h3>Sales Rep Performance</h3><button class="btn btn-reset-inline" onclick="resetFilters()">✕ Reset Filters</button></div>
+        <div class="table-header">
+          <h3>Sales Rep Performance</h3>
+          <button class="btn btn-reset-inline" onclick="resetAllFilters()">✕ Reset All</button>
+        </div>
         <div class="table-wrap">
           <table class="rep-table"><thead><tr>
             <th onclick="sortRep('name')">Sales Rep</th>
@@ -379,21 +496,25 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
       </div>
     </div>
 
-    <!-- ── COVERAGE ── -->
+    <!-- ══ COVERAGE ══ -->
     <div id="tab-coverage" class="tab-content">
       <div class="cov-kpi-row">
         <div class="cov-kpi" style="--card-accent:var(--accent)"><div class="cov-kpi-label">Total Customers</div><div class="cov-kpi-value" id="cov-kpi-total">—</div><div class="cov-kpi-sub">in Customers sheet</div></div>
         <div class="cov-kpi" style="--card-accent:var(--green)"><div class="cov-kpi-label">Visited</div><div class="cov-kpi-value" id="cov-kpi-visited">—</div><div class="cov-kpi-sub">at least once</div></div>
         <div class="cov-kpi" style="--card-accent:var(--accent3)"><div class="cov-kpi-label">Unvisited</div><div class="cov-kpi-value" id="cov-kpi-unvisited">—</div><div class="cov-kpi-sub">never visited</div></div>
         <div class="cov-kpi" style="--card-accent:var(--blue)"><div class="cov-kpi-label">Overall Coverage</div><div class="cov-kpi-value" id="cov-kpi-pct">—</div><div class="cov-kpi-sub">of total base</div></div>
+        <div class="cov-kpi" style="--card-accent:var(--purple)"><div class="cov-kpi-label">Ordered</div><div class="cov-kpi-value" id="cov-kpi-ordered">—</div><div class="cov-kpi-sub">placed digital order</div></div>
       </div>
       <div class="table-section">
         <div class="table-header">
           <h3>Coverage by Rep <span id="cov-status-label" style="color:var(--text3);font-size:11px;font-weight:400;margin-left:8px"></span></h3>
-          <div class="table-controls" style="flex-wrap:wrap;gap:6px">
+          <div class="table-controls">
             <input class="table-search" id="cov-search" placeholder="Search rep…" oninput="renderCovTable()" style="width:130px">
-            <select id="cov-filter-rsm" onchange="renderCovTable()" style="width:110px;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:6px 9px;border-radius:6px;font-size:12px;outline:none;cursor:pointer"><option value="">All RSMs</option></select>
-            <select id="cov-filter-asm" onchange="renderCovTable()" style="width:110px;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:6px 9px;border-radius:6px;font-size:12px;outline:none;cursor:pointer"><option value="">All ASMs</option></select>
+            <div class="visit-status-toggle">
+              <button class="vs-btn active" id="vs-all" onclick="setCovVisitFilter('all')">All</button>
+              <button class="vs-btn" id="vs-visited" onclick="setCovVisitFilter('visited')">Visited</button>
+              <button class="vs-btn" id="vs-unvisited" onclick="setCovVisitFilter('unvisited')">Not Visited</button>
+            </div>
             <button class="btn btn-reset-inline" onclick="resetCovFilters()">✕ Clear</button>
           </div>
         </div>
@@ -405,6 +526,7 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
             <th onclick="sortCov('total')">Total</th>
             <th onclick="sortCov('visited')">Visited</th>
             <th onclick="sortCov('unvisited')">Unvisited</th>
+            <th onclick="sortCov('ordered')">Ordered</th>
             <th onclick="sortCov('pct')" class="cov-sort-asc">Coverage %</th>
           </tr></thead>
           <tbody id="cov-tbody"></tbody></table>
@@ -431,9 +553,88 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
       </div>
     </div>
 
+    <!-- ══ ORDERS ══ -->
+    <div id="tab-orders" class="tab-content">
+      <div class="ord-kpi-row" id="ord-top-kpis">
+        <div class="ord-kpi" style="--card-accent:var(--green)"><div class="ord-kpi-label">Total Digital Orders</div><div class="ord-kpi-value" id="ord-total">—</div><div class="ord-kpi-sub">all channels</div></div>
+        <div class="ord-kpi" style="--card-accent:var(--accent3)"><div class="ord-kpi-label">Total Value</div><div class="ord-kpi-value" id="ord-value">—</div><div class="ord-kpi-sub">€ net</div></div>
+        <div class="ord-kpi" style="--card-accent:var(--blue)"><div class="ord-kpi-label">Avg Order Value</div><div class="ord-kpi-value" id="ord-avg">—</div><div class="ord-kpi-sub">€ per order</div></div>
+        <div class="ord-kpi" style="--card-accent:var(--green)"><div class="ord-kpi-label">e-Shop (015)</div><div class="ord-kpi-value" id="ord-ch-eshop">—</div><div class="ord-kpi-sub">orders</div></div>
+        <div class="ord-kpi" style="--card-accent:var(--purple)"><div class="ord-kpi-label">OCI (315)</div><div class="ord-kpi-value" id="ord-ch-oci">—</div><div class="ord-kpi-sub">orders</div></div>
+        <div class="ord-kpi" style="--card-accent:var(--accent2)"><div class="ord-kpi-label">App (303/304)</div><div class="ord-kpi-value" id="ord-ch-app">—</div><div class="ord-kpi-sub">orders</div></div>
+      </div>
+
+      <div class="charts-grid" style="grid-template-columns:1.5fr 0.5fr;margin-bottom:16px">
+        <div class="chart-card"><div class="chart-title"><span class="dot" style="background:var(--green)"></span>Orders Over Time</div><div style="height:185px"><canvas id="ord-chart-timeline"></canvas></div></div>
+        <div class="chart-card"><div class="chart-title"><span class="dot" style="background:var(--purple)"></span>Channel Mix</div><div style="height:185px"><canvas id="ord-chart-channels"></canvas></div></div>
+      </div>
+
+      <!-- Visit Status filter for Orders tab -->
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+        <span style="font-size:11px;font-weight:600;color:var(--text2)">Show customers:</span>
+        <div class="visit-status-toggle">
+          <button class="vs-btn active" id="ord-vs-all" onclick="setOrdVisitFilter('all')">All</button>
+          <button class="vs-btn" id="ord-vs-visited" onclick="setOrdVisitFilter('visited')">Visited</button>
+          <button class="vs-btn" id="ord-vs-unvisited" onclick="setOrdVisitFilter('unvisited')">Not Visited</button>
+        </div>
+        <input class="tfb-input" id="ord-search" placeholder="Search rep / customer…" oninput="renderOrdRepTable()" style="width:180px">
+        <button class="btn btn-reset-inline" onclick="resetOrdFilters()">✕ Clear</button>
+      </div>
+
+      <!-- Rep orders table -->
+      <div class="table-section" style="margin-bottom:16px">
+        <div class="table-header">
+          <h3>Orders by Rep</h3>
+          <span id="ord-unmatched-note" style="font-size:11px;color:var(--text3)"></span>
+        </div>
+        <div class="table-wrap">
+          <table class="ord-table"><thead><tr>
+            <th onclick="sortOrd('rep')">Sales Rep</th>
+            <th onclick="sortOrd('rsm')">RSM</th>
+            <th onclick="sortOrd('asm')">ASM</th>
+            <th onclick="sortOrd('totalOrders')" class="ord-sort-desc">Orders</th>
+            <th onclick="sortOrd('totalValue')">Total Value €</th>
+            <th onclick="sortOrd('avgOrderValue')">Avg Value €</th>
+            <th onclick="sortOrd('eshop')">e-Shop</th>
+            <th onclick="sortOrd('oci')">OCI</th>
+            <th onclick="sortOrd('app')">App</th>
+            <th onclick="sortOrd('convertedCustomers')">Converted</th>
+            <th onclick="sortOrd('uniqueCustomers')">Unique Custs</th>
+          </tr></thead>
+          <tbody id="ord-rep-tbody"></tbody></table>
+        </div>
+      </div>
+
+      <!-- Top customers table -->
+      <div class="table-section">
+        <div class="table-header">
+          <h3>Top Customers by Orders</h3>
+          <input class="table-search" id="ord-cust-search" placeholder="Search customer…" oninput="renderOrdCustTable()" style="width:180px">
+        </div>
+        <div class="table-wrap">
+          <table class="ord-table"><thead><tr>
+            <th onclick="sortOrdCust('custNum')">Customer #</th>
+            <th onclick="sortOrdCust('name')">Company</th>
+            <th onclick="sortOrdCust('rep')">Sales Rep</th>
+            <th onclick="sortOrdCust('division')">Division</th>
+            <th onclick="sortOrdCust('orders')" class="ord-sort-desc">Orders</th>
+            <th onclick="sortOrdCust('value')">Total Value €</th>
+            <th onclick="sortOrdCust('avgVal')">Avg Value €</th>
+            <th onclick="sortOrdCust('channels')">Channels</th>
+          </tr></thead>
+          <tbody id="ord-cust-tbody"></tbody></table>
+        </div>
+        <div class="pagination">
+          <span id="ord-cust-page-info" style="font-size:11px;color:var(--text2)"></span>
+          <div class="pagination-btns" id="ord-cust-page-btns"></div>
+        </div>
+      </div>
+    </div>
+
   </main>
 </div>
 
+<!-- ── MODAL ── -->
 <div class="modal-overlay" id="modal" onclick="closeModal(event)">
   <div class="modal">
     <button class="modal-close" onclick="document.getElementById('modal').classList.remove('open')">✕</button>
@@ -442,44 +643,39 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
     <div class="modal-grid" id="modal-grid"></div>
     <div class="modal-notes-label">Notes</div>
     <div class="modal-notes" id="modal-notes"></div>
+    <div class="modal-orders-section" id="modal-orders-section" style="display:none">
+      <div class="modal-orders-label">
+        <span>Order History</span>
+        <span id="modal-orders-status" style="color:var(--text3)"><span class="spinner"></span></span>
+      </div>
+      <div class="modal-orders-kpis" id="modal-orders-kpis"></div>
+      <div id="modal-orders-body"></div>
+    </div>
   </div>
 </div>
 
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwaY-kNAECM1LgNxtksRkYZtWap0i9Q7B4URusdngRIl1i9l6uEp7h3e6i5Y9zwpKUkQQ/exec';
+
+// ── STATE ──────────────────────────────────────────────────────────────────
 let ALL_DATA=[],filtered=[],sortCol='Date',sortDir=1,currentPage=1,charts={};
 let repSortCol='visits',repSortDir=-1;
 let activeKpiFilter={cardId:null,field:null,value:null};
-let COV_DATA=[];
-let covSortCol='pct',covSortDir=1;
+let COV_DATA=[],covSortCol='pct',covSortDir=1,covVisitFilter='all';
 let drillData=null,drillPage=1,drillSortCol='lastVisited',drillSortDir=-1;
-const PAGE_SIZE=25,DRILL_SIZE=50;
+let ORD_DATA=null,ordSortCol='totalOrders',ordSortDir=-1;
+let ordCustSortCol='orders',ordCustSortDir=-1,ordCustPage=1;
+let ORD_KPI=null,ordVisitFilter='all';
+const PAGE_SIZE=25,DRILL_SIZE=50,ORD_CUST_SIZE=25;
 
-window.addEventListener('DOMContentLoaded',()=>{attachListeners();fetchLive();});
+// ── INIT ───────────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded',()=>{attachSidebarListeners();fetchLive();});
 
-// ── DRAWER ────────────────────────────────────────────────────────────────
-function openDrawer(){
-  document.getElementById('sidebar').classList.add('drawer-open');
-  document.getElementById('drawer-overlay').classList.add('open');
-  document.getElementById('sidebar-close').style.display='flex';
-}
-function closeDrawer(){
-  document.getElementById('sidebar').classList.remove('drawer-open');
-  document.getElementById('drawer-overlay').classList.remove('open');
-}
-function countActiveFilters(){
-  const ids=['filter-rep','filter-already','filter-opened','filter-app','filter-tech','filter-behaviour',
-    'filter-interest','filter-opp','filter-barrier','filter-followup','filter-maturity',
-    'filter-rsm','filter-asm','filter-division','filter-date-from','filter-date-to',
-    'score-min','score-max','search-input'];
-  return ids.filter(id=>{const el=document.getElementById(id);return el&&el.value!=='';}).length;
-}
-function updateFilterBadge(){
-  const n=countActiveFilters(),el=document.getElementById('filter-count');
-  if(el){el.textContent=n;el.classList.toggle('has-filters',n>0);}
-}
+// ── DRAWER ─────────────────────────────────────────────────────────────────
+function openDrawer(){document.getElementById('sidebar').classList.add('drawer-open');document.getElementById('drawer-overlay').classList.add('open');document.getElementById('sidebar-close').style.display='flex';}
+function closeDrawer(){document.getElementById('sidebar').classList.remove('drawer-open');document.getElementById('drawer-overlay').classList.remove('open');}
 
-// ── DATA FETCH ────────────────────────────────────────────────────────────
+// ── FETCH ──────────────────────────────────────────────────────────────────
 async function fetchLive(){
   setStatus('loading','<span class="spinner"></span> Fetching from Google Sheets…');
   try{
@@ -489,93 +685,167 @@ async function fetchLive(){
     if(d.error)throw new Error(d.error);
     ALL_DATA=d;
     setStatus('ok','✓ '+d.length+' records — '+new Date().toLocaleString('el-GR'));
-    populateDropdowns();applyFilters();
+    populateTopFilters();
+    populateSidebarDropdowns();
+    applyFilters();
     fetchCoverageSummary();
+    fetchOrderKPIs();
   }catch(e){setStatus('err','✗ '+e.message);}
 }
+
 async function fetchCoverageSummary(){
   try{
     const r=await fetch(SCRIPT_URL+'?action=coverage_summary');
     if(!r.ok)return;
     COV_DATA=await r.json();
     updateCovKPIs();
-  // Populate RSM/ASM dropdowns
-  const rsmVals=[...new Set(COV_DATA.map(d=>d.rsm).filter(Boolean))].sort();
-  const asmVals=[...new Set(COV_DATA.map(d=>d.asm).filter(Boolean))].sort();
-  const rsmSel=document.getElementById('cov-filter-rsm');
-  const asmSel=document.getElementById('cov-filter-asm');
-  if(rsmSel){while(rsmSel.options.length>1)rsmSel.remove(1);rsmVals.forEach(v=>{const o=document.createElement('option');o.value=o.textContent=v;rsmSel.appendChild(o);});}
-  if(asmSel){while(asmSel.options.length>1)asmSel.remove(1);asmVals.forEach(v=>{const o=document.createElement('option');o.value=o.textContent=v;asmSel.appendChild(o);});}
-  renderCovTable();
+    renderCovTable();
     document.getElementById('cov-status-label').textContent='';
-  }catch(e){
-    document.getElementById('cov-status-label').textContent='⚠ Could not load coverage data';
-  }
+  }catch(e){document.getElementById('cov-status-label').textContent='⚠ Could not load coverage data';}
 }
+
+async function fetchOrderKPIs(){
+  document.getElementById('ord-kpi-status').textContent='loading…';
+  try{
+    const r=await fetch(SCRIPT_URL+'?action=order_kpis');
+    if(!r.ok)return;
+    ORD_KPI=await r.json();
+    renderOverviewOrderKPIs();
+    document.getElementById('ord-kpi-status').textContent='';
+  }catch(e){document.getElementById('ord-kpi-status').textContent='⚠ could not load';}
+}
+
+async function fetchOrdersData(){
+  if(ORD_DATA){renderOrdersTab();return;}
+  document.getElementById('ord-total').textContent='…';
+  try{
+    const r=await fetch(SCRIPT_URL+'?action=orders_data');
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    ORD_DATA=await r.json();
+    renderOrdersTab();
+  }catch(e){document.getElementById('ord-total').textContent='⚠';}
+}
+
 function setStatus(cls,html){const el=document.getElementById('sync-status');el.className='sync-status '+cls;el.innerHTML=html;}
 
-// ── EXPORT ────────────────────────────────────────────────────────────────
-function exportCSV(){
-  const cols=['Date','Sales Rep','Customer Number','Company Name','RSM','ASM','Division',
-    'Already Eshop Account','Opened During Visit','App Engaged','Tech Savvy Level',
-    'Digital Behaviour','Interest Level','Opportunity Type','Barrier Type',
-    'Follow Up Priority','Potential Score','Digital Maturity Stage','Notes'];
-  const esc=v=>'"'+String(v||'').replace(/"/g,'""')+'"';
-  const rows=[cols.map(esc).join(',')];
-  filtered.forEach(r=>rows.push(cols.map(c=>esc(r[c])).join(',')));
-  const blob=new Blob([rows.join('\n')],{type:'text/csv;charset=utf-8;'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  a.download='Wurth_RideAlong_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
+// ── TOP FILTER BAR ─────────────────────────────────────────────────────────
+function populateTopFilters(){
+  // Build RSM→ASM→Rep hierarchy from visit data
+  const rsmSet=new Set(),asmByRsm={},repByAsm={};
+  ALL_DATA.forEach(r=>{
+    const rsm=r['RSM']||'',asm=r['ASM']||'',rep=r['Sales Rep']||'';
+    if(rsm){
+      rsmSet.add(rsm);
+      if(!asmByRsm[rsm])asmByRsm[rsm]=new Set();
+      if(asm)asmByRsm[rsm].add(asm);
+    }
+    if(asm){
+      if(!repByAsm[asm])repByAsm[asm]=new Set();
+      if(rep)repByAsm[asm].add(rep);
+    }
+  });
+  window._rsmSet=rsmSet;window._asmByRsm=asmByRsm;window._repByAsm=repByAsm;
+  const rsmSel=document.getElementById('tf-rsm');
+  while(rsmSel.options.length>1)rsmSel.remove(1);
+  [...rsmSet].sort().forEach(v=>{const o=document.createElement('option');o.value=o.textContent=v;rsmSel.appendChild(o);});
+  refreshAsmOptions();refreshRepOptions();
 }
 
-// ── DROPDOWNS ─────────────────────────────────────────────────────────────
-function populateDropdowns(){
+function refreshAsmOptions(){
+  const rsmVal=document.getElementById('tf-rsm').value;
+  const asmSel=document.getElementById('tf-asm');
+  const prev=asmSel.value;
+  while(asmSel.options.length>1)asmSel.remove(1);
+  const asms=rsmVal&&window._asmByRsm?[...(window._asmByRsm[rsmVal]||[])].sort():[...new Set(ALL_DATA.map(r=>r['ASM']).filter(Boolean))].sort();
+  asms.forEach(v=>{const o=document.createElement('option');o.value=o.textContent=v;asmSel.appendChild(o);});
+  if(asms.includes(prev))asmSel.value=prev;
+  refreshRepOptions();
+}
+
+function refreshRepOptions(){
+  const asmVal=document.getElementById('tf-asm').value;
+  const repSel=document.getElementById('tf-rep');
+  const prev=repSel.value;
+  while(repSel.options.length>1)repSel.remove(1);
+  const reps=asmVal&&window._repByAsm?[...(window._repByAsm[asmVal]||[])].sort():[...new Set(ALL_DATA.map(r=>r['Sales Rep']).filter(Boolean))].sort();
+  reps.forEach(v=>{const o=document.createElement('option');o.value=o.textContent=v;repSel.appendChild(o);});
+  if(reps.includes(prev))repSel.value=prev;
+}
+
+function onTopFilterChange(level){
+  if(level==='rsm'){refreshAsmOptions();document.getElementById('tf-asm').value='';document.getElementById('tf-rep').value='';}
+  if(level==='asm'){refreshRepOptions();document.getElementById('tf-rep').value='';}
+  applyFilters();
+  if(ORD_DATA)renderOrdersTab();
+}
+
+function onDateInput(){
+  document.querySelectorAll('.qp-btn').forEach(b=>b.classList.remove('active'));
+  applyFilters();
+}
+
+function setQuickPick(mode){
+  document.querySelectorAll('.qp-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('qp-'+mode).classList.add('active');
+  const now=new Date(),p2=n=>n<10?'0'+n:String(n);
+  const fmt=d=>p2(d.getDate())+'/'+p2(d.getMonth()+1)+'/'+d.getFullYear();
+  if(mode==='all'){document.getElementById('tf-date-from').value='';document.getElementById('tf-date-to').value='';}
+  else if(mode==='month'){document.getElementById('tf-date-from').value=fmt(new Date(now.getFullYear(),now.getMonth(),1));document.getElementById('tf-date-to').value=fmt(new Date(now.getFullYear(),now.getMonth()+1,0));}
+  else if(mode==='last'){document.getElementById('tf-date-from').value=fmt(new Date(now.getFullYear(),now.getMonth()-1,1));document.getElementById('tf-date-to').value=fmt(new Date(now.getFullYear(),now.getMonth(),0));}
+  applyFilters();
+}
+
+// ── SIDEBAR DROPDOWNS ──────────────────────────────────────────────────────
+function populateSidebarDropdowns(){
   const vals=k=>[...new Set(ALL_DATA.map(r=>r[k]).filter(v=>v&&v!==''))].sort();
-  const fill=(id,vs)=>{const s=document.getElementById(id);while(s.options.length>1)s.remove(1);
-    vs.forEach(v=>{const o=document.createElement('option');o.value=o.textContent=v;s.appendChild(o);});};
-  fill('filter-rep',vals('Sales Rep'));fill('filter-behaviour',vals('Digital Behaviour'));
-  fill('filter-opp',vals('Opportunity Type'));fill('filter-barrier',vals('Barrier Type'));
+  const fill=(id,vs)=>{const s=document.getElementById(id);while(s.options.length>1)s.remove(1);vs.forEach(v=>{const o=document.createElement('option');o.value=o.textContent=v;s.appendChild(o);});};
+  fill('filter-behaviour',vals('Digital Behaviour'));
+  fill('filter-opp',vals('Opportunity Type'));
+  fill('filter-barrier',vals('Barrier Type'));
   fill('filter-maturity',vals('Digital Maturity Stage'));
-  fill('filter-rsm',vals('RSM'));fill('filter-asm',vals('ASM'));fill('filter-division',vals('Division'));
+  fill('filter-division',vals('Division'));
 }
 
-// ── LISTENERS ─────────────────────────────────────────────────────────────
-function attachListeners(){
-  ['filter-rep','filter-already','filter-opened','filter-app','filter-tech','filter-behaviour',
-   'filter-interest','filter-opp','filter-barrier','filter-followup','filter-maturity',
-   'filter-rsm','filter-asm','filter-division'].forEach(id=>{
+function attachSidebarListeners(){
+  ['filter-already','filter-opened','filter-app','filter-tech','filter-behaviour',
+   'filter-interest','filter-opp','filter-barrier','filter-followup','filter-maturity','filter-division'].forEach(id=>{
     document.getElementById(id).addEventListener('change',()=>{
       if(activeKpiFilter.cardId){
         const sid=fieldToFilterId(activeKpiFilter.field);
-        if(sid===id){
-          document.getElementById(activeKpiFilter.cardId)?.classList.remove('active-filter');
-          activeKpiFilter={cardId:null,field:null,value:null};
-        }
+        if(sid===id){document.getElementById(activeKpiFilter.cardId)?.classList.remove('active-filter');activeKpiFilter={cardId:null,field:null,value:null};}
       }
       applyFilters();
     });
   });
-  ['search-input','score-min','score-max','filter-date-from','filter-date-to'].forEach(id=>{
-    document.getElementById(id).addEventListener('input',()=>{
-      if(id==='filter-date-from'||id==='filter-date-to')
-        document.querySelectorAll('.qp-btn').forEach(b=>b.classList.remove('active'));
-      applyFilters();
-    });
+  ['search-input','score-min','score-max'].forEach(id=>{
+    document.getElementById(id).addEventListener('input',applyFilters);
   });
 }
-function pd(s){if(!s)return null;const p=s.split('/');return p.length===3?new Date(+p[2],+p[1]-1,+p[0]):null;}
 
-// ── APPLY FILTERS ─────────────────────────────────────────────────────────
+function countActiveFilters(){
+  const ids=['filter-already','filter-opened','filter-app','filter-tech','filter-behaviour',
+    'filter-interest','filter-opp','filter-barrier','filter-followup','filter-maturity','filter-division','search-input','score-min','score-max'];
+  return ids.filter(id=>{const el=document.getElementById(id);return el&&el.value!=='';}).length;
+}
+function updateFilterBadge(){const n=countActiveFilters(),el=document.getElementById('filter-count');if(el){el.textContent=n;el.classList.toggle('has-filters',n>0);}}
+
+// ── FILTERS ────────────────────────────────────────────────────────────────
+const pd=s=>{if(!s)return null;const p=s.split('/');return p.length===3?new Date(+p[2],+p[1]-1,+p[0]):null;};
+
 function applyFilters(){
-  const g=id=>document.getElementById(id).value;
-  const rep=g('filter-rep'),already=g('filter-already'),opened=g('filter-opened'),app=g('filter-app'),
-    tech=g('filter-tech'),beh=g('filter-behaviour'),interest=g('filter-interest'),opp=g('filter-opp'),
-    barrier=g('filter-barrier'),followup=g('filter-followup'),maturity=g('filter-maturity'),
-    rsm=g('filter-rsm'),asm=g('filter-asm'),division=g('filter-division'),
-    search=g('search-input').toLowerCase(),scMin=g('score-min'),scMax=g('score-max'),
-    dfrom=g('filter-date-from'),dto=g('filter-date-to');
+  const g=id=>(document.getElementById(id)||{value:''}).value;
+  const rsm=g('tf-rsm'),asm=g('tf-asm'),rep=g('tf-rep');
+  const dfrom=g('tf-date-from'),dto=g('tf-date-to');
   const dFrom=dfrom?pd(dfrom):null,dTo=dto?pd(dto):null;
+  const already=g('filter-already'),opened=g('filter-opened'),app=g('filter-app'),
+    tech=g('filter-tech'),beh=g('filter-behaviour'),interest=g('filter-interest'),
+    opp=g('filter-opp'),barrier=g('filter-barrier'),followup=g('filter-followup'),
+    maturity=g('filter-maturity'),division=g('filter-division'),
+    search=g('search-input').toLowerCase(),scMin=g('score-min'),scMax=g('score-max');
+
   filtered=ALL_DATA.filter(r=>{
+    if(rsm&&r['RSM']!==rsm)return false;
+    if(asm&&r['ASM']!==asm)return false;
     if(rep&&r['Sales Rep']!==rep)return false;
     if(already&&r['Already Eshop Account']!==already)return false;
     if(opened&&r['Opened During Visit']!==opened)return false;
@@ -587,8 +857,6 @@ function applyFilters(){
     if(barrier&&r['Barrier Type']!==barrier)return false;
     if(followup&&r['Follow Up Priority']!==followup)return false;
     if(maturity&&r['Digital Maturity Stage']!==maturity)return false;
-    if(rsm&&r['RSM']!==rsm)return false;
-    if(asm&&r['ASM']!==asm)return false;
     if(division&&r['Division']!==division)return false;
     if(scMin&&+r['Potential Score']<+scMin)return false;
     if(scMax&&+r['Potential Score']>+scMax)return false;
@@ -599,42 +867,38 @@ function applyFilters(){
   });
   currentPage=1;
   updateKPIs();updateCharts();renderTable();renderRepTable();updateFilterBadge();
+  if(ORD_DATA)renderOrdersTab();
 }
 
-function resetFilters(){
-  ['filter-rep','filter-already','filter-opened','filter-app','filter-tech','filter-behaviour',
-   'filter-interest','filter-opp','filter-barrier','filter-followup','filter-maturity',
-   'filter-rsm','filter-asm','filter-division'].forEach(id=>document.getElementById(id).value='');
-  ['search-input','score-min','score-max','filter-date-from','filter-date-to']
+function resetAllFilters(){
+  ['filter-already','filter-opened','filter-app','filter-tech','filter-behaviour',
+   'filter-interest','filter-opp','filter-barrier','filter-followup','filter-maturity','filter-division']
     .forEach(id=>document.getElementById(id).value='');
-  if(activeKpiFilter.cardId){
-    document.getElementById(activeKpiFilter.cardId)?.classList.remove('active-filter');
-    activeKpiFilter={cardId:null,field:null,value:null};
-  }
+  ['search-input','score-min','score-max'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('tf-rsm').value='';
+  document.getElementById('tf-asm').value='';
+  document.getElementById('tf-rep').value='';
+  document.getElementById('tf-date-from').value='';
+  document.getElementById('tf-date-to').value='';
+  refreshAsmOptions();refreshRepOptions();
   document.querySelectorAll('.qp-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('qp-all').classList.add('active');
+  if(activeKpiFilter.cardId){document.getElementById(activeKpiFilter.cardId)?.classList.remove('active-filter');activeKpiFilter={cardId:null,field:null,value:null};}
   applyFilters();
 }
 
-// ── QUICK PICKS ───────────────────────────────────────────────────────────
-function setQuickPick(mode){
-  document.querySelectorAll('.qp-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('qp-'+mode).classList.add('active');
-  const now=new Date(),p2=n=>n<10?'0'+n:String(n);
-  const fmt=d=>p2(d.getDate())+'/'+p2(d.getMonth()+1)+'/'+d.getFullYear();
-  if(mode==='all'){document.getElementById('filter-date-from').value='';document.getElementById('filter-date-to').value='';}
-  else if(mode==='month'){
-    document.getElementById('filter-date-from').value=fmt(new Date(now.getFullYear(),now.getMonth(),1));
-    document.getElementById('filter-date-to').value=fmt(new Date(now.getFullYear(),now.getMonth()+1,0));
-  }else if(mode==='last'){
-    document.getElementById('filter-date-from').value=fmt(new Date(now.getFullYear(),now.getMonth()-1,1));
-    document.getElementById('filter-date-to').value=fmt(new Date(now.getFullYear(),now.getMonth(),0));
-  }
+function resetSidebarFilters(){
+  ['filter-already','filter-opened','filter-app','filter-tech','filter-behaviour',
+   'filter-interest','filter-opp','filter-barrier','filter-followup','filter-maturity','filter-division']
+    .forEach(id=>document.getElementById(id).value='');
+  ['search-input','score-min','score-max'].forEach(id=>document.getElementById(id).value='');
+  if(activeKpiFilter.cardId){document.getElementById(activeKpiFilter.cardId)?.classList.remove('active-filter');activeKpiFilter={cardId:null,field:null,value:null};}
   applyFilters();
 }
 
-// ── KPIs ──────────────────────────────────────────────────────────────────
+// ── KPIs ───────────────────────────────────────────────────────────────────
 function pct(n,t){return t?Math.round(n/t*100)+'%':'0%';}
+
 function updateKPIs(){
   const n=filtered.length,
     opened=filtered.filter(r=>r['Opened During Visit']==='Yes').length,
@@ -664,52 +928,57 @@ function updateKPIs(){
   document.getElementById('shown-count').textContent=n.toLocaleString();
   document.getElementById('shown-reps').textContent=repsCount;
 }
+
+function renderOverviewOrderKPIs(){
+  if(!ORD_KPI)return;
+  const rsm=(document.getElementById('tf-rsm')||{}).value||'';
+  const asm=(document.getElementById('tf-asm')||{}).value||'';
+  const rep=(document.getElementById('tf-rep')||{}).value||'';
+  // Filter order KPIs by top bar — use ORD_DATA if loaded for precision, else show global
+  let kpi=ORD_KPI;
+  if(ORD_DATA&&(rsm||asm||rep)){
+    // Compute filtered totals from ORD_DATA.repList
+    const rows=ORD_DATA.repList.filter(r=>{
+      if(rsm&&r.rsm!==rsm)return false;
+      if(asm&&r.asm!==asm)return false;
+      if(rep&&r.rep!==rep)return false;
+      return true;
+    });
+    const total=rows.reduce((s,r)=>s+r.totalOrders,0);
+    const val=rows.reduce((s,r)=>s+r.totalValue,0);
+    kpi={totalOrders:total,avgOrderValue:total?Math.round(val/total):0,
+      convertedCustomers:rows.reduce((s,r)=>s+r.convertedCustomers,0),
+      visitedCustomers:ORD_KPI.visitedCustomers,
+      channelBreakdown:{...ORD_KPI.channelBreakdown}};
+  }
+  document.getElementById('ord-kpi-total').textContent=(kpi.totalOrders||0).toLocaleString();
+  document.getElementById('ord-kpi-avg').textContent='€'+(kpi.avgOrderValue||0).toLocaleString();
+  document.getElementById('ord-kpi-converted').textContent=(kpi.convertedCustomers||0).toLocaleString();
+  const convPct=kpi.visitedCustomers?Math.round((kpi.convertedCustomers||0)/kpi.visitedCustomers*100):0;
+  document.getElementById('ord-kpi-converted-pct').textContent=convPct+'% of visited customers';
+  const ch=kpi.channelBreakdown||{};
+  document.getElementById('ord-kpi-eshop').textContent=(ch['e-Shop']||0).toLocaleString();
+  document.getElementById('ord-kpi-oci').textContent=(ch['OCI/e-Procurement']||0).toLocaleString();
+  document.getElementById('ord-kpi-app').textContent=((ch['App']||0)).toLocaleString();
+}
+
 function kpiFilter(cardId,field,value){
   const el=document.getElementById(cardId);
   if(activeKpiFilter.cardId===cardId){
-    activeKpiFilter={cardId:null,field:null,value:null};
-    el.classList.remove('active-filter');
-    const sel=document.getElementById(fieldToFilterId(field));
-    if(sel){sel.value='';applyFilters();}
-    return;
+    activeKpiFilter={cardId:null,field:null,value:null};el.classList.remove('active-filter');
+    const sel=document.getElementById(fieldToFilterId(field));if(sel){sel.value='';applyFilters();}return;
   }
-  if(activeKpiFilter.cardId){
-    document.getElementById(activeKpiFilter.cardId)?.classList.remove('active-filter');
-    const ps=document.getElementById(fieldToFilterId(activeKpiFilter.field));
-    if(ps)ps.value='';
-  }
-  activeKpiFilter={cardId,field,value};
-  el.classList.add('active-filter');
-  const sel=document.getElementById(fieldToFilterId(field));
-  if(sel){sel.value=value;applyFilters();}
+  if(activeKpiFilter.cardId){document.getElementById(activeKpiFilter.cardId)?.classList.remove('active-filter');const ps=document.getElementById(fieldToFilterId(activeKpiFilter.field));if(ps)ps.value='';}
+  activeKpiFilter={cardId,field,value};el.classList.add('active-filter');
+  const sel=document.getElementById(fieldToFilterId(field));if(sel){sel.value=value;applyFilters();}
 }
-function fieldToFilterId(f){
-  return{'Opened During Visit':'filter-opened','Already Eshop Account':'filter-already',
-    'App Engaged':'filter-app','Follow Up Priority':'filter-followup',
-    'Opportunity Type':'filter-opp','Interest Level':'filter-interest'}[f]||'';
-}
+function fieldToFilterId(f){return{'Opened During Visit':'filter-opened','Already Eshop Account':'filter-already','App Engaged':'filter-app','Follow Up Priority':'filter-followup','Opportunity Type':'filter-opp','Interest Level':'filter-interest'}[f]||'';}
 
 // ── CHARTS ────────────────────────────────────────────────────────────────
-function mkBarH(id,labels,data,colors){
-  if(charts[id])charts[id].destroy();
-  charts[id]=new Chart(document.getElementById(id),{type:'bar',data:{labels,datasets:[{data,backgroundColor:colors,borderRadius:4,borderSkipped:false}]},
-    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+c.raw+' visits'}}},
-    scales:{x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8892a4',font:{size:10}}},y:{grid:{display:false},ticks:{color:'#e8eaf0',font:{size:10}}}}}});
-}
-function mkPie(id,labels,data,colors){
-  if(charts[id])charts[id].destroy();
-  charts[id]=new Chart(document.getElementById(id),{type:'doughnut',data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:1,borderColor:'#13161e'}]},
-    options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'right',labels:{color:'#8892a4',font:{size:10},boxWidth:10,padding:8}},
-    tooltip:{callbacks:{label:c=>` ${c.label}: ${c.raw} (${Math.round(c.raw/(filtered.length||1)*100)}%)`}}}}});
-}
-function mkLine(id,labels,data){
-  if(charts[id])charts[id].destroy();
-  const ctx=document.getElementById(id).getContext('2d');
-  const g=ctx.createLinearGradient(0,0,0,150);g.addColorStop(0,'rgba(230,57,70,0.3)');g.addColorStop(1,'rgba(230,57,70,0)');
-  charts[id]=new Chart(ctx,{type:'line',data:{labels,datasets:[{data,borderColor:'#e63946',backgroundColor:g,borderWidth:2,tension:0.4,pointRadius:2,fill:true}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-    scales:{x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8892a4',font:{size:10},maxTicksLimit:12}},y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8892a4',font:{size:10}}}}}});
-}
+function mkBarH(id,labels,data,colors){if(charts[id])charts[id].destroy();charts[id]=new Chart(document.getElementById(id),{type:'bar',data:{labels,datasets:[{data,backgroundColor:colors,borderRadius:4,borderSkipped:false}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+c.raw+' visits'}}},scales:{x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8892a4',font:{size:10}}},y:{grid:{display:false},ticks:{color:'#e8eaf0',font:{size:10}}}}}});}
+function mkPie(id,labels,data,colors){if(charts[id])charts[id].destroy();charts[id]=new Chart(document.getElementById(id),{type:'doughnut',data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:1,borderColor:'#13161e'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'right',labels:{color:'#8892a4',font:{size:10},boxWidth:10,padding:8}},tooltip:{callbacks:{label:c=>`${c.label}: ${c.raw} (${Math.round(c.raw/(filtered.length||1)*100)}%)`}}}}});}
+function mkLine(id,labels,data,color){if(charts[id])charts[id].destroy();const ctx=document.getElementById(id).getContext('2d');const g=ctx.createLinearGradient(0,0,0,150);g.addColorStop(0,`${color||'rgba(230,57,70'},.3)`);g.addColorStop(1,`${color||'rgba(230,57,70'},.0)`);charts[id]=new Chart(ctx,{type:'line',data:{labels,datasets:[{data,borderColor:color||'#e63946',backgroundColor:g,borderWidth:2,tension:0.4,pointRadius:2,fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8892a4',font:{size:10},maxTicksLimit:12}},y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8892a4',font:{size:10}}}}}});}
+
 function updateCharts(){
   const iV=['High','Medium','Pending','Not Interested','N/A'],iC=['#06d6a0','#ffd166','#118ab2','#e63946','#4a526a'];
   const iM={};iV.forEach(v=>iM[v]=0);filtered.forEach(r=>{if(iM[r['Interest Level']]!==undefined)iM[r['Interest Level']]++;});
@@ -727,21 +996,18 @@ function updateCharts(){
   mkBarH('chart-opps',oP.map(x=>x.o),oP.map(x=>x.c),oP.map(x=>x.col));
   const monthly={};filtered.forEach(r=>{if(!r['Date'])return;const p=r['Date'].split('/');if(p.length<3)return;const k=p[2]+'-'+p[1];monthly[k]=(monthly[k]||0)+1;});
   const tK=Object.keys(monthly).sort(),mo=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  mkLine('chart-timeline',tK.map(k=>{const[y,m]=k.split('-');return mo[+m]+' '+y.slice(2);}),tK.map(k=>monthly[k]));
+  mkLine('chart-timeline',tK.map(k=>{const[y,m]=k.split('-');return mo[+m]+' '+y.slice(2);}),tK.map(k=>monthly[k]),'#e63946');
   const beV=['Active User','Browser Only','New Activation','Dormant Account','Non-Digital'],beC=['#06d6a0','#118ab2','#ffd166','#9b5de5','#e63946'];
   const beP=beV.map((b,i)=>({b,c:filtered.filter(r=>r['Digital Behaviour']===b).length,col:beC[i]})).filter(x=>x.c>0);
   mkBarH('chart-behaviour',beP.map(x=>x.b),beP.map(x=>x.c),beP.map(x=>x.col));
   mkPie('chart-followup',['High','Medium','Low'],['High','Medium','Low'].map(f=>filtered.filter(r=>r['Follow Up Priority']===f).length),['#e63946','#ffd166','#4a526a']);
 }
 
-// ── DATA TABLE ────────────────────────────────────────────────────────────
+// ── DATA TABLE ─────────────────────────────────────────────────────────────
 function sortBy(col){
   if(sortCol===col)sortDir*=-1;else{sortCol=col;sortDir=1;}
   document.querySelectorAll('thead th').forEach(th=>th.classList.remove('sort-asc','sort-desc'));
-  const cols=['Date','Sales Rep','Customer Number','Company Name','RSM','ASM','Division',
-    'Already Eshop Account','Opened During Visit','App Engaged','Tech Savvy Level',
-    'Digital Behaviour','Interest Level','Opportunity Type','Barrier Type',
-    'Follow Up Priority','Potential Score','Digital Maturity Stage','Notes'];
+  const cols=['Date','Sales Rep','Customer Number','Company Name','RSM','ASM','Division','Already Eshop Account','Opened During Visit','App Engaged','Tech Savvy Level','Digital Behaviour','Interest Level','Opportunity Type','Barrier Type','Follow Up Priority','Potential Score','Digital Maturity Stage','Notes'];
   const idx=cols.indexOf(col);
   if(idx>=0)document.querySelectorAll('thead th')[idx].classList.add(sortDir===1?'sort-asc':'sort-desc');
   renderTable();
@@ -752,7 +1018,7 @@ const bFU=v=>{const m={'High':'bfh','Medium':'bfm','Low':'bfl'};return`<span cla
 const bSc=s=>{const c=+s>=70?'#06d6a0':+s>=40?'#ffd166':'#e63946';return`<div class="score-bar"><div class="score-bar-bg"><div class="score-bar-fill" style="width:${s}%;background:${c}"></div></div><span style="font-size:11px;font-weight:700;color:${c}">${s}</span></div>`;};
 
 function renderTable(){
-  const ts=document.getElementById('table-search').value.toLowerCase();
+  const ts=(document.getElementById('table-search')||{value:''}).value.toLowerCase();
   let rows=[...filtered];
   if(ts)rows=rows.filter(r=>Object.values(r).join(' ').toLowerCase().includes(ts));
   rows.sort((a,b)=>{
@@ -769,22 +1035,16 @@ function renderTable(){
   document.getElementById('table-count-label').textContent='('+total+' records)';
   document.getElementById('table-body').innerHTML=rows.slice(start,end).map(r=>`
     <tr onclick="openModal(${filtered.indexOf(r)})">
-      <td>${r['Date']}</td>
-      <td title="${r['Sales Rep']}">${r['Sales Rep']}</td>
+      <td>${r['Date']}</td><td title="${r['Sales Rep']}">${r['Sales Rep']}</td>
       <td style="font-family:monospace;font-size:11px">${r['Customer Number']}</td>
       <td style="font-weight:500" title="${r['Company Name']||''}">${r['Company Name']||'—'}</td>
-      <td style="color:var(--text2)">${r['RSM']||'—'}</td>
-      <td style="color:var(--text2)">${r['ASM']||'—'}</td>
+      <td style="color:var(--text2)">${r['RSM']||'—'}</td><td style="color:var(--text2)">${r['ASM']||'—'}</td>
       <td style="color:var(--text2)">${r['Division']||'—'}</td>
-      <td>${bYN(r['Already Eshop Account'])}</td>
-      <td>${bYN(r['Opened During Visit'])}</td>
-      <td>${bYN(r['App Engaged'])}</td>
+      <td>${bYN(r['Already Eshop Account'])}</td><td>${bYN(r['Opened During Visit'])}</td><td>${bYN(r['App Engaged'])}</td>
       <td style="color:${r['Tech Savvy Level']==='High'?'#06d6a0':r['Tech Savvy Level']==='Low'?'#e63946':'#ffd166'};font-weight:600">${r['Tech Savvy Level']||'—'}</td>
       <td style="color:var(--text2)">${r['Digital Behaviour']||'—'}</td>
-      <td>${bInt(r['Interest Level'])}</td>
-      <td style="color:var(--text2)">${r['Opportunity Type']||'—'}</td>
-      <td style="color:var(--text2)">${r['Barrier Type']||'—'}</td>
-      <td>${bFU(r['Follow Up Priority'])}</td>
+      <td>${bInt(r['Interest Level'])}</td><td style="color:var(--text2)">${r['Opportunity Type']||'—'}</td>
+      <td style="color:var(--text2)">${r['Barrier Type']||'—'}</td><td>${bFU(r['Follow Up Priority'])}</td>
       <td>${bSc(r['Potential Score'])}</td>
       <td style="font-size:10px;color:var(--text2)">${r['Digital Maturity Stage']||'—'}</td>
       <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis" title="${(r['Notes']||'').replace(/"/g,'&quot;')}">${r['Notes']||'—'}</td>
@@ -792,7 +1052,7 @@ function renderTable(){
   renderPagination('pagination-btns',currentPage,pages,p=>{currentPage=p;renderTable();});
 }
 
-// ── PAGINATION HELPER ─────────────────────────────────────────────────────
+// ── PAGINATION ─────────────────────────────────────────────────────────────
 function renderPagination(containerId,cur,pages,cb){
   const pb=document.getElementById(containerId);pb.innerHTML='';
   const add=(lbl,pg,act,dis)=>{const b=document.createElement('button');b.className='page-btn'+(act?' active':'');b.textContent=lbl;if(!dis)b.onclick=()=>cb(pg);else b.disabled=true;pb.appendChild(b);};
@@ -804,7 +1064,7 @@ function renderPagination(containerId,cur,pages,cb){
   add('›',cur+1,false,cur>=pages);
 }
 
-// ── MODAL ─────────────────────────────────────────────────────────────────
+// ── MODAL ──────────────────────────────────────────────────────────────────
 function openModal(idx){
   const r=filtered[idx];if(!r)return;
   document.getElementById('modal-title').textContent=r['Company Name']||'Customer '+r['Customer Number'];
@@ -820,18 +1080,50 @@ function openModal(idx){
   ];
   document.getElementById('modal-grid').innerHTML=fields.map(([l,v])=>`<div class="modal-field"><label>${l}</label><span>${v||'—'}</span></div>`).join('');
   document.getElementById('modal-notes').textContent=r['Notes']||'No notes recorded.';
+  // Show order history section
+  const ordSec=document.getElementById('modal-orders-section');
+  if(r['Customer Number']){
+    ordSec.style.display='block';
+    document.getElementById('modal-orders-status').innerHTML='<span class="spinner"></span>';
+    document.getElementById('modal-orders-kpis').innerHTML='';
+    document.getElementById('modal-orders-body').innerHTML='';
+    fetchCustomerOrders(r['Customer Number']);
+  } else {ordSec.style.display='none';}
   document.getElementById('modal').classList.add('open');
+}
+async function fetchCustomerOrders(custNum){
+  try{
+    const r=await fetch(SCRIPT_URL+'?action=customer_orders&customer='+encodeURIComponent(custNum));
+    const d=await r.json();
+    document.getElementById('modal-orders-status').textContent=d.count?'':'No digital orders found';
+    if(!d.count)return;
+    document.getElementById('modal-orders-kpis').innerHTML=`
+      <div class="modal-order-kpi"><div class="modal-order-kpi-label">Orders</div><div class="modal-order-kpi-value">${d.count}</div></div>
+      <div class="modal-order-kpi"><div class="modal-order-kpi-label">Total Value</div><div class="modal-order-kpi-value">€${d.totalValue.toLocaleString()}</div></div>
+      <div class="modal-order-kpi"><div class="modal-order-kpi-label">Avg Value</div><div class="modal-order-kpi-value">€${d.avgValue.toLocaleString()}</div></div>`;
+    const rows=d.orders.slice(0,10);
+    document.getElementById('modal-orders-body').innerHTML=`<table class="modal-orders-table"><thead><tr><th>Date</th><th>Channel</th><th>Value €</th></tr></thead><tbody>${rows.map(o=>`<tr><td>${o.date||'—'}</td><td>${o.channel}</td><td style="color:var(--green);font-weight:600">€${o.netVal.toLocaleString()}</td></tr>`).join('')}</tbody></table>${d.count>10?`<div style="font-size:10px;color:var(--text3);padding:6px 8px">Showing 10 of ${d.count} orders</div>`:''}`;
+  }catch(e){document.getElementById('modal-orders-status').textContent='⚠ Could not load';}
 }
 function closeModal(e){if(e.target===document.getElementById('modal'))document.getElementById('modal').classList.remove('open');}
 
-// ── REP PERFORMANCE ───────────────────────────────────────────────────────
-function filterByRep(name){document.getElementById('filter-rep').value=name;applyFilters();switchTab('data');}
+// ── EXPORT ─────────────────────────────────────────────────────────────────
+function exportCSV(){
+  const cols=['Date','Sales Rep','Customer Number','Company Name','RSM','ASM','Division','Already Eshop Account','Opened During Visit','App Engaged','Tech Savvy Level','Digital Behaviour','Interest Level','Opportunity Type','Barrier Type','Follow Up Priority','Potential Score','Digital Maturity Stage','Notes'];
+  const esc=v=>'"'+String(v||'').replace(/"/g,'""')+'"';
+  const rows=[cols.map(esc).join(',')];
+  filtered.forEach(r=>rows.push(cols.map(c=>esc(r[c])).join(',')));
+  const blob=new Blob([rows.join('\n')],{type:'text/csv;charset=utf-8;'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Wurth_RideAlong_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
+}
+
+// ── REP PERFORMANCE ────────────────────────────────────────────────────────
+function filterByRep(name){document.getElementById('tf-rep').value=name;applyFilters();switchTab('data');}
 function sortRep(col){
   if(repSortCol===col)repSortDir*=-1;else{repSortCol=col;repSortDir=col==='name'?1:-1;}
   document.querySelectorAll('.rep-table th').forEach(th=>th.classList.remove('rep-sort-asc','rep-sort-desc'));
   const cols=['name','visits','opened','app','highInt','highFU','eproc','avg','sr'];
-  const idx=cols.indexOf(col);
-  if(idx>=0)document.querySelectorAll('.rep-table th')[idx].classList.add(repSortDir===1?'rep-sort-asc':'rep-sort-desc');
+  const idx=cols.indexOf(col);if(idx>=0)document.querySelectorAll('.rep-table th')[idx].classList.add(repSortDir===1?'rep-sort-asc':'rep-sort-desc');
   renderRepTable();
 }
 function renderRepTable(){
@@ -848,11 +1140,7 @@ function renderRepTable(){
     const sr=n?Math.round((opened+hI)/n*100):0;
     return{name:rep,visits:n,opened,app,highInt:hI,highFU:hFU,eproc:ep,avg,sr};
   });
-  data.sort((a,b)=>{
-    let va=a[repSortCol],vb=b[repSortCol];
-    if(typeof va==='string')return va.localeCompare(vb)*repSortDir;
-    return(va-vb)*repSortDir;
-  });
+  data.sort((a,b)=>{let va=a[repSortCol],vb=b[repSortCol];if(typeof va==='string')return va.localeCompare(vb)*repSortDir;return(va-vb)*repSortDir;});
   document.getElementById('rep-tbody').innerHTML=data.map(d=>`
     <tr style="cursor:pointer" onclick="filterByRep('${d.name.replace(/'/g,"\\'")}')">
       <td style="font-weight:600">${d.name}</td>
@@ -867,51 +1155,53 @@ function renderRepTable(){
     </tr>`).join('');
   document.querySelectorAll('.rep-table th').forEach(th=>th.classList.remove('rep-sort-asc','rep-sort-desc'));
   const cols=['name','visits','opened','app','highInt','highFU','eproc','avg','sr'];
-  const idx=cols.indexOf(repSortCol);
-  if(idx>=0)document.querySelectorAll('.rep-table th')[idx].classList.add(repSortDir===1?'rep-sort-asc':'rep-sort-desc');
+  const idx=cols.indexOf(repSortCol);if(idx>=0)document.querySelectorAll('.rep-table th')[idx].classList.add(repSortDir===1?'rep-sort-asc':'rep-sort-desc');
 }
 
-// ── COVERAGE ──────────────────────────────────────────────────────────────
+// ── COVERAGE ───────────────────────────────────────────────────────────────
 function updateCovKPIs(){
   const total=COV_DATA.reduce((s,d)=>s+d.total,0);
   const visited=COV_DATA.reduce((s,d)=>s+d.visited,0);
+  const ordered=COV_DATA.reduce((s,d)=>s+(d.ordered||0),0);
   document.getElementById('cov-kpi-total').textContent=total.toLocaleString();
   document.getElementById('cov-kpi-visited').textContent=visited.toLocaleString();
   document.getElementById('cov-kpi-unvisited').textContent=(total-visited).toLocaleString();
   document.getElementById('cov-kpi-pct').textContent=(total?Math.round(visited/total*100):0)+'%';
+  document.getElementById('cov-kpi-ordered').textContent=ordered.toLocaleString();
+}
+function setCovVisitFilter(mode){
+  covVisitFilter=mode;
+  ['all','visited','unvisited'].forEach(m=>document.getElementById('vs-'+m).classList.toggle('active',m===mode));
+  renderCovTable();
 }
 function resetCovFilters(){
   const s=document.getElementById('cov-search');if(s)s.value='';
-  const r=document.getElementById('cov-filter-rsm');if(r)r.value='';
-  const a=document.getElementById('cov-filter-asm');if(a)a.value='';
+  covVisitFilter='all';
+  ['all','visited','unvisited'].forEach(m=>document.getElementById('vs-'+m).classList.toggle('active',m==='all'));
   renderCovTable();
 }
 function sortCov(col){
-  if(covSortCol===col)covSortDir*=-1;
-  else{covSortCol=col;covSortDir=(col==='rep'||col==='rsm'||col==='asm')?1:-1;}
+  if(covSortCol===col)covSortDir*=-1;else{covSortCol=col;covSortDir=(col==='rep'||col==='rsm'||col==='asm')?1:-1;}
   document.querySelectorAll('.cov-table th').forEach(th=>th.classList.remove('cov-sort-asc','cov-sort-desc'));
-  const cols=['rep','rsm','asm','total','visited','unvisited','pct'];
-  const idx=cols.indexOf(col);
-  if(idx>=0)document.querySelectorAll('.cov-table th')[idx].classList.add(covSortDir===1?'cov-sort-asc':'cov-sort-desc');
+  const cols=['rep','rsm','asm','total','visited','unvisited','ordered','pct'];
+  const idx=cols.indexOf(col);if(idx>=0)document.querySelectorAll('.cov-table th')[idx].classList.add(covSortDir===1?'cov-sort-asc':'cov-sort-desc');
   renderCovTable();
 }
 function renderCovTable(){
-  const search=document.getElementById('cov-search').value.toLowerCase();
-  const rsmF=(document.getElementById('cov-filter-rsm')||{}).value||'';
-  const asmF=(document.getElementById('cov-filter-asm')||{}).value||'';
+  const search=(document.getElementById('cov-search')||{value:''}).value.toLowerCase();
+  const rsmF=(document.getElementById('tf-rsm')||{}).value||'';
+  const asmF=(document.getElementById('tf-asm')||{}).value||'';
+  const repF=(document.getElementById('tf-rep')||{}).value||'';
   let rows=[...COV_DATA];
   if(search)rows=rows.filter(d=>(d.rep+d.rsm+d.asm).toLowerCase().includes(search));
   if(rsmF)rows=rows.filter(d=>d.rsm===rsmF);
   if(asmF)rows=rows.filter(d=>d.asm===asmF);
-  rows.sort((a,b)=>{
-    let va=a[covSortCol],vb=b[covSortCol];
-    if(typeof va==='string')return va.localeCompare(vb)*covSortDir;
-    return(va-vb)*covSortDir;
-  });
-  if(!rows.length){
-    document.getElementById('cov-tbody').innerHTML='<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--text3)">No coverage data. Click Refresh to load from Customers sheet.</td></tr>';
-    return;
-  }
+  if(repF)rows=rows.filter(d=>d.rep===repF);
+  // Visit status filter
+  if(covVisitFilter==='visited')rows=rows.filter(d=>d.visited>0);
+  else if(covVisitFilter==='unvisited')rows=rows.filter(d=>d.visited===0);
+  rows.sort((a,b)=>{let va=a[covSortCol],vb=b[covSortCol];if(typeof va==='string')return va.localeCompare(vb)*covSortDir;return(va-vb)*covSortDir;});
+  if(!rows.length){document.getElementById('cov-tbody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--text3)">No coverage data for current filters.</td></tr>';return;}
   document.getElementById('cov-tbody').innerHTML=rows.map(d=>{
     const c=d.pct>=75?'var(--green)':d.pct>=40?'var(--accent3)':'var(--accent)';
     return`<tr style="cursor:pointer" onclick="openDrill('${d.rep.replace(/'/g,"\\'")}')">
@@ -921,11 +1211,12 @@ function renderCovTable(){
       <td style="text-align:center;font-weight:600">${d.total.toLocaleString()}</td>
       <td style="text-align:center;color:var(--green);font-weight:600">${d.visited.toLocaleString()}</td>
       <td style="text-align:center;color:${d.unvisited>0?'var(--accent3)':'var(--text3)'};font-weight:600">${d.unvisited.toLocaleString()}</td>
+      <td style="text-align:center;color:${(d.ordered||0)>0?'var(--purple)':'var(--text3)'};font-weight:600">${(d.ordered||0).toLocaleString()}</td>
       <td><div class="cov-bar-wrap"><div class="cov-bar-bg"><div class="cov-bar-fill" style="width:${d.pct}%;background:${c}"></div></div><span class="cov-pct-label" style="color:${c}">${d.pct}%</span></div></td>
     </tr>`;}).join('');
 }
 
-// ── DRILL DOWN ────────────────────────────────────────────────────────────
+// ── DRILL DOWN ─────────────────────────────────────────────────────────────
 async function openDrill(repName){
   const panel=document.getElementById('drill-panel');
   panel.style.display='block';
@@ -933,7 +1224,6 @@ async function openDrill(repName){
   document.getElementById('drill-body').innerHTML='<div class="drill-empty"><span class="spinner"></span> Loading customer list…</div>';
   document.getElementById('drill-division').innerHTML='<option value="">All Divisions</option>';
   drillData=null;drillPage=1;drillSortCol='lastVisited';drillSortDir=-1;
-  // Scroll to panel immediately so user sees the spinner
   panel.scrollIntoView({behavior:'smooth',block:'start'});
   try{
     const r=await fetch(SCRIPT_URL+'?action=coverage&rep='+encodeURIComponent(repName));
@@ -945,17 +1235,10 @@ async function openDrill(repName){
     const sel=document.getElementById('drill-division');
     divs.forEach(div=>{const o=document.createElement('option');o.value=o.textContent=div;sel.appendChild(o);});
     renderDrill();
-    // Scroll again after content is rendered so the full table is in view
     setTimeout(()=>panel.scrollIntoView({behavior:'smooth',block:'start'}),50);
-  }catch(e){
-    document.getElementById('drill-body').innerHTML=`<div class="drill-empty">⚠ ${e.message}</div>`;
-  }
+  }catch(e){document.getElementById('drill-body').innerHTML=`<div class="drill-empty">⚠ ${e.message}</div>`;}
 }
-function sortDrill(col){
-  if(drillSortCol===col)drillSortDir*=-1;
-  else{drillSortCol=col;drillSortDir=col==='lastVisited'?-1:1;}
-  drillPage=1;renderDrill();
-}
+function sortDrill(col){if(drillSortCol===col)drillSortDir*=-1;else{drillSortCol=col;drillSortDir=col==='lastVisited'?-1:1;}drillPage=1;renderDrill();}
 function closeDrill(){document.getElementById('drill-panel').style.display='none';drillData=null;}
 function renderDrill(){
   if(!drillData)return;
@@ -964,17 +1247,14 @@ function renderDrill(){
   const search=document.getElementById('drill-search').value.toLowerCase();
   const visitedSet=new Set(drillData.visited.map(c=>c.num));
   let rows=showMode==='all'?[...drillData.unvisited,...drillData.visited]:[...drillData.unvisited];
-  // Sort drill rows
   rows.sort((a,b)=>{
-    let va='',vb='';
-    if(drillSortCol==='status'){va=drillData.visited.map(c=>c.num).includes(a.num)?'visited':'unvisited';vb=drillData.visited.map(c=>c.num).includes(b.num)?'visited':'unvisited';}
-    else if(drillSortCol==='lastVisited'){
+    if(drillSortCol==='lastVisited'){
       const pa=a.lastVisited?a.lastVisited.split('/'):null,pb=b.lastVisited?b.lastVisited.split('/'):null;
-      va=pa?new Date(+pa[2],+pa[1]-1,+pa[0]):new Date(0);
-      vb=pb?new Date(+pb[2],+pb[1]-1,+pb[0]):new Date(0);
+      const va=pa?new Date(+pa[2],+pa[1]-1,+pa[0]):new Date(0);
+      const vb=pb?new Date(+pb[2],+pb[1]-1,+pb[0]):new Date(0);
       return va<vb?-drillSortDir:va>vb?drillSortDir:0;
     }
-    else{va=String(a[drillSortCol]||'').toLowerCase();vb=String(b[drillSortCol]||'').toLowerCase();}
+    const va=String(a[drillSortCol]||'').toLowerCase(),vb=String(b[drillSortCol]||'').toLowerCase();
     return va<vb?-drillSortDir:va>vb?drillSortDir:0;
   });
   if(divFilter)rows=rows.filter(c=>c.division===divFilter);
@@ -982,47 +1262,182 @@ function renderDrill(){
   const total=rows.length,pages=Math.max(1,Math.ceil(total/DRILL_SIZE));
   if(drillPage>pages)drillPage=1;
   const start=(drillPage-1)*DRILL_SIZE,end=Math.min(start+DRILL_SIZE,total);
-  const label=showMode==='all'
+  document.getElementById('drill-title').textContent=showMode==='all'
     ?`${drillData.rep} — ${drillData.visitedCount} visited · ${drillData.unvisitedCount} unvisited`
     :`${drillData.rep} — ${drillData.unvisitedCount} Unvisited Customers`;
-  document.getElementById('drill-title').textContent=label;
-  // Update sort indicators
-  ['num','name','division','lastVisited','status'].forEach(c=>{
-    const el=document.getElementById('dh-'+c);
-    if(el)el.textContent=drillSortCol===c?(drillSortDir===1?'↑':'↓'):'';
-  });
-  if(!rows.length){
-    document.getElementById('drill-body').innerHTML='<div class="drill-empty" style="color:var(--green)">✓ All customers visited for this filter!</div>';
-    document.getElementById('drill-page-info').textContent='';
-    document.getElementById('drill-page-btns').innerHTML='';
-    return;
-  }
+  ['num','name','division','lastVisited','status','orderCount'].forEach(c=>{const el=document.getElementById('dh-'+c);if(el)el.textContent=drillSortCol===c?(drillSortDir===1?'↑':'↓'):'';});
+  if(!rows.length){document.getElementById('drill-body').innerHTML='<div class="drill-empty" style="color:var(--green)">✓ All customers visited for this filter!</div>';document.getElementById('drill-page-info').textContent='';document.getElementById('drill-page-btns').innerHTML='';return;}
   document.getElementById('drill-body').innerHTML=`<div class="table-wrap"><table class="drill-table"><thead><tr>
-    <th onclick="sortDrill('num')" style="cursor:pointer">Customer # <span id="dh-num"></span></th><th onclick="sortDrill('name')" style="cursor:pointer">Company Name <span id="dh-name"></span></th><th onclick="sortDrill('division')" style="cursor:pointer">Division <span id="dh-division"></span></th><th onclick="sortDrill('lastVisited')" style="cursor:pointer">Last Visited <span id="dh-lastVisited">↓</span></th><th onclick="sortDrill('status')" style="cursor:pointer">Status <span id="dh-status"></span></th>
+    <th onclick="sortDrill('num')" style="cursor:pointer">Customer # <span id="dh-num"></span></th>
+    <th onclick="sortDrill('name')" style="cursor:pointer">Company Name <span id="dh-name"></span></th>
+    <th onclick="sortDrill('division')" style="cursor:pointer">Division <span id="dh-division"></span></th>
+    <th onclick="sortDrill('lastVisited')" style="cursor:pointer">Last Visited <span id="dh-lastVisited">↓</span></th>
+    <th onclick="sortDrill('orderCount')" style="cursor:pointer">Orders <span id="dh-orderCount"></span></th>
+    <th onclick="sortDrill('status')" style="cursor:pointer">Status <span id="dh-status"></span></th>
   </tr></thead><tbody>${rows.slice(start,end).map(c=>{
     const wasVisited=visitedSet.has(c.num);
     const lv=c.lastVisited||'';
     let daysAgo='',stale=false;
     if(lv){const parts=lv.split('/');if(parts.length===3){daysAgo=Math.floor((new Date()-new Date(+parts[2],+parts[1]-1,+parts[0]))/86400000);stale=daysAgo>180;}}
+    const oc=c.orderCount||0;
     return`<tr>
       <td style="font-family:monospace;font-size:11px">${c.num}</td>
       <td style="font-weight:500">${c.name||'—'}</td>
       <td style="color:var(--text2)">${c.division||'—'}</td>
       <td style="color:${stale?'var(--accent)':lv?'var(--green)':'var(--text3)'}">${lv||'Never'}${stale?' ⚠':''}${daysAgo!==''?` <span style="font-size:10px;color:var(--text3)">(${daysAgo}d ago)</span>`:''}</td>
+      <td style="text-align:center;color:${oc>0?'var(--purple)':'var(--text3)'};font-weight:${oc>0?'700':'400'}">${oc>0?oc:'—'}</td>
       <td>${wasVisited?'<span class="badge by">Visited</span>':'<span class="badge bni">Not Visited</span>'}</td>
     </tr>`;}).join('')}</tbody></table></div>`;
   document.getElementById('drill-page-info').textContent=`Showing ${start+1}–${end} of ${total}`;
   renderPagination('drill-page-btns',drillPage,pages,p=>{drillPage=p;renderDrill();});
 }
 
-// ── TAB SWITCH ────────────────────────────────────────────────────────────
+// ── ORDERS TAB ─────────────────────────────────────────────────────────────
+function setOrdVisitFilter(mode){
+  ordVisitFilter=mode;
+  ['all','visited','unvisited'].forEach(m=>document.getElementById('ord-vs-'+m).classList.toggle('active',m===mode));
+  if(ORD_DATA)renderOrdRepTable();
+}
+function resetOrdFilters(){
+  ordVisitFilter='all';
+  ['all','visited','unvisited'].forEach(m=>document.getElementById('ord-vs-'+m).classList.toggle('active',m==='all'));
+  const s=document.getElementById('ord-search');if(s)s.value='';
+  const cs=document.getElementById('ord-cust-search');if(cs)cs.value='';
+  renderOrdRepTable();renderOrdCustTable();
+}
+
+function renderOrdersTab(){
+  if(!ORD_DATA)return;
+  const rsm=(document.getElementById('tf-rsm')||{}).value||'';
+  const asm=(document.getElementById('tf-asm')||{}).value||'';
+  const rep=(document.getElementById('tf-rep')||{}).value||'';
+
+  // Filter rep list by top bar
+  const repRows=ORD_DATA.repList.filter(r=>{
+    if(rsm&&r.rsm!==rsm)return false;
+    if(asm&&r.asm!==asm)return false;
+    if(rep&&r.rep!==rep)return false;
+    return true;
+  });
+
+  // Top KPIs from filtered reps
+  const tot=repRows.reduce((s,r)=>s+r.totalOrders,0);
+  const val=repRows.reduce((s,r)=>s+r.totalValue,0);
+  document.getElementById('ord-total').textContent=tot.toLocaleString();
+  document.getElementById('ord-value').textContent='€'+val.toLocaleString();
+  document.getElementById('ord-avg').textContent=tot?'€'+Math.round(val/tot).toLocaleString():'€0';
+  document.getElementById('ord-ch-eshop').textContent=repRows.reduce((s,r)=>s+r.eshop,0).toLocaleString();
+  document.getElementById('ord-ch-oci').textContent=repRows.reduce((s,r)=>s+r.oci,0).toLocaleString();
+  document.getElementById('ord-ch-app').textContent=repRows.reduce((s,r)=>s+r.app,0).toLocaleString();
+  if(ORD_DATA.unmatchedCount>0)document.getElementById('ord-unmatched-note').textContent=`ℹ ${ORD_DATA.unmatchedCount} orders couldn't be matched to a rep (customer not in Customers sheet)`;
+
+  // Timeline chart (global, not filtered by rep for trend context)
+  const tl=ORD_DATA.timeline;
+  const mo=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const tlLabels=tl.map(t=>{const[y,m]=t.month.split('-');return mo[+m]+' '+y.slice(2);});
+  if(charts['ord-chart-timeline'])charts['ord-chart-timeline'].destroy();
+  const ctx=document.getElementById('ord-chart-timeline').getContext('2d');
+  const g=ctx.createLinearGradient(0,0,0,150);g.addColorStop(0,'rgba(6,214,160,.3)');g.addColorStop(1,'rgba(6,214,160,0)');
+  charts['ord-chart-timeline']=new Chart(ctx,{type:'line',data:{labels:tlLabels,datasets:[{label:'Orders',data:tl.map(t=>t.orders),borderColor:'#06d6a0',backgroundColor:g,borderWidth:2,tension:0.4,pointRadius:2,fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8892a4',font:{size:10},maxTicksLimit:12}},y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8892a4',font:{size:10}}}}}});
+
+  // Channel donut (from filtered reps)
+  const eshop=repRows.reduce((s,r)=>s+r.eshop,0);
+  const oci=repRows.reduce((s,r)=>s+r.oci,0);
+  const appC=repRows.reduce((s,r)=>s+r.app,0);
+  if(charts['ord-chart-channels'])charts['ord-chart-channels'].destroy();
+  charts['ord-chart-channels']=new Chart(document.getElementById('ord-chart-channels'),{type:'doughnut',data:{labels:['e-Shop','OCI','App'],datasets:[{data:[eshop,oci,appC],backgroundColor:['#06d6a0','#9b5de5','#ff6b6b'],borderWidth:1,borderColor:'#13161e'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{position:'bottom',labels:{color:'#8892a4',font:{size:10},boxWidth:10,padding:8}}}}});
+
+  renderOrdRepTable();renderOrdCustTable();
+  renderOverviewOrderKPIs();
+}
+
+function sortOrd(col){
+  if(ordSortCol===col)ordSortDir*=-1;else{ordSortCol=col;ordSortDir=col==='rep'||col==='rsm'||col==='asm'?1:-1;}
+  document.querySelectorAll('.ord-table th').forEach(th=>th.classList.remove('ord-sort-asc','ord-sort-desc'));
+  const cols=['rep','rsm','asm','totalOrders','totalValue','avgOrderValue','eshop','oci','app','convertedCustomers','uniqueCustomers'];
+  const idx=cols.indexOf(col);if(idx>=0)document.querySelectorAll('#ord-rep-tbody').item(0)?.closest('table')?.querySelectorAll('th')[idx]?.classList.add(ordSortDir===1?'ord-sort-asc':'ord-sort-desc');
+  renderOrdRepTable();
+}
+
+function renderOrdRepTable(){
+  if(!ORD_DATA)return;
+  const rsm=(document.getElementById('tf-rsm')||{}).value||'';
+  const asm=(document.getElementById('tf-asm')||{}).value||'';
+  const rep=(document.getElementById('tf-rep')||{}).value||'';
+  const search=(document.getElementById('ord-search')||{value:''}).value.toLowerCase();
+  // Build visited rep set from filtered visit data
+  const visitedReps=new Set(filtered.map(r=>r['Sales Rep']).filter(Boolean));
+  let rows=[...ORD_DATA.repList].filter(r=>{
+    if(rsm&&r.rsm!==rsm)return false;
+    if(asm&&r.asm!==asm)return false;
+    if(rep&&r.rep!==rep)return false;
+    if(search&&!(r.rep+r.rsm+r.asm).toLowerCase().includes(search))return false;
+    if(ordVisitFilter==='visited'&&!visitedReps.has(r.rep))return false;
+    if(ordVisitFilter==='unvisited'&&visitedReps.has(r.rep))return false;
+    return true;
+  });
+  rows.sort((a,b)=>{const va=a[ordSortCol],vb=b[ordSortCol];if(typeof va==='string')return va.localeCompare(vb)*ordSortDir;return(va-vb)*ordSortDir;});
+  document.getElementById('ord-rep-tbody').innerHTML=rows.length?rows.map(r=>`
+    <tr>
+      <td style="font-weight:600">${r.rep}</td>
+      <td style="color:var(--text2)">${r.rsm||'—'}</td>
+      <td style="color:var(--text2)">${r.asm||'—'}</td>
+      <td style="text-align:center;font-weight:700;color:var(--green)">${r.totalOrders.toLocaleString()}</td>
+      <td style="text-align:center;font-weight:600">€${r.totalValue.toLocaleString()}</td>
+      <td style="text-align:center">€${r.avgOrderValue.toLocaleString()}</td>
+      <td style="text-align:center;color:var(--green)">${r.eshop}</td>
+      <td style="text-align:center;color:var(--purple)">${r.oci}</td>
+      <td style="text-align:center;color:var(--accent2)">${r.app}</td>
+      <td style="text-align:center;color:var(--blue);font-weight:600">${r.convertedCustomers}</td>
+      <td style="text-align:center">${r.uniqueCustomers}</td>
+    </tr>`).join(''):'<tr><td colspan="11" style="text-align:center;padding:24px;color:var(--text3)">No data for current filters</td></tr>';
+}
+
+function sortOrdCust(col){if(ordCustSortCol===col)ordCustSortDir*=-1;else{ordCustSortCol=col;ordCustSortDir=col==='custNum'||col==='name'||col==='rep'||col==='division'?1:-1;}ordCustPage=1;renderOrdCustTable();}
+function renderOrdCustTable(){
+  if(!ORD_DATA)return;
+  const rsm=(document.getElementById('tf-rsm')||{}).value||'';
+  const asm=(document.getElementById('tf-asm')||{}).value||'';
+  const rep=(document.getElementById('tf-rep')||{}).value||'';
+  const search=(document.getElementById('ord-cust-search')||{value:''}).value.toLowerCase();
+  const visitedCusts=new Set(filtered.map(r=>r['Customer Number']).filter(Boolean));
+  let rows=[...ORD_DATA.topCustomers].filter(c=>{
+    if(rsm&&c.rsm!==rsm)return false;
+    if(asm&&c.asm!==asm)return false;
+    if(rep&&c.rep!==rep)return false;
+    if(search&&!(c.custNum+c.name+c.rep+c.division).toLowerCase().includes(search))return false;
+    if(ordVisitFilter==='visited'&&!visitedCusts.has(c.custNum))return false;
+    if(ordVisitFilter==='unvisited'&&visitedCusts.has(c.custNum))return false;
+    return true;
+  });
+  rows.sort((a,b)=>{const va=a[ordCustSortCol],vb=b[ordCustSortCol];if(typeof va==='string')return va.localeCompare(vb)*ordCustSortDir;return(va-vb)*ordCustSortDir;});
+  const total=rows.length,pages=Math.max(1,Math.ceil(total/ORD_CUST_SIZE));
+  if(ordCustPage>pages)ordCustPage=1;
+  const start=(ordCustPage-1)*ORD_CUST_SIZE,end=Math.min(start+ORD_CUST_SIZE,total);
+  document.getElementById('ord-cust-page-info').textContent=`Showing ${start+1}–${end} of ${total}`;
+  document.getElementById('ord-cust-tbody').innerHTML=rows.length?rows.slice(start,end).map(c=>`
+    <tr>
+      <td style="font-family:monospace;font-size:11px">${c.custNum}</td>
+      <td style="font-weight:500">${c.name||'—'}</td>
+      <td style="color:var(--text2)">${c.rep||'—'}</td>
+      <td style="color:var(--text2)">${c.division||'—'}</td>
+      <td style="text-align:center;font-weight:700;color:var(--green)">${c.orders}</td>
+      <td style="text-align:center;font-weight:600">€${c.value.toLocaleString()}</td>
+      <td style="text-align:center">€${c.avgVal.toLocaleString()}</td>
+      <td style="font-size:11px;color:var(--text2)">${c.channels}</td>
+    </tr>`).join(''):'<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--text3)">No data for current filters</td></tr>';
+  renderPagination('ord-cust-page-btns',ordCustPage,pages,p=>{ordCustPage=p;renderOrdCustTable();});
+}
+
+// ── TAB SWITCH ─────────────────────────────────────────────────────────────
 function switchTab(name){
-  const names=['overview','data','reps','coverage'];
+  const names=['overview','data','reps','coverage','orders'];
   document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',names[i]===name));
   document.querySelectorAll('.tab-content').forEach(tc=>tc.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
   if(name==='data')renderTable();
   if(name==='coverage'&&COV_DATA.length===0)fetchCoverageSummary();
+  if(name==='orders')fetchOrdersData();
 }
 </script>
 </body>
