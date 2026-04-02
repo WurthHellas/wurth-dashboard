@@ -300,7 +300,7 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
   </div>
   <div class="header-right">
     <div class="live-badge">GOOGLE SHEETS LIVE</div>
-    <div class="total-badge"><span id="shown-reps">—</span> reps · <span id="shown-count">—</span> visits</div>
+    <div class="total-badge"><span id="shown-reps">—</span> reps · <span id="shown-count">—</span> visits · <span id="shown-total">—</span> total</div>
   </div>
 </header>
 
@@ -926,6 +926,8 @@ function updateKPIs(){
   document.getElementById('kpi-high-int').textContent=highInt;
   document.getElementById('kpi-high-int-pct').textContent=pct(highInt,n)+' of visits';
   document.getElementById('shown-total').textContent=ALL_DATA.length.toLocaleString();
+  document.getElementById('shown-count').textContent=n.toLocaleString();
+  document.getElementById('shown-reps').textContent=repsCount;
 }
 
 function renderOverviewOrderKPIs(){
