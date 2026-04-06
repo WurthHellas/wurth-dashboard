@@ -271,7 +271,8 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
     <div class="tfb-qp">
       <button class="qp-btn active" id="qp-all" onclick="setQuickPick('all')">All</button>
       <button class="qp-btn" id="qp-month" onclick="setQuickPick('month')">This Month</button>
-      <button class="qp-btn" id="qp-last" onclick="setQuickPick('last')">Last Month</button>
+      <button class="qp-btn" id="qp-last" onclick="setQuickPick('last')">Last Month</button> 
+      <button class="qp-btn" id="qp-year" onclick="setQuickPick('year')">This Year</button>
     </div>
   </div>
   <div class="tfb-group">
@@ -717,7 +718,9 @@ function setQuickPick(mode){
   const fmt=d=>p2(d.getDate())+'/'+p2(d.getMonth()+1)+'/'+d.getFullYear();
   if(mode==='all'){document.getElementById('tf-date-from').value='';document.getElementById('tf-date-to').value='';}
   else if(mode==='month'){document.getElementById('tf-date-from').value=fmt(new Date(now.getFullYear(),now.getMonth(),1));document.getElementById('tf-date-to').value=fmt(new Date(now.getFullYear(),now.getMonth()+1,0));}
-  else if(mode==='last'){document.getElementById('tf-date-from').value=fmt(new Date(now.getFullYear(),now.getMonth()-1,1));document.getElementById('tf-date-to').value=fmt(new Date(now.getFullYear(),now.getMonth(),0));}
+  else if(mode==='last'){document.getElementById('tf-date-from').value=fmt(new Date(now.getFullYear(),now.getMonth()-1,1));document.getElementById('tf-date-to').value=fmt(new Date(now.getFullYear(),now.getMonth(),0));} 
+  else if(mode==='year'){document.getElementById('tf-date-from').value=fmt(new Date(now.getFullYear(),0,1));document.getElementById('tf-date-to').value=fmt(new Date(now.getFullYear(),11,31));} 
+  else if(mode==='year'){document.getElementById('tf-date-from').value=fmt(new Date(now.getFullYear(),0,1));document.getElementById('tf-date-to').value=fmt(new Date(now.getFullYear(),11,31));}
   applyFilters();
 }
 
