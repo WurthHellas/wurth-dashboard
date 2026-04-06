@@ -1291,20 +1291,28 @@ function renderOrdersTab(){
   const rsm=(document.getElementById('tf-rsm')||{}).value||'';
   const asm=(document.getElementById('tf-asm')||{}).value||'';
   const rep=(document.getElementById('tf-rep')||{}).value||'';
-  const repRows=ORD_DATA.repList.filter(r=>{
-    if(rsm&&r.rsm!==rsm)return false;
-    if(asm&&r.asm!==asm)return false;
-    if(rep&&r.rep!==rep)return false;
+  const dFrom=pd((document.getElementById('tf-date-from')||{value:''}).value);
+  const dTo=pd((document.getElementById('tf-date-to')||{value:''}).value);
+
+  // Filter allOrders by date + hierarchy for cards
+  const fo=(ORD_DATA.allOrders||[]).filter(o=>{
+    if(rsm&&o.rsm!==rsm)return false;
+    if(asm&&o.asm!==asm)return false;
+    if(rep&&o.salesRep!==rep)return false;
+    if(dFrom||dTo){const d=pd(o.date);if(!d)return false;if(dFrom&&d<dFrom)return false;if(dTo&&d>dTo)return false;}
     return true;
   });
-  const tot=repRows.reduce((s,r)=>s+r.totalOrders,0);
-  const val=repRows.reduce((s,r)=>s+r.totalValue,0);
+  const tot=fo.length;
+  const val=fo.reduce((s,o)=>s+o.netVal,0);
+  const eshopCount=fo.filter(o=>o.reason==='015'||o.reason==='15').length;
+  const ociCount=fo.filter(o=>o.reason==='315').length;
+  const appCount=fo.filter(o=>o.reason==='303'||o.reason==='304').length;
   document.getElementById('ord-total').textContent=tot.toLocaleString();
-  document.getElementById('ord-value').textContent='€'+val.toLocaleString();
+  document.getElementById('ord-value').textContent='€'+Math.round(val).toLocaleString();
   document.getElementById('ord-avg').textContent=tot?'€'+Math.round(val/tot).toLocaleString():'€0';
-  document.getElementById('ord-ch-eshop').textContent=repRows.reduce((s,r)=>s+r.eshop,0).toLocaleString();
-  document.getElementById('ord-ch-oci').textContent=repRows.reduce((s,r)=>s+r.oci,0).toLocaleString();
-  document.getElementById('ord-ch-app').textContent=repRows.reduce((s,r)=>s+r.app,0).toLocaleString();
+  document.getElementById('ord-ch-eshop').textContent=eshopCount.toLocaleString();
+  document.getElementById('ord-ch-oci').textContent=ociCount.toLocaleString();
+  document.getElementById('ord-ch-app').textContent=appCount.toLocaleString();
   if(ORD_DATA.unmatchedCount>0)document.getElementById('ord-unmatched-note').textContent=`ℹ ${ORD_DATA.unmatchedCount} orders unmatched to a rep`;
 
   // Timeline — filter by date
