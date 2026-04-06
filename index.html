@@ -601,7 +601,6 @@ async function fetchCoverageSummary(){
     // Build hierarchy from COV_DATA — this is the authoritative source
     buildHierarchyFromCovData();
     populateTopFilters();
-    updateCovKPIs();
     renderCovTable();
     document.getElementById('cov-status-label').textContent='';
   }catch(e){
@@ -1121,7 +1120,29 @@ function renderCovTable(){
   const rsmF=(document.getElementById('tf-rsm')||{}).value||'';
   const asmF=(document.getElementById('tf-asm')||{}).value||'';
   const repF=(document.getElementById('tf-rep')||{}).value||'';
-  let rows=[...COV_DATA];
+  const dFrom=pd((document.getElementById('tf-date-from')||{value:''}).value);
+  const dTo=pd((document.getElementById('tf-date-to')||{value:''}).value);
+  const dateFiltered=!!(dFrom||dTo);
+
+  // Build per-rep visited sets from date-filtered ALL_DATA
+  const repVisitedMap={};
+  if(dateFiltered){
+    filtered.forEach(r=>{
+      const rep=r['Sales Rep'],cust=r['Customer Number'];
+      if(!rep||!cust)return;
+      if(!repVisitedMap[rep])repVisitedMap[rep]=new Set();
+      repVisitedMap[rep].add(cust);
+    });
+  }
+
+  let rows=COV_DATA.map(d=>{
+    if(!dateFiltered)return d;
+    const visited=(repVisitedMap[d.rep]||new Set()).size;
+    const unvisited=d.total-visited;
+    const pct=d.total?Math.round(visited/d.total*100):0;
+    return{...d,visited,unvisited,pct};
+  });
+
   if(search)rows=rows.filter(d=>(d.rep+d.rsm+d.asm).toLowerCase().includes(search));
   if(rsmF)rows=rows.filter(d=>d.rsm===rsmF);
   if(asmF)rows=rows.filter(d=>d.asm===asmF);
@@ -1129,6 +1150,17 @@ function renderCovTable(){
   if(covVisitFilter==='visited')rows=rows.filter(d=>d.visited>0);
   else if(covVisitFilter==='unvisited')rows=rows.filter(d=>d.visited===0);
   rows.sort((a,b)=>{let va=a[covSortCol],vb=b[covSortCol];if(typeof va==='string')return va.localeCompare(vb)*covSortDir;return(va-vb)*covSortDir;});
+
+  // Update KPI cards
+  const totalCusts=rows.reduce((s,d)=>s+d.total,0);
+  const totalVisited=rows.reduce((s,d)=>s+d.visited,0);
+  const totalOrdered=rows.reduce((s,d)=>s+(d.ordered||0),0);
+  document.getElementById('cov-kpi-total').textContent=totalCusts.toLocaleString();
+  document.getElementById('cov-kpi-visited').textContent=totalVisited.toLocaleString();
+  document.getElementById('cov-kpi-unvisited').textContent=(totalCusts-totalVisited).toLocaleString();
+  document.getElementById('cov-kpi-pct').textContent=(totalCusts?Math.round(totalVisited/totalCusts*100):0)+'%';
+  document.getElementById('cov-kpi-ordered').textContent=totalOrdered.toLocaleString();
+
   if(!rows.length){document.getElementById('cov-tbody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--text3)">No data for current filters.</td></tr>';return;}
   document.getElementById('cov-tbody').innerHTML=rows.map(d=>{
     const c=d.pct>=75?'var(--green)':d.pct>=40?'var(--accent3)':'var(--accent)';
@@ -1254,8 +1286,17 @@ function renderOrdersTab(){
   document.getElementById('ord-ch-app').textContent=repRows.reduce((s,r)=>s+r.app,0).toLocaleString();
   if(ORD_DATA.unmatchedCount>0)document.getElementById('ord-unmatched-note').textContent=`ℹ ${ORD_DATA.unmatchedCount} orders unmatched to a rep`;
 
-  // Timeline
-  const tl=ORD_DATA.timeline;
+  // Timeline — filter by date
+  const dFrom=pd((document.getElementById('tf-date-from')||{value:''}).value);
+  const dTo=pd((document.getElementById('tf-date-to')||{value:''}).value);
+  const tl=ORD_DATA.timeline.filter(t=>{
+    if(!dFrom&&!dTo)return true;
+    const[y,m]=t.month.split('-');
+    const monthStart=new Date(+y,+m-1,1),monthEnd=new Date(+y,+m,0);
+    if(dFrom&&monthEnd<dFrom)return false;
+    if(dTo&&monthStart>dTo)return false;
+    return true;
+  });
   const mo=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   if(charts['ord-chart-timeline'])charts['ord-chart-timeline'].destroy();
   const ctx=document.getElementById('ord-chart-timeline').getContext('2d');
