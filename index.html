@@ -576,14 +576,14 @@ function closeDrawer(){document.getElementById('sidebar').classList.remove('draw
 
 // ── FETCH ──────────────────────────────────────────────────────────────────
 async function fetchLive(){
-  setStatus('loading','<span class="spinner"></span> Fetching from Google Sheets…');
+  setStatus('loading','<span class="spinner"></span> Loading data from Google Sheets — this takes ~10 seconds…');
   try{
     const r=await fetch(SCRIPT_URL+'?action=data');
     if(!r.ok)throw new Error('HTTP '+r.status);
     const d=await r.json();
     if(d.error)throw new Error(d.error);
     ALL_DATA=d;
-    setStatus('ok','✓ '+d.length+' records — '+new Date().toLocaleString('el-GR'));
+    setStatus('ok','✓ '+d.length+' records loaded — '+new Date().toLocaleString('el-GR'));
     populateSidebarDropdowns();
     applyFilters();
     fetchCoverageSummary();
