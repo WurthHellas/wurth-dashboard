@@ -789,6 +789,7 @@ function applyFilters(){
   updateKPIs();updateCharts();renderTable();renderRepTable();updateFilterBadge();
   if(COV_DATA.length)renderCovTable();
   if(ORD_DATA)renderOrdersTab();
+  if(ORD_DATA||ORD_KPI)renderOverviewOrderKPIs();
 }
 
 function resetAllFilters(){
