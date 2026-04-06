@@ -854,32 +854,52 @@ function updateKPIs(){
 }
 
 function renderOverviewOrderKPIs(){
-  if(!ORD_KPI)return;
-  let kpi=ORD_KPI;
-  if(ORD_DATA){
-    const rsm=(document.getElementById('tf-rsm')||{}).value||'';
-    const asm=(document.getElementById('tf-asm')||{}).value||'';
-    const rep=(document.getElementById('tf-rep')||{}).value||'';
-    if(rsm||asm||rep){
-      const rows=ORD_DATA.repList.filter(r=>{
-        if(rsm&&r.rsm!==rsm)return false;
-        if(asm&&r.asm!==asm)return false;
-        if(rep&&r.rep!==rep)return false;
-        return true;
-      });
-      const tot=rows.reduce((s,r)=>s+r.totalOrders,0);
-      const val=rows.reduce((s,r)=>s+r.totalValue,0);
-      kpi={totalOrders:tot,avgOrderValue:tot?Math.round(val/tot):0,
-        convertedCustomers:rows.reduce((s,r)=>s+r.convertedCustomers,0),
-        visitedCustomers:ORD_KPI.visitedCustomers,channelBreakdown:ORD_KPI.channelBreakdown};
-    }
+  if(!ORD_KPI&&!ORD_DATA)return;
+  const dFrom=pd((document.getElementById('tf-date-from')||{value:''}).value);
+  const dTo=pd((document.getElementById('tf-date-to')||{value:''}).value);
+  const rsm=(document.getElementById('tf-rsm')||{}).value||'';
+  const asm=(document.getElementById('tf-asm')||{}).value||'';
+  const rep=(document.getElementById('tf-rep')||{}).value||'';
+
+  // If we have raw orders, filter them — otherwise fall back to ORD_KPI
+  if(ORD_DATA&&ORD_DATA.allOrders){
+    const fo=ORD_DATA.allOrders.filter(o=>{
+      if(rsm&&o.rsm!==rsm)return false;
+      if(asm&&o.asm!==asm)return false;
+      if(rep&&o.salesRep!==rep)return false;
+      if(dFrom||dTo){const d=pd(o.date);if(!d)return false;if(dFrom&&d<dFrom)return false;if(dTo&&d>dTo)return false;}
+      return true;
+    });
+    const tot=fo.length;
+    const val=fo.reduce((s,o)=>s+o.netVal,0);
+    const eshop=fo.filter(o=>o.reason==='015'||o.reason==='15').length;
+    const oci=fo.filter(o=>o.reason==='315').length;
+    const app=fo.filter(o=>o.reason==='303'||o.reason==='304').length;
+    const visitedCusts=new Set(ALL_DATA.filter(r=>{
+      if(dFrom){const d=pd(r['Date']);if(!d||d<dFrom)return false;}
+      if(dTo){const d=pd(r['Date']);if(!d||d>dTo)return false;}
+      if(rsm&&r['RSM']!==rsm)return false;
+      if(asm&&r['ASM']!==asm)return false;
+      if(rep&&r['Sales Rep']!==rep)return false;
+      return true;
+    }).map(r=>r['Customer Number']).filter(Boolean));
+    const converted=new Set(fo.filter(o=>visitedCusts.has(o.custNum)).map(o=>o.custNum)).size;
+    document.getElementById('ord-kpi-total').textContent=tot.toLocaleString();
+    document.getElementById('ord-kpi-avg').textContent='€'+(tot?Math.round(val/tot):0).toLocaleString();
+    document.getElementById('ord-kpi-converted').textContent=converted.toLocaleString();
+    document.getElementById('ord-kpi-converted-pct').textContent=(visitedCusts.size?Math.round(converted/visitedCusts.size*100):0)+'% of visited customers';
+    document.getElementById('ord-kpi-eshop').textContent=eshop.toLocaleString();
+    document.getElementById('ord-kpi-oci').textContent=oci.toLocaleString();
+    document.getElementById('ord-kpi-app').textContent=app.toLocaleString();
+    return;
   }
-  document.getElementById('ord-kpi-total').textContent=(kpi.totalOrders||0).toLocaleString();
-  document.getElementById('ord-kpi-avg').textContent='€'+(kpi.avgOrderValue||0).toLocaleString();
-  document.getElementById('ord-kpi-converted').textContent=(kpi.convertedCustomers||0).toLocaleString();
-  const convPct=kpi.visitedCustomers?Math.round((kpi.convertedCustomers||0)/kpi.visitedCustomers*100):0;
-  document.getElementById('ord-kpi-converted-pct').textContent=convPct+'% of visited customers';
-  const ch=kpi.channelBreakdown||{};
+  // Fallback to ORD_KPI (no date filtering)
+  if(!ORD_KPI)return;
+  const ch=ORD_KPI.channelBreakdown||{};
+  document.getElementById('ord-kpi-total').textContent=(ORD_KPI.totalOrders||0).toLocaleString();
+  document.getElementById('ord-kpi-avg').textContent='€'+(ORD_KPI.avgOrderValue||0).toLocaleString();
+  document.getElementById('ord-kpi-converted').textContent=(ORD_KPI.convertedCustomers||0).toLocaleString();
+  document.getElementById('ord-kpi-converted-pct').textContent=(ORD_KPI.visitedCustomers?Math.round((ORD_KPI.convertedCustomers||0)/ORD_KPI.visitedCustomers*100):0)+'% of visited customers';
   document.getElementById('ord-kpi-eshop').textContent=(ch['e-Shop']||0).toLocaleString();
   document.getElementById('ord-kpi-oci').textContent=(ch['OCI/e-Procurement']||0).toLocaleString();
   document.getElementById('ord-kpi-app').textContent=(ch['App']||0).toLocaleString();
