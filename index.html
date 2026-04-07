@@ -589,6 +589,7 @@ async function fetchLive(){
     applyFilters();
     fetchCoverageSummary();
     fetchOrderKPIs();
+    fetchOrdersData();
   }catch(e){setStatus('err','✗ '+e.message);}
 }
 
@@ -854,14 +855,13 @@ function updateKPIs(){
 }
 
 function renderOverviewOrderKPIs(){
-  if(!ORD_KPI&&!ORD_DATA)return;
-  const dFrom=pd((document.getElementById('tf-date-from')||{value:''}).value);
-  const dTo=pd((document.getElementById('tf-date-to')||{value:''}).value);
+  if(!ORD_DATA&&!ORD_KPI)return;
   const rsm=(document.getElementById('tf-rsm')||{}).value||'';
   const asm=(document.getElementById('tf-asm')||{}).value||'';
   const rep=(document.getElementById('tf-rep')||{}).value||'';
+  const dFrom=pd((document.getElementById('tf-date-from')||{value:''}).value);
+  const dTo=pd((document.getElementById('tf-date-to')||{value:''}).value);
 
-  // If we have raw orders, filter them — otherwise fall back to ORD_KPI
   if(ORD_DATA&&ORD_DATA.allOrders){
     const fo=ORD_DATA.allOrders.filter(o=>{
       if(rsm&&o.rsm!==rsm)return false;
@@ -872,9 +872,11 @@ function renderOverviewOrderKPIs(){
     });
     const tot=fo.length;
     const val=fo.reduce((s,o)=>s+o.netVal,0);
-    const eshop=fo.filter(o=>o.reason==='015'||o.reason==='15').length;
-    const oci=fo.filter(o=>o.reason==='315').length;
-    const app=fo.filter(o=>o.reason==='303'||o.reason==='304').length;
+    document.getElementById('ord-kpi-total').textContent=tot.toLocaleString();
+    document.getElementById('ord-kpi-avg').textContent='€'+(tot?Math.round(val/tot):0).toLocaleString();
+    document.getElementById('ord-kpi-eshop').textContent=fo.filter(o=>o.reason==='015'||o.reason==='15').length.toLocaleString();
+    document.getElementById('ord-kpi-oci').textContent=fo.filter(o=>o.reason==='315').length.toLocaleString();
+    document.getElementById('ord-kpi-app').textContent=fo.filter(o=>o.reason==='303'||o.reason==='304').length.toLocaleString();
     const visitedCusts=new Set(ALL_DATA.filter(r=>{
       if(dFrom){const d=pd(r['Date']);if(!d||d<dFrom)return false;}
       if(dTo){const d=pd(r['Date']);if(!d||d>dTo)return false;}
@@ -884,16 +886,11 @@ function renderOverviewOrderKPIs(){
       return true;
     }).map(r=>r['Customer Number']).filter(Boolean));
     const converted=new Set(fo.filter(o=>visitedCusts.has(o.custNum)).map(o=>o.custNum)).size;
-    document.getElementById('ord-kpi-total').textContent=tot.toLocaleString();
-    document.getElementById('ord-kpi-avg').textContent='€'+(tot?Math.round(val/tot):0).toLocaleString();
     document.getElementById('ord-kpi-converted').textContent=converted.toLocaleString();
     document.getElementById('ord-kpi-converted-pct').textContent=(visitedCusts.size?Math.round(converted/visitedCusts.size*100):0)+'% of visited customers';
-    document.getElementById('ord-kpi-eshop').textContent=eshop.toLocaleString();
-    document.getElementById('ord-kpi-oci').textContent=oci.toLocaleString();
-    document.getElementById('ord-kpi-app').textContent=app.toLocaleString();
     return;
   }
-  // Fallback to ORD_KPI (no date filtering)
+  // Fallback to ORD_KPI when ORD_DATA not loaded yet
   if(!ORD_KPI)return;
   const ch=ORD_KPI.channelBreakdown||{};
   document.getElementById('ord-kpi-total').textContent=(ORD_KPI.totalOrders||0).toLocaleString();
