@@ -1153,12 +1153,27 @@ function renderCovTable(){
     });
   }
 
+// Build per-rep ordered sets from date-filtered allOrders
+  const repOrderedMap={};
+  if(dateFiltered&&ORD_DATA&&ORD_DATA.allOrders){
+    ORD_DATA.allOrders.filter(o=>{
+      const d=pd(o.date);if(!d)return false;
+      if(dFrom&&d<dFrom)return false;
+      if(dTo&&d>dTo)return false;
+      return true;
+    }).forEach(o=>{
+      if(!repOrderedMap[o.salesRep])repOrderedMap[o.salesRep]=new Set();
+      repOrderedMap[o.salesRep].add(o.custNum);
+    });
+  }
+
   let rows=COV_DATA.map(d=>{
     if(!dateFiltered)return d;
     const visited=(repVisitedMap[d.rep]||new Set()).size;
     const unvisited=d.total-visited;
     const pct=d.total?Math.round(visited/d.total*100):0;
-    return{...d,visited,unvisited,pct};
+    const ordered=(repOrderedMap[d.rep]||new Set()).size;
+    return{...d,visited,unvisited,pct,ordered};
   });
 
   if(search)rows=rows.filter(d=>(d.rep+d.rsm+d.asm).toLowerCase().includes(search));
