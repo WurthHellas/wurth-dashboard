@@ -1324,9 +1324,9 @@ function renderOrdersTab(){
   charts['ord-chart-timeline']=new Chart(ctx,{type:'line',data:{labels:tl.map(t=>{const[y,m]=t.month.split('-');return mo[+m]+' '+y.slice(2);}),datasets:[{label:'Orders',data:tl.map(t=>t.orders),borderColor:'#06d6a0',backgroundColor:g,borderWidth:2,tension:0.4,pointRadius:2,fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8892a4',font:{size:10},maxTicksLimit:12}},y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8892a4',font:{size:10}}}}}});
 
   // Channel donut
-  const eshop=repRows.reduce((s,r)=>s+r.eshop,0);
-  const oci=repRows.reduce((s,r)=>s+r.oci,0);
-  const appC=repRows.reduce((s,r)=>s+r.app,0);
+  const eshop=fo.filter(o=>o.reason==='015'||o.reason==='15').length;
+  const oci=fo.filter(o=>o.reason==='315').length;
+  const appC=fo.filter(o=>o.reason==='303'||o.reason==='304').length;
   if(charts['ord-chart-channels'])charts['ord-chart-channels'].destroy();
   charts['ord-chart-channels']=new Chart(document.getElementById('ord-chart-channels'),{type:'doughnut',data:{labels:['e-Shop','OCI','App'],datasets:[{data:[eshop,oci,appC],backgroundColor:['#06d6a0','#9b5de5','#ff6b6b'],borderWidth:1,borderColor:'#13161e'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{position:'bottom',labels:{color:'#8892a4',font:{size:10},boxWidth:10,padding:8}}}}});
 
