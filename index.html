@@ -6,10 +6,12 @@
 <title>Würth Hellas — Ride-Along Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 :root{--bg:#0d0f14;--surface:#13161e;--surface2:#1a1e2a;--surface3:#21263a;--border:#2a2f45;--accent:#e63946;--accent2:#ff6b6b;--accent3:#ffd166;--green:#06d6a0;--blue:#118ab2;--purple:#9b5de5;--text:#e8eaf0;--text2:#8892a4;--text3:#4a526a;--font-display:"Barlow Condensed",sans-serif;--font-body:"Barlow",sans-serif;--radius:10px;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:14px;min-height:100vh;}
+/* HEADER */
 .header{background:linear-gradient(135deg,#0d0f14 0%,#1a1e2a 50%,#0d0f14 100%);border-bottom:2px solid var(--accent);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 30px rgba(230,57,70,0.15);}
 .header-logo{display:flex;align-items:center;gap:14px;}
 .header-logo .bar{width:4px;height:36px;background:var(--accent);border-radius:2px;}
@@ -19,15 +21,17 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-si
 .header-right{display:flex;align-items:center;gap:14px;}
 .live-badge{background:rgba(6,214,160,0.1);border:1px solid var(--green);color:var(--green);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:1px;display:flex;align-items:center;gap:6px;}
 .live-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
-@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
 .total-badge{font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--text2);display:flex;gap:12px;}
 .total-badge .tb-item{display:flex;flex-direction:column;align-items:center;gap:1px;}
 .total-badge .tb-val{color:var(--accent);font-size:18px;font-weight:800;line-height:1;}
 .total-badge .tb-lbl{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--text3);}
-.sync-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:8px 28px;display:flex;align-items:center;gap:10px;}
+/* SYNC BAR */
+.sync-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:8px 28px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .btn{padding:7px 16px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .2s;letter-spacing:.5px;display:inline-flex;align-items:center;gap:6px;}
 .btn-primary{background:var(--accent);color:#fff;}.btn-primary:hover{background:#c0303b;}
-.btn-export{background:rgba(6,214,160,0.1);color:var(--green);border:1px solid rgba(6,214,160,0.3);}.btn-export:hover{background:rgba(6,214,160,0.2);}
+.btn-export{background:rgba(6,214,160,.1);color:var(--green);border:1px solid rgba(6,214,160,.3);}.btn-export:hover{background:rgba(6,214,160,.2);}
+.btn-pdf{background:rgba(255,209,102,.1);color:var(--accent3);border:1px solid rgba(255,209,102,.3);}.btn-pdf:hover{background:rgba(255,209,102,.2);}
 .btn-reset-inline{background:transparent;color:var(--text2);border:1px solid var(--border);font-size:11px;padding:5px 12px;}.btn-reset-inline:hover{border-color:var(--accent);color:var(--accent);}
 .sync-status{font-size:11px;color:var(--text3);margin-left:auto;display:flex;align-items:center;gap:6px;}
 .sync-status.ok{color:var(--green);}.sync-status.err{color:var(--accent);}.sync-status.loading{color:var(--accent3);}
@@ -47,8 +51,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-si
 .qp-btn{padding:4px 10px;border-radius:5px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap;}
 .qp-btn:hover,.qp-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
 /* LAYOUT */
-.app{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 108px);}
-.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:14px 12px;overflow-y:auto;position:sticky;top:108px;max-height:calc(100vh - 108px);}
+.app{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 116px);}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:14px 12px;overflow-y:auto;position:sticky;top:116px;max-height:calc(100vh - 116px);}
 .main{padding:18px;overflow-x:hidden;}
 .filter-section{margin-bottom:14px;}
 .filter-section-title{font-family:var(--font-display);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:7px;padding-bottom:5px;border-bottom:1px solid var(--border);}
@@ -64,7 +68,7 @@ input[type=text]::placeholder,input[type=number]::placeholder{color:var(--text3)
 .kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:11px;margin-bottom:18px;}
 .kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px;position:relative;overflow:hidden;transition:transform .2s,border-color .2s,box-shadow .2s;}
 .kpi-card:hover{transform:translateY(-2px);border-color:var(--accent);}
-.kpi-card.clickable{cursor:pointer;}.kpi-card.clickable:hover{box-shadow:0 4px 20px rgba(230,57,70,0.2);}
+.kpi-card.clickable{cursor:pointer;}.kpi-card.clickable:hover{box-shadow:0 4px 20px rgba(230,57,70,.2);}
 .kpi-card.active-filter{border-color:var(--card-accent,var(--accent));box-shadow:0 0 0 2px var(--card-accent,var(--accent));background:var(--surface2);}
 .kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--card-accent,var(--accent));}
 .kpi-click-hint{font-size:9px;color:var(--text3);margin-top:4px;letter-spacing:.5px;}
@@ -114,32 +118,17 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
 .pagination-btns{display:flex;gap:3px;}
 .page-btn{background:var(--surface2);border:1px solid var(--border);color:var(--text2);padding:4px 8px;border-radius:5px;cursor:pointer;font-size:12px;transition:all .15s;}
 .page-btn:hover,.page-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
-/* MODAL */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center;}
-.modal-overlay.open{display:flex;}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;width:580px;max-height:82vh;overflow-y:auto;position:relative;}
-.modal-close{position:absolute;top:14px;right:14px;background:none;border:none;color:var(--text2);font-size:20px;cursor:pointer;}
-.modal-title{font-family:var(--font-display);font-size:20px;font-weight:800;margin-bottom:3px;}
-.modal-sub{font-size:12px;color:var(--text2);margin-bottom:16px;}
-.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:16px;}
-.modal-field{background:var(--surface2);border-radius:6px;padding:9px 11px;}
-.modal-field label{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text3);display:block;margin-bottom:3px;}
-.modal-notes{background:var(--surface2);border-radius:6px;padding:11px;font-size:12px;line-height:1.7;border-left:3px solid var(--accent);}
-.modal-notes-label{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:6px;}
-.modal-orders-section{margin-top:16px;}
-.modal-orders-label{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;}
-.modal-orders-kpis{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
-.modal-order-kpi{background:var(--surface2);border-radius:6px;padding:8px 12px;flex:1;min-width:80px;}
-.modal-order-kpi-label{font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:2px;}
-.modal-order-kpi-value{font-family:var(--font-display);font-size:18px;font-weight:800;color:var(--green);}
-.modal-orders-table{width:100%;border-collapse:collapse;font-size:11px;}
-.modal-orders-table th{background:var(--surface3);padding:5px 8px;text-align:left;color:var(--text3);font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
-.modal-orders-table td{padding:5px 8px;border-bottom:1px solid var(--border);color:var(--text2);}
 /* TABS */
 .tabs{display:flex;gap:3px;margin-bottom:14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:4px;width:fit-content;}
-.tab{padding:7px 17px;border-radius:7px;cursor:pointer;font-size:12px;font-weight:600;color:var(--text2);transition:all .2s;}
+.tab{padding:7px 17px;border-radius:7px;cursor:pointer;font-size:12px;font-weight:600;color:var(--text2);transition:all .2s;position:relative;}
 .tab.active{background:var(--accent);color:#fff;}
+.tab-badge{position:absolute;top:-4px;right:-4px;background:var(--accent3);color:#0d0f14;border-radius:10px;font-size:9px;font-weight:800;padding:1px 5px;display:none;}
+.tab-badge.visible{display:inline;}
 .tab-content{display:none;}.tab-content.active{display:block;}
+/* SUB-TOGGLE */
+.sub-toggle{display:flex;gap:3px;margin-bottom:16px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:3px;width:fit-content;}
+.sub-btn{padding:6px 16px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;color:var(--text2);transition:all .2s;border:none;background:none;}
+.sub-btn.active{background:var(--surface3);color:var(--text);border:1px solid var(--border);}
 /* REP TABLE */
 .rep-table{width:100%;border-collapse:collapse;}
 .rep-table th{background:var(--surface2);padding:9px 12px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2);text-align:left;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;white-space:nowrap;transition:color .2s;}
@@ -181,7 +170,7 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
 .drill-table td{padding:7px 10px;border-bottom:1px solid var(--border);font-size:12px;}
 .drill-table tr:hover td{background:var(--surface2);}
 .drill-empty{padding:32px;text-align:center;color:var(--text3);font-size:13px;}
-/* ORDERS TAB */
+/* ORDERS */
 .ord-kpi-row{display:flex;gap:11px;margin-bottom:16px;flex-wrap:wrap;}
 .ord-kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;flex:1;min-width:110px;position:relative;overflow:hidden;}
 .ord-kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--card-accent,var(--accent));}
@@ -199,6 +188,64 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
 .visit-status-toggle{display:flex;gap:4px;}
 .vs-btn{padding:5px 12px;border-radius:5px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;}
 .vs-btn:hover,.vs-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+/* ALERTS */
+.alert-kpi-row{display:flex;gap:11px;margin-bottom:16px;flex-wrap:wrap;}
+.alert-kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;flex:1;min-width:130px;position:relative;overflow:hidden;}
+.alert-kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--card-accent,var(--accent));}
+.alert-kpi-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);margin-bottom:5px;}
+.alert-kpi-value{font-family:var(--font-display);font-size:26px;font-weight:800;color:var(--card-accent,var(--text));line-height:1;}
+.alert-kpi-sub{font-size:10px;color:var(--text3);margin-top:2px;}
+.alert-table{width:100%;border-collapse:collapse;}
+.alert-table th{background:var(--surface2);padding:9px 12px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2);text-align:left;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;white-space:nowrap;transition:color .2s;}
+.alert-table th:hover{color:var(--accent);}
+.alert-table th.al-sort-asc::after{content:' ↑';color:var(--accent);}
+.alert-table th.al-sort-desc::after{content:' ↓';color:var(--accent);}
+.alert-table td{padding:9px 12px;border-bottom:1px solid var(--border);font-size:12px;}
+.alert-table tr:hover td{background:var(--surface2);}
+.alert-pill{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;}
+.pill-fu{background:rgba(230,57,70,.15);color:var(--accent2);border:1px solid rgba(230,57,70,.3);}
+.pill-churn{background:rgba(255,209,102,.15);color:var(--accent3);border:1px solid rgba(255,209,102,.3);}
+.pill-days-high{background:rgba(230,57,70,.15);color:var(--accent);border:1px solid rgba(230,57,70,.3);}
+.pill-days-med{background:rgba(255,209,102,.15);color:var(--accent3);border:1px solid rgba(255,209,102,.3);}
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;width:640px;max-height:85vh;overflow-y:auto;position:relative;}
+.modal-close{position:absolute;top:14px;right:14px;background:none;border:none;color:var(--text2);font-size:20px;cursor:pointer;}
+.modal-title{font-family:var(--font-display);font-size:20px;font-weight:800;margin-bottom:3px;}
+.modal-sub{font-size:12px;color:var(--text2);margin-bottom:16px;}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:16px;}
+.modal-field{background:var(--surface2);border-radius:6px;padding:9px 11px;}
+.modal-field label{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text3);display:block;margin-bottom:3px;}
+.modal-notes{background:var(--surface2);border-radius:6px;padding:11px;font-size:12px;line-height:1.7;border-left:3px solid var(--accent);}
+.modal-notes-label{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:6px;}
+/* VISIT TIMELINE */
+.modal-timeline-section{margin-top:18px;}
+.modal-section-title{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:10px;padding-bottom:5px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.timeline-visit{background:var(--surface2);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--border);position:relative;}
+.timeline-visit.latest{border-left-color:var(--green);}
+.timeline-visit-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px;}
+.timeline-visit-date{font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--text);}
+.timeline-visit-rep{font-size:11px;color:var(--text3);}
+.timeline-visit-fields{display:flex;gap:6px;flex-wrap:wrap;}
+.tfield{font-size:10px;padding:2px 7px;border-radius:4px;background:var(--surface3);color:var(--text2);border:1px solid var(--border);}
+.timeline-progression{background:var(--surface3);border-radius:6px;padding:9px 12px;margin-bottom:10px;font-size:11px;}
+.prog-title{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:6px;}
+.prog-row{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.prog-label{font-size:10px;color:var(--text2);width:80px;flex-shrink:0;}
+.prog-arrow{color:var(--text3);font-size:11px;}
+.prog-change{font-weight:600;font-size:10px;}
+.prog-up{color:var(--green);}.prog-down{color:var(--accent);}.prog-same{color:var(--text3);}
+/* ORDER HISTORY MODAL */
+.modal-orders-section{margin-top:16px;}
+.modal-orders-label{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;}
+.modal-orders-kpis{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+.modal-order-kpi{background:var(--surface2);border-radius:6px;padding:8px 12px;flex:1;min-width:80px;}
+.modal-order-kpi-label{font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:2px;}
+.modal-order-kpi-value{font-family:var(--font-display);font-size:18px;font-weight:800;color:var(--green);}
+.modal-orders-table{width:100%;border-collapse:collapse;font-size:11px;}
+.modal-orders-table th{background:var(--surface3);padding:5px 8px;text-align:left;color:var(--text3);font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+.modal-orders-table td{padding:5px 8px;border-bottom:1px solid var(--border);color:var(--text2);}
 /* MOBILE */
 .filter-toggle{display:none;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:12px;}
 .filter-count{background:var(--accent);color:#fff;border-radius:10px;padding:1px 7px;font-size:11px;font-weight:700;display:none;}
@@ -211,7 +258,25 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
 ::-webkit-scrollbar-thumb:hover{background:var(--accent);}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
-.kpi-card,.chart-card,.table-section,.cov-kpi,.drill-panel,.ord-kpi{animation:fadeIn .35s ease both;}
+.kpi-card,.chart-card,.table-section,.cov-kpi,.drill-panel,.ord-kpi,.alert-kpi{animation:fadeIn .35s ease both;}
+/* PRINT / PDF STYLES */
+@media print{
+  body{background:#fff;color:#000;}
+  .header,.sync-bar,.top-filter-bar,.sidebar,.tabs,.sub-toggle,.filter-toggle,.modal-overlay,
+  .btn,.pagination,.pagination-btns,.drill-panel,.table-controls,.modal-close{display:none!important;}
+  .app{display:block;}.main{padding:0;}
+  .tab-content{display:block!important;}
+  #tab-fielddata > *:not(.print-visible){display:none;}
+  #tab-overview,#tab-operations,#tab-alerts,#tab-fielddata .sub-toggle{display:none!important;}
+  .print-section{display:block!important;}
+  table,thead,tbody,tr,th,td{color:#000;background:#fff;border-color:#ccc;}
+  .kpi-card,.chart-card,.table-section,.cov-kpi,.alert-kpi,.ord-kpi{border:1px solid #ccc;background:#fff;}
+  .kpi-value,.kpi-label,.kpi-sub,.section-divider{color:#000;}
+  canvas{max-width:100%;}
+  .print-header{display:block!important;margin-bottom:20px;border-bottom:2px solid #e63946;padding-bottom:12px;}
+}
+.print-header{display:none;}
+.print-section{display:none;}
 @media(max-width:768px){
   .header{padding:10px 14px;}.header-logo .bar{height:28px;}.header-logo h1{font-size:17px;}.header-logo p{display:none;}
   .live-badge{display:none;}.total-badge{font-size:11px;}
@@ -231,8 +296,9 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
   .table-wrap{-webkit-overflow-scrolling:touch;}
   tbody td:first-child,thead th:first-child{position:sticky;left:0;background:var(--surface);z-index:1;}
   thead th:first-child{background:var(--surface2);}
-  .cov-kpi-row,.ord-kpi-row{flex-direction:column;}
+  .cov-kpi-row,.ord-kpi-row,.alert-kpi-row{flex-direction:column;}
   .drill-controls{width:100%;}.drill-search{width:100%;}
+  .sub-toggle{width:100%;}.sub-btn{flex:1;text-align:center;}
 }
 @media(max-width:400px){.kpi-grid{grid-template-columns:1fr 1fr;}.kpi-value{font-size:20px;}.modal-grid{grid-template-columns:1fr;}}
 </style>
@@ -256,11 +322,11 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
 
 <div class="sync-bar">
   <button class="btn btn-primary" onclick="fetchLive()">⟳ Refresh Data</button>
-  <button class="btn btn-export" onclick="exportCSV()">↓ Export CSV</button>
+  <button class="btn btn-export" onclick="exportExcel()">↓ Excel</button>
+  <button class="btn btn-pdf" onclick="exportPDF()">⎙ PDF Summary</button>
   <div class="sync-status" id="sync-status"><span class="spinner"></span> Loading…</div>
 </div>
 
-<!-- TOP FILTER BAR -->
 <div class="top-filter-bar">
   <div class="tfb-group"><span class="tfb-label">RSM</span><select class="tfb-select" id="tf-rsm" onchange="onTopFilterChange('rsm')"><option value="">All RSMs</option></select></div>
   <div class="tfb-group"><span class="tfb-label">ASM</span><select class="tfb-select" id="tf-asm" onchange="onTopFilterChange('asm')"><option value="">All ASMs</option></select></div>
@@ -271,7 +337,7 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
     <div class="tfb-qp">
       <button class="qp-btn active" id="qp-all" onclick="setQuickPick('all')">All</button>
       <button class="qp-btn" id="qp-month" onclick="setQuickPick('month')">This Month</button>
-      <button class="qp-btn" id="qp-last" onclick="setQuickPick('last')">Last Month</button> 
+      <button class="qp-btn" id="qp-last" onclick="setQuickPick('last')">Last Month</button>
       <button class="qp-btn" id="qp-year" onclick="setQuickPick('year')">This Year</button>
     </div>
   </div>
@@ -305,7 +371,7 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
       <div class="filter-group"><label class="filter-label">Division</label><select id="filter-division"><option value="">All</option></select></div>
     </div>
     <div class="filter-section">
-      <div class="filter-section-title">🎯 Opportunity</div>
+      <div class="filter-section-title">🎯 Classification</div>
       <div class="filter-group"><label class="filter-label">Opportunity Type</label><select id="filter-opp"><option value="">All</option></select></div>
       <div class="filter-group"><label class="filter-label">Barrier Type</label><select id="filter-barrier"><option value="">All</option></select></div>
       <div class="filter-group"><label class="filter-label">Follow-Up Priority</label><select id="filter-followup"><option value="">All</option><option>High</option><option>Medium</option><option>Low</option></select></div>
@@ -323,13 +389,12 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
 
     <div class="tabs">
       <div class="tab active" onclick="switchTab('overview')">Overview</div>
-      <div class="tab" onclick="switchTab('data')">Data Table</div>
-      <div class="tab" onclick="switchTab('reps')">Rep Performance</div>
-      <div class="tab" onclick="switchTab('coverage')">Coverage</div>
-      <div class="tab" onclick="switchTab('orders')">Orders</div>
+      <div class="tab" onclick="switchTab('fielddata')">Field Data</div>
+      <div class="tab" onclick="switchTab('operations')">Operations</div>
+      <div class="tab" onclick="switchTab('alerts')">Alerts <span class="tab-badge" id="alert-badge">0</span></div>
     </div>
 
-    <!-- OVERVIEW -->
+    <!-- ── OVERVIEW ──────────────────────────────────────────────────────── -->
     <div id="tab-overview" class="tab-content active">
       <div class="section-divider">📊 Visit Metrics</div>
       <div class="kpi-grid">
@@ -368,164 +433,222 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
       </div>
     </div>
 
-    <!-- DATA TABLE -->
-    <div id="tab-data" class="tab-content">
-      <div class="table-section">
-        <div class="table-header">
-          <h3>Visit Records <span id="table-count-label" style="color:var(--text2);font-size:12px;font-weight:400"></span></h3>
-          <div class="table-controls">
-            <input class="table-search" id="table-search" placeholder="Search in results…" oninput="renderTable()">
+    <!-- ── FIELD DATA (Visit Table + Rep Summary toggle) ────────────────── -->
+    <div id="tab-fielddata" class="tab-content">
+      <div class="sub-toggle">
+        <button class="sub-btn active" id="fd-btn-visits" onclick="switchFieldData('visits')">Visit Records</button>
+        <button class="sub-btn" id="fd-btn-reps" onclick="switchFieldData('reps')">Rep Summary</button>
+      </div>
+
+      <!-- Visit Records -->
+      <div id="fd-visits">
+        <div class="table-section">
+          <div class="table-header">
+            <h3>Visit Records <span id="table-count-label" style="color:var(--text2);font-size:12px;font-weight:400"></span></h3>
+            <div class="table-controls">
+              <input class="table-search" id="table-search" placeholder="Search in results…" oninput="renderTable()">
+              <button class="btn btn-reset-inline" onclick="resetAllFilters()">✕ Reset All</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table><thead><tr>
+              <th onclick="sortBy('Date')">Date</th><th onclick="sortBy('Sales Rep')">Sales Rep</th>
+              <th onclick="sortBy('Customer Number')">Customer #</th><th onclick="sortBy('Company Name')">Company</th>
+              <th onclick="sortBy('RSM')">RSM</th><th onclick="sortBy('ASM')">ASM</th><th onclick="sortBy('Division')">Division</th>
+              <th onclick="sortBy('Already Eshop Account')">Had Acct</th><th onclick="sortBy('Opened During Visit')">Opened</th>
+              <th onclick="sortBy('App Engaged')">App</th><th onclick="sortBy('Tech Savvy Level')">Tech</th>
+              <th onclick="sortBy('Digital Behaviour')">Behaviour</th><th onclick="sortBy('Interest Level')">Interest</th>
+              <th onclick="sortBy('Opportunity Type')">Opportunity</th><th onclick="sortBy('Barrier Type')">Barrier</th>
+              <th onclick="sortBy('Follow Up Priority')">Follow-Up</th><th onclick="sortBy('Potential Score')">Score</th>
+              <th onclick="sortBy('Digital Maturity Stage')">Maturity</th><th>Notes</th>
+            </tr></thead><tbody id="table-body"></tbody></table>
+          </div>
+          <div class="pagination">
+            <span id="page-info" style="font-size:11px;color:var(--text2)"></span>
+            <div class="pagination-btns" id="pagination-btns"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rep Summary -->
+      <div id="fd-reps" style="display:none">
+        <div class="table-section">
+          <div class="table-header">
+            <h3>Sales Rep Performance</h3>
             <button class="btn btn-reset-inline" onclick="resetAllFilters()">✕ Reset All</button>
           </div>
-        </div>
-        <div class="table-wrap">
-          <table><thead><tr>
-            <th onclick="sortBy('Date')">Date</th><th onclick="sortBy('Sales Rep')">Sales Rep</th>
-            <th onclick="sortBy('Customer Number')">Customer #</th><th onclick="sortBy('Company Name')">Company</th>
-            <th onclick="sortBy('RSM')">RSM</th><th onclick="sortBy('ASM')">ASM</th><th onclick="sortBy('Division')">Division</th>
-            <th onclick="sortBy('Already Eshop Account')">Had Acct</th><th onclick="sortBy('Opened During Visit')">Opened</th>
-            <th onclick="sortBy('App Engaged')">App</th><th onclick="sortBy('Tech Savvy Level')">Tech</th>
-            <th onclick="sortBy('Digital Behaviour')">Behaviour</th><th onclick="sortBy('Interest Level')">Interest</th>
-            <th onclick="sortBy('Opportunity Type')">Opportunity</th><th onclick="sortBy('Barrier Type')">Barrier</th>
-            <th onclick="sortBy('Follow Up Priority')">Follow-Up</th><th onclick="sortBy('Potential Score')">Score</th>
-            <th onclick="sortBy('Digital Maturity Stage')">Maturity</th><th>Notes</th>
-          </tr></thead><tbody id="table-body"></tbody></table>
-        </div>
-        <div class="pagination">
-          <span id="page-info" style="font-size:11px;color:var(--text2)"></span>
-          <div class="pagination-btns" id="pagination-btns"></div>
+          <div class="table-wrap">
+            <table class="rep-table"><thead><tr>
+              <th onclick="sortRep('name')">Sales Rep</th>
+              <th onclick="sortRep('visits')" class="rep-sort-desc">Visits</th>
+              <th onclick="sortRep('opened')">Opened</th><th onclick="sortRep('app')">App</th>
+              <th onclick="sortRep('highInt')">High Interest</th><th onclick="sortRep('highFU')">High Follow-Up</th>
+              <th onclick="sortRep('eproc')">e-Proc</th><th onclick="sortRep('avg')">Avg Score</th>
+              <th onclick="sortRep('sr')">Success Rate</th>
+            </tr></thead><tbody id="rep-tbody"></tbody></table>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- REP PERFORMANCE -->
-    <div id="tab-reps" class="tab-content">
-      <div class="table-section">
-        <div class="table-header">
-          <h3>Sales Rep Performance</h3>
-          <button class="btn btn-reset-inline" onclick="resetAllFilters()">✕ Reset All</button>
-        </div>
-        <div class="table-wrap">
-          <table class="rep-table"><thead><tr>
-            <th onclick="sortRep('name')">Sales Rep</th>
-            <th onclick="sortRep('visits')" class="rep-sort-desc">Visits</th>
-            <th onclick="sortRep('opened')">Opened</th><th onclick="sortRep('app')">App</th>
-            <th onclick="sortRep('highInt')">High Interest</th><th onclick="sortRep('highFU')">High Follow-Up</th>
-            <th onclick="sortRep('eproc')">e-Proc</th><th onclick="sortRep('avg')">Avg Score</th>
-            <th onclick="sortRep('sr')">Success Rate</th>
-          </tr></thead><tbody id="rep-tbody"></tbody></table>
-        </div>
+    <!-- ── OPERATIONS (Coverage + Orders toggle) ────────────────────────── -->
+    <div id="tab-operations" class="tab-content">
+      <div class="sub-toggle">
+        <button class="sub-btn active" id="op-btn-coverage" onclick="switchOperations('coverage')">Coverage</button>
+        <button class="sub-btn" id="op-btn-orders" onclick="switchOperations('orders')">Orders</button>
       </div>
-    </div>
 
-    <!-- COVERAGE -->
-    <div id="tab-coverage" class="tab-content">
-      <div class="cov-kpi-row">
-        <div class="cov-kpi" style="--card-accent:var(--accent)"><div class="cov-kpi-label">Total Customers</div><div class="cov-kpi-value" id="cov-kpi-total">—</div><div class="cov-kpi-sub">in Customers sheet</div></div>
-        <div class="cov-kpi" style="--card-accent:var(--green)"><div class="cov-kpi-label">Visited</div><div class="cov-kpi-value" id="cov-kpi-visited">—</div><div class="cov-kpi-sub">at least once</div></div>
-        <div class="cov-kpi" style="--card-accent:var(--accent3)"><div class="cov-kpi-label">Unvisited</div><div class="cov-kpi-value" id="cov-kpi-unvisited">—</div><div class="cov-kpi-sub">never visited</div></div>
-        <div class="cov-kpi" style="--card-accent:var(--blue)"><div class="cov-kpi-label">Overall Coverage</div><div class="cov-kpi-value" id="cov-kpi-pct">—</div><div class="cov-kpi-sub">of total base</div></div>
-        <div class="cov-kpi" style="--card-accent:var(--purple)"><div class="cov-kpi-label">Ordered</div><div class="cov-kpi-value" id="cov-kpi-ordered">—</div><div class="cov-kpi-sub">placed digital order</div></div>
-      </div>
-      <div class="table-section">
-        <div class="table-header">
-          <h3>Coverage by Rep <span id="cov-status-label" style="color:var(--text3);font-size:11px;font-weight:400;margin-left:8px"></span></h3>
-          <div class="table-controls">
-            <input class="table-search" id="cov-search" placeholder="Search rep…" oninput="renderCovTable()" style="width:130px">
-            <div class="visit-status-toggle">
-              <button class="vs-btn active" id="vs-all" onclick="setCovVisitFilter('all')">All</button>
-              <button class="vs-btn" id="vs-visited" onclick="setCovVisitFilter('visited')">Visited</button>
-              <button class="vs-btn" id="vs-unvisited" onclick="setCovVisitFilter('unvisited')">Not Visited</button>
+      <!-- Coverage -->
+      <div id="op-coverage">
+        <div class="cov-kpi-row">
+          <div class="cov-kpi" style="--card-accent:var(--accent)"><div class="cov-kpi-label">Total Customers</div><div class="cov-kpi-value" id="cov-kpi-total">—</div><div class="cov-kpi-sub">in Customers sheet</div></div>
+          <div class="cov-kpi" style="--card-accent:var(--green)"><div class="cov-kpi-label">Visited</div><div class="cov-kpi-value" id="cov-kpi-visited">—</div><div class="cov-kpi-sub">at least once</div></div>
+          <div class="cov-kpi" style="--card-accent:var(--accent3)"><div class="cov-kpi-label">Unvisited</div><div class="cov-kpi-value" id="cov-kpi-unvisited">—</div><div class="cov-kpi-sub">never visited</div></div>
+          <div class="cov-kpi" style="--card-accent:var(--blue)"><div class="cov-kpi-label">Coverage</div><div class="cov-kpi-value" id="cov-kpi-pct">—</div><div class="cov-kpi-sub">of total base</div></div>
+          <div class="cov-kpi" style="--card-accent:var(--purple)"><div class="cov-kpi-label">Ordered</div><div class="cov-kpi-value" id="cov-kpi-ordered">—</div><div class="cov-kpi-sub">placed digital order</div></div>
+        </div>
+        <div class="table-section">
+          <div class="table-header">
+            <h3>Coverage by Rep <span id="cov-status-label" style="color:var(--text3);font-size:11px;font-weight:400;margin-left:8px"></span></h3>
+            <div class="table-controls">
+              <input class="table-search" id="cov-search" placeholder="Search rep…" oninput="renderCovTable()" style="width:130px">
+              <div class="visit-status-toggle">
+                <button class="vs-btn active" id="vs-all" onclick="setCovVisitFilter('all')">All</button>
+                <button class="vs-btn" id="vs-visited" onclick="setCovVisitFilter('visited')">Visited</button>
+                <button class="vs-btn" id="vs-unvisited" onclick="setCovVisitFilter('unvisited')">Not Visited</button>
+              </div>
+              <button class="btn btn-reset-inline" onclick="resetCovFilters()">✕ Clear</button>
             </div>
-            <button class="btn btn-reset-inline" onclick="resetCovFilters()">✕ Clear</button>
+          </div>
+          <div class="table-wrap">
+            <table class="cov-table"><thead><tr>
+              <th onclick="sortCov('rep')">Sales Rep</th><th onclick="sortCov('rsm')">RSM</th><th onclick="sortCov('asm')">ASM</th>
+              <th onclick="sortCov('total')">Total</th><th onclick="sortCov('visited')">Visited</th>
+              <th onclick="sortCov('unvisited')">Unvisited</th><th onclick="sortCov('ordered')">Ordered</th>
+              <th onclick="sortCov('pct')" class="cov-sort-asc">Coverage %</th>
+            </tr></thead><tbody id="cov-tbody"></tbody></table>
           </div>
         </div>
-        <div class="table-wrap">
-          <table class="cov-table"><thead><tr>
-            <th onclick="sortCov('rep')">Sales Rep</th><th onclick="sortCov('rsm')">RSM</th><th onclick="sortCov('asm')">ASM</th>
-            <th onclick="sortCov('total')">Total</th><th onclick="sortCov('visited')">Visited</th>
-            <th onclick="sortCov('unvisited')">Unvisited</th><th onclick="sortCov('ordered')">Ordered</th>
-            <th onclick="sortCov('pct')" class="cov-sort-asc">Coverage %</th>
-          </tr></thead><tbody id="cov-tbody"></tbody></table>
+        <div class="drill-panel" id="drill-panel" style="display:none">
+          <div class="drill-header">
+            <h3 id="drill-title">Customers</h3>
+            <div class="drill-controls">
+              <select class="drill-filter" id="drill-division" onchange="renderDrill()"><option value="">All Divisions</option></select>
+              <select class="drill-filter" id="drill-show" onchange="renderDrill()">
+                <option value="unvisited">Unvisited only</option>
+                <option value="all">All customers</option>
+              </select>
+              <input class="drill-search" id="drill-search" placeholder="Search…" oninput="renderDrill()">
+              <button class="btn btn-reset-inline" onclick="closeDrill()">✕ Close</button>
+            </div>
+          </div>
+          <div id="drill-body"><div class="drill-empty"><span class="spinner"></span> Loading…</div></div>
+          <div class="pagination" id="drill-pagination">
+            <span id="drill-page-info" style="font-size:11px;color:var(--text2)"></span>
+            <div class="pagination-btns" id="drill-page-btns"></div>
+          </div>
         </div>
       </div>
-      <div class="drill-panel" id="drill-panel" style="display:none">
-        <div class="drill-header">
-          <h3 id="drill-title">Customers</h3>
-          <div class="drill-controls">
-            <select class="drill-filter" id="drill-division" onchange="renderDrill()"><option value="">All Divisions</option></select>
-            <select class="drill-filter" id="drill-show" onchange="renderDrill()">
-              <option value="unvisited">Unvisited only</option>
-              <option value="all">All customers</option>
-            </select>
-            <input class="drill-search" id="drill-search" placeholder="Search…" oninput="renderDrill()">
-            <button class="btn btn-reset-inline" onclick="closeDrill()">✕ Close</button>
+
+      <!-- Orders -->
+      <div id="op-orders" style="display:none">
+        <div class="ord-kpi-row">
+          <div class="ord-kpi" style="--card-accent:var(--green)"><div class="ord-kpi-label">Total Digital Orders</div><div class="ord-kpi-value" id="ord-total">—</div><div class="ord-kpi-sub">all channels</div></div>
+          <div class="ord-kpi" style="--card-accent:var(--accent3)"><div class="ord-kpi-label">Total Value</div><div class="ord-kpi-value" id="ord-value">—</div><div class="ord-kpi-sub">€ net</div></div>
+          <div class="ord-kpi" style="--card-accent:var(--blue)"><div class="ord-kpi-label">Avg Order Value</div><div class="ord-kpi-value" id="ord-avg">—</div><div class="ord-kpi-sub">€ per order</div></div>
+          <div class="ord-kpi" style="--card-accent:var(--green)"><div class="ord-kpi-label">e-Shop (015)</div><div class="ord-kpi-value" id="ord-ch-eshop">—</div><div class="ord-kpi-sub">orders</div></div>
+          <div class="ord-kpi" style="--card-accent:var(--purple)"><div class="ord-kpi-label">OCI (315)</div><div class="ord-kpi-value" id="ord-ch-oci">—</div><div class="ord-kpi-sub">orders</div></div>
+          <div class="ord-kpi" style="--card-accent:var(--accent2)"><div class="ord-kpi-label">App (303/304)</div><div class="ord-kpi-value" id="ord-ch-app">—</div><div class="ord-kpi-sub">orders</div></div>
+        </div>
+        <div class="charts-grid" style="grid-template-columns:1.5fr 0.5fr;margin-bottom:16px">
+          <div class="chart-card"><div class="chart-title"><span class="dot" style="background:var(--green)"></span>Orders Over Time</div><div style="height:185px"><canvas id="ord-chart-timeline"></canvas></div></div>
+          <div class="chart-card"><div class="chart-title"><span class="dot" style="background:var(--purple)"></span>Channel Mix</div><div style="height:185px"><canvas id="ord-chart-channels"></canvas></div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+          <span style="font-size:11px;font-weight:600;color:var(--text2)">Show customers:</span>
+          <div class="visit-status-toggle">
+            <button class="vs-btn active" id="ord-vs-all" onclick="setOrdVisitFilter('all')">All</button>
+            <button class="vs-btn" id="ord-vs-visited" onclick="setOrdVisitFilter('visited')">Visited</button>
+            <button class="vs-btn" id="ord-vs-unvisited" onclick="setOrdVisitFilter('unvisited')">Not Visited</button>
+          </div>
+          <input class="tfb-input" id="ord-search" placeholder="Search rep…" oninput="renderOrdRepTable()" style="width:180px">
+          <button class="btn btn-reset-inline" onclick="resetOrdFilters()">✕ Clear</button>
+        </div>
+        <div class="table-section" style="margin-bottom:16px">
+          <div class="table-header">
+            <h3>Orders by Rep</h3>
+            <span id="ord-unmatched-note" style="font-size:11px;color:var(--text3)"></span>
+          </div>
+          <div class="table-wrap">
+            <table class="ord-table"><thead><tr>
+              <th onclick="sortOrd('rep')">Sales Rep</th><th onclick="sortOrd('rsm')">RSM</th><th onclick="sortOrd('asm')">ASM</th>
+              <th onclick="sortOrd('totalOrders')" class="ord-sort-desc">Orders</th>
+              <th onclick="sortOrd('totalValue')">Total Value €</th><th onclick="sortOrd('avgOrderValue')">Avg Value €</th>
+              <th onclick="sortOrd('eshop')">e-Shop</th><th onclick="sortOrd('oci')">OCI</th><th onclick="sortOrd('app')">App</th>
+              <th onclick="sortOrd('convertedCustomers')">Converted</th><th onclick="sortOrd('uniqueCustomers')">Unique Custs</th>
+            </tr></thead><tbody id="ord-rep-tbody"></tbody></table>
           </div>
         </div>
-        <div id="drill-body"><div class="drill-empty"><span class="spinner"></span> Loading…</div></div>
-        <div class="pagination" id="drill-pagination">
-          <span id="drill-page-info" style="font-size:11px;color:var(--text2)"></span>
-          <div class="pagination-btns" id="drill-page-btns"></div>
+        <div class="table-section">
+          <div class="table-header">
+            <h3>Top Customers by Orders</h3>
+            <input class="table-search" id="ord-cust-search" placeholder="Search customer…" oninput="renderOrdCustTable()" style="width:180px">
+          </div>
+          <div class="table-wrap">
+            <table class="ord-table"><thead><tr>
+              <th onclick="sortOrdCust('custNum')">Customer #</th><th onclick="sortOrdCust('name')">Company</th>
+              <th onclick="sortOrdCust('rep')">Sales Rep</th><th onclick="sortOrdCust('division')">Division</th>
+              <th onclick="sortOrdCust('orders')" class="ord-sort-desc">Orders</th>
+              <th onclick="sortOrdCust('value')">Total Value €</th><th onclick="sortOrdCust('avgVal')">Avg Value €</th>
+              <th onclick="sortOrdCust('channels')">Channels</th>
+            </tr></thead><tbody id="ord-cust-tbody"></tbody></table>
+          </div>
+          <div class="pagination">
+            <span id="ord-cust-page-info" style="font-size:11px;color:var(--text2)"></span>
+            <div class="pagination-btns" id="ord-cust-page-btns"></div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- ORDERS -->
-    <div id="tab-orders" class="tab-content">
-      <div class="ord-kpi-row">
-        <div class="ord-kpi" style="--card-accent:var(--green)"><div class="ord-kpi-label">Total Digital Orders</div><div class="ord-kpi-value" id="ord-total">—</div><div class="ord-kpi-sub">all channels</div></div>
-        <div class="ord-kpi" style="--card-accent:var(--accent3)"><div class="ord-kpi-label">Total Value</div><div class="ord-kpi-value" id="ord-value">—</div><div class="ord-kpi-sub">€ net</div></div>
-        <div class="ord-kpi" style="--card-accent:var(--blue)"><div class="ord-kpi-label">Avg Order Value</div><div class="ord-kpi-value" id="ord-avg">—</div><div class="ord-kpi-sub">€ per order</div></div>
-        <div class="ord-kpi" style="--card-accent:var(--green)"><div class="ord-kpi-label">e-Shop (015)</div><div class="ord-kpi-value" id="ord-ch-eshop">—</div><div class="ord-kpi-sub">orders</div></div>
-        <div class="ord-kpi" style="--card-accent:var(--purple)"><div class="ord-kpi-label">OCI (315)</div><div class="ord-kpi-value" id="ord-ch-oci">—</div><div class="ord-kpi-sub">orders</div></div>
-        <div class="ord-kpi" style="--card-accent:var(--accent2)"><div class="ord-kpi-label">App (303/304)</div><div class="ord-kpi-value" id="ord-ch-app">—</div><div class="ord-kpi-sub">orders</div></div>
-      </div>
-      <div class="charts-grid" style="grid-template-columns:1.5fr 0.5fr;margin-bottom:16px">
-        <div class="chart-card"><div class="chart-title"><span class="dot" style="background:var(--green)"></span>Orders Over Time</div><div style="height:185px"><canvas id="ord-chart-timeline"></canvas></div></div>
-        <div class="chart-card"><div class="chart-title"><span class="dot" style="background:var(--purple)"></span>Channel Mix</div><div style="height:185px"><canvas id="ord-chart-channels"></canvas></div></div>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
-        <span style="font-size:11px;font-weight:600;color:var(--text2)">Show customers:</span>
-        <div class="visit-status-toggle">
-          <button class="vs-btn active" id="ord-vs-all" onclick="setOrdVisitFilter('all')">All</button>
-          <button class="vs-btn" id="ord-vs-visited" onclick="setOrdVisitFilter('visited')">Visited</button>
-          <button class="vs-btn" id="ord-vs-unvisited" onclick="setOrdVisitFilter('unvisited')">Not Visited</button>
-        </div>
-        <input class="tfb-input" id="ord-search" placeholder="Search rep…" oninput="renderOrdRepTable()" style="width:180px">
-        <button class="btn btn-reset-inline" onclick="resetOrdFilters()">✕ Clear</button>
-      </div>
-      <div class="table-section" style="margin-bottom:16px">
-        <div class="table-header">
-          <h3>Orders by Rep</h3>
-          <span id="ord-unmatched-note" style="font-size:11px;color:var(--text3)"></span>
-        </div>
-        <div class="table-wrap">
-          <table class="ord-table"><thead><tr>
-            <th onclick="sortOrd('rep')">Sales Rep</th><th onclick="sortOrd('rsm')">RSM</th><th onclick="sortOrd('asm')">ASM</th>
-            <th onclick="sortOrd('totalOrders')" class="ord-sort-desc">Orders</th>
-            <th onclick="sortOrd('totalValue')">Total Value €</th><th onclick="sortOrd('avgOrderValue')">Avg Value €</th>
-            <th onclick="sortOrd('eshop')">e-Shop</th><th onclick="sortOrd('oci')">OCI</th><th onclick="sortOrd('app')">App</th>
-            <th onclick="sortOrd('convertedCustomers')">Converted</th><th onclick="sortOrd('uniqueCustomers')">Unique Custs</th>
-          </tr></thead><tbody id="ord-rep-tbody"></tbody></table>
-        </div>
+    <!-- ── ALERTS ─────────────────────────────────────────────────────────── -->
+    <div id="tab-alerts" class="tab-content">
+      <div class="alert-kpi-row">
+        <div class="alert-kpi" style="--card-accent:var(--accent)"><div class="alert-kpi-label">Overdue Follow-Ups</div><div class="alert-kpi-value" id="al-kpi-fu">—</div><div class="alert-kpi-sub">High F/U, no revisit &gt;30d</div></div>
+        <div class="alert-kpi" style="--card-accent:var(--accent3)"><div class="alert-kpi-label">Churned Buyers</div><div class="alert-kpi-value" id="al-kpi-churn">—</div><div class="alert-kpi-sub">No digital order &gt;90d</div></div>
+        <div class="alert-kpi" style="--card-accent:var(--purple)"><div class="alert-kpi-label">Total Alerts</div><div class="alert-kpi-value" id="al-kpi-total">—</div><div class="alert-kpi-sub">requiring action</div></div>
       </div>
       <div class="table-section">
         <div class="table-header">
-          <h3>Top Customers by Orders</h3>
-          <input class="table-search" id="ord-cust-search" placeholder="Search customer…" oninput="renderOrdCustTable()" style="width:180px">
+          <h3>Alert Queue <span id="al-count-label" style="color:var(--text2);font-size:12px;font-weight:400"></span></h3>
+          <div class="table-controls">
+            <div class="visit-status-toggle">
+              <button class="vs-btn active" id="al-type-all" onclick="setAlertType('all')">All</button>
+              <button class="vs-btn" id="al-type-fu" onclick="setAlertType('followup')">Overdue F/U</button>
+              <button class="vs-btn" id="al-type-churn" onclick="setAlertType('churn')">Churned</button>
+            </div>
+            <input class="table-search" id="al-search" placeholder="Search…" oninput="renderAlerts()" style="width:160px">
+          </div>
         </div>
         <div class="table-wrap">
-          <table class="ord-table"><thead><tr>
-            <th onclick="sortOrdCust('custNum')">Customer #</th><th onclick="sortOrdCust('name')">Company</th>
-            <th onclick="sortOrdCust('rep')">Sales Rep</th><th onclick="sortOrdCust('division')">Division</th>
-            <th onclick="sortOrdCust('orders')" class="ord-sort-desc">Orders</th>
-            <th onclick="sortOrdCust('value')">Total Value €</th><th onclick="sortOrdCust('avgVal')">Avg Value €</th>
-            <th onclick="sortOrdCust('channels')">Channels</th>
-          </tr></thead><tbody id="ord-cust-tbody"></tbody></table>
+          <table class="alert-table"><thead><tr>
+            <th onclick="sortAlerts('type')">Type</th>
+            <th onclick="sortAlerts('custNum')">Customer #</th>
+            <th onclick="sortAlerts('name')">Company</th>
+            <th onclick="sortAlerts('rep')">Sales Rep</th>
+            <th onclick="sortAlerts('rsm')">RSM</th>
+            <th onclick="sortAlerts('asm')">ASM</th>
+            <th onclick="sortAlerts('lastVisit')">Last Visit</th>
+            <th onclick="sortAlerts('daysSinceVisit')">Days Since Visit</th>
+            <th onclick="sortAlerts('lastOrder')">Last Order</th>
+            <th onclick="sortAlerts('daysSinceOrder')">Days Since Order</th>
+            <th onclick="sortAlerts('interest')">Interest</th>
+            <th onclick="sortAlerts('followUp')">Follow-Up</th>
+          </tr></thead><tbody id="alert-tbody"></tbody></table>
         </div>
         <div class="pagination">
-          <span id="ord-cust-page-info" style="font-size:11px;color:var(--text2)"></span>
-          <div class="pagination-btns" id="ord-cust-page-btns"></div>
+          <span id="al-page-info" style="font-size:11px;color:var(--text2)"></span>
+          <div class="pagination-btns" id="al-page-btns"></div>
         </div>
       </div>
     </div>
@@ -542,6 +665,18 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
     <div class="modal-grid" id="modal-grid"></div>
     <div class="modal-notes-label">Notes</div>
     <div class="modal-notes" id="modal-notes"></div>
+
+    <!-- Visit Timeline -->
+    <div class="modal-timeline-section" id="modal-timeline-section">
+      <div class="modal-section-title">
+        <span>Visit History</span>
+        <span id="modal-timeline-count" style="color:var(--text3);font-size:10px"></span>
+      </div>
+      <div id="modal-progression"></div>
+      <div id="modal-timeline"></div>
+    </div>
+
+    <!-- Order History -->
     <div class="modal-orders-section" id="modal-orders-section" style="display:none">
       <div class="modal-orders-label">
         <span>Order History</span>
@@ -555,6 +690,8 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
 
 <script>
 const SCRIPT_URL='https://script.google.com/macros/s/AKfycbwaY-kNAECM1LgNxtksRkYZtWap0i9Q7B4URusdngRIl1i9l6uEp7h3e6i5Y9zwpKUkQQ/exec';
+const CHURN_DAYS=90;
+const OVERDUE_DAYS=30;
 
 // ── STATE ──────────────────────────────────────────────────────────────────
 let ALL_DATA=[],filtered=[],sortCol='Date',sortDir=1,currentPage=1,charts={};
@@ -565,9 +702,9 @@ let drillData=null,drillPage=1,drillSortCol='lastVisited',drillSortDir=-1;
 let ORD_DATA=null,ordSortCol='totalOrders',ordSortDir=-1;
 let ordCustSortCol='orders',ordCustSortDir=-1,ordCustPage=1;
 let ORD_KPI=null,ordVisitFilter='all';
-// Hierarchy built from COV_DATA (Customers sheet) — accurate RSM/ASM/Rep
 let _hierarchy={rsmSet:new Set(),asmByRsm:{},repByAsm:{}};
-const PAGE_SIZE=25,DRILL_SIZE=50,ORD_CUST_SIZE=25;
+let alertRows=[],alertType='all',alertSortCol='daysSinceVisit',alertSortDir=-1,alertPage=1;
+const PAGE_SIZE=25,DRILL_SIZE=50,ORD_CUST_SIZE=25,AL_PAGE_SIZE=50;
 
 window.addEventListener('DOMContentLoaded',()=>{attachSidebarListeners();fetchLive();});
 
@@ -599,14 +736,12 @@ async function fetchCoverageSummary(){
     const r=await fetch(SCRIPT_URL+'?action=coverage_summary');
     if(!r.ok)throw new Error('HTTP '+r.status);
     COV_DATA=await r.json();
-    // Build hierarchy from COV_DATA — this is the authoritative source
     buildHierarchyFromCovData();
     populateTopFilters();
     renderCovTable();
     document.getElementById('cov-status-label').textContent='';
   }catch(e){
     document.getElementById('cov-status-label').textContent='⚠ '+e.message;
-    // Fallback: build hierarchy from ALL_DATA
     buildHierarchyFromAllData();
     populateTopFilters();
   }
@@ -624,53 +759,38 @@ async function fetchOrderKPIs(){
 }
 
 async function fetchOrdersData(){
-  if(ORD_DATA){renderOrdersTab();return;}
+  if(ORD_DATA){renderOrdersSection();return;}
   document.getElementById('ord-total').textContent='…';
   try{
     const r=await fetch(SCRIPT_URL+'?action=orders_data');
     if(!r.ok)throw new Error('HTTP '+r.status);
     ORD_DATA=await r.json();
-    renderOrdersTab();
+    renderOrdersSection();
+    buildAlerts();
   }catch(e){document.getElementById('ord-total').textContent='⚠ '+e.message;}
 }
 
 function setStatus(cls,html){const el=document.getElementById('sync-status');el.className='sync-status '+cls;el.innerHTML=html;}
 
-// ── HIERARCHY FROM COV_DATA (authoritative) ────────────────────────────────
+// ── HIERARCHY ───────────────────────────────────────────────────────────────
 function buildHierarchyFromCovData(){
   _hierarchy={rsmSet:new Set(),asmByRsm:{},repByAsm:{}};
   COV_DATA.forEach(d=>{
     const rsm=d.rsm||'',asm=d.asm||'',rep=d.rep||'';
-    if(rsm){
-      _hierarchy.rsmSet.add(rsm);
-      if(!_hierarchy.asmByRsm[rsm])_hierarchy.asmByRsm[rsm]=new Set();
-      if(asm)_hierarchy.asmByRsm[rsm].add(asm);
-    }
-    if(asm){
-      if(!_hierarchy.repByAsm[asm])_hierarchy.repByAsm[asm]=new Set();
-      if(rep)_hierarchy.repByAsm[asm].add(rep);
-    }
+    if(rsm){_hierarchy.rsmSet.add(rsm);if(!_hierarchy.asmByRsm[rsm])_hierarchy.asmByRsm[rsm]=new Set();if(asm)_hierarchy.asmByRsm[rsm].add(asm);}
+    if(asm){if(!_hierarchy.repByAsm[asm])_hierarchy.repByAsm[asm]=new Set();if(rep)_hierarchy.repByAsm[asm].add(rep);}
   });
 }
-
-// ── HIERARCHY FALLBACK FROM ALL_DATA ──────────────────────────────────────
 function buildHierarchyFromAllData(){
   _hierarchy={rsmSet:new Set(),asmByRsm:{},repByAsm:{}};
   ALL_DATA.forEach(r=>{
     const rsm=r['RSM']||'',asm=r['ASM']||'',rep=r['Sales Rep']||'';
-    if(rsm){
-      _hierarchy.rsmSet.add(rsm);
-      if(!_hierarchy.asmByRsm[rsm])_hierarchy.asmByRsm[rsm]=new Set();
-      if(asm)_hierarchy.asmByRsm[rsm].add(asm);
-    }
-    if(asm){
-      if(!_hierarchy.repByAsm[asm])_hierarchy.repByAsm[asm]=new Set();
-      if(rep)_hierarchy.repByAsm[asm].add(rep);
-    }
+    if(rsm){_hierarchy.rsmSet.add(rsm);if(!_hierarchy.asmByRsm[rsm])_hierarchy.asmByRsm[rsm]=new Set();if(asm)_hierarchy.asmByRsm[rsm].add(asm);}
+    if(asm){if(!_hierarchy.repByAsm[asm])_hierarchy.repByAsm[asm]=new Set();if(rep)_hierarchy.repByAsm[asm].add(rep);}
   });
 }
 
-// ── TOP FILTER BAR ─────────────────────────────────────────────────────────
+// ── TOP FILTER BAR ──────────────────────────────────────────────────────────
 function populateTopFilters(){
   const rsmSel=document.getElementById('tf-rsm');
   const prev={rsm:rsmSel.value,asm:document.getElementById('tf-asm').value,rep:document.getElementById('tf-rep').value};
@@ -679,7 +799,6 @@ function populateTopFilters(){
   if(prev.rsm)rsmSel.value=prev.rsm;
   refreshAsmOptions(prev.asm,prev.rep);
 }
-
 function refreshAsmOptions(prevAsm,prevRep){
   const rsmVal=document.getElementById('tf-rsm').value;
   const asmSel=document.getElementById('tf-asm');
@@ -689,7 +808,6 @@ function refreshAsmOptions(prevAsm,prevRep){
   if(prevAsm&&asms.includes(prevAsm))asmSel.value=prevAsm;
   refreshRepOptions(prevRep);
 }
-
 function refreshRepOptions(prevRep){
   const asmVal=document.getElementById('tf-asm').value;
   const repSel=document.getElementById('tf-rep');
@@ -698,19 +816,13 @@ function refreshRepOptions(prevRep){
   reps.forEach(v=>{const o=document.createElement('option');o.value=o.textContent=v;repSel.appendChild(o);});
   if(prevRep&&reps.includes(prevRep))repSel.value=prevRep;
 }
-
 function onTopFilterChange(level){
   if(level==='rsm'){document.getElementById('tf-asm').value='';document.getElementById('tf-rep').value='';refreshAsmOptions('','');}
   if(level==='asm'){document.getElementById('tf-rep').value='';refreshRepOptions('');}
   applyFilters();
-  if(ORD_DATA)renderOrdersTab();
+  if(ORD_DATA)renderOrdersSection();
 }
-
-function onDateInput(){
-  document.querySelectorAll('.qp-btn').forEach(b=>b.classList.remove('active'));
-  applyFilters();
-}
-
+function onDateInput(){document.querySelectorAll('.qp-btn').forEach(b=>b.classList.remove('active'));applyFilters();}
 function setQuickPick(mode){
   document.querySelectorAll('.qp-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('qp-'+mode).classList.add('active');
@@ -718,12 +830,12 @@ function setQuickPick(mode){
   const fmt=d=>p2(d.getDate())+'/'+p2(d.getMonth()+1)+'/'+d.getFullYear();
   if(mode==='all'){document.getElementById('tf-date-from').value='';document.getElementById('tf-date-to').value='';}
   else if(mode==='month'){document.getElementById('tf-date-from').value=fmt(new Date(now.getFullYear(),now.getMonth(),1));document.getElementById('tf-date-to').value=fmt(new Date(now.getFullYear(),now.getMonth()+1,0));}
-  else if(mode==='last'){document.getElementById('tf-date-from').value=fmt(new Date(now.getFullYear(),now.getMonth()-1,1));document.getElementById('tf-date-to').value=fmt(new Date(now.getFullYear(),now.getMonth(),0));} 
+  else if(mode==='last'){document.getElementById('tf-date-from').value=fmt(new Date(now.getFullYear(),now.getMonth()-1,1));document.getElementById('tf-date-to').value=fmt(new Date(now.getFullYear(),now.getMonth(),0));}
   else if(mode==='year'){document.getElementById('tf-date-from').value=fmt(new Date(now.getFullYear(),0,1));document.getElementById('tf-date-to').value=fmt(new Date(now.getFullYear(),11,31));}
   applyFilters();
 }
 
-// ── SIDEBAR DROPDOWNS ──────────────────────────────────────────────────────
+// ── SIDEBAR DROPDOWNS ───────────────────────────────────────────────────────
 function populateSidebarDropdowns(){
   const vals=k=>[...new Set(ALL_DATA.map(r=>r[k]).filter(v=>v&&v!==''))].sort();
   const fill=(id,vs)=>{const s=document.getElementById(id);while(s.options.length>1)s.remove(1);vs.forEach(v=>{const o=document.createElement('option');o.value=o.textContent=v;s.appendChild(o);});};
@@ -733,7 +845,6 @@ function populateSidebarDropdowns(){
   fill('filter-maturity',vals('Digital Maturity Stage'));
   fill('filter-division',vals('Division'));
 }
-
 function attachSidebarListeners(){
   ['filter-already','filter-opened','filter-app','filter-tech','filter-behaviour','filter-interest','filter-opp','filter-barrier','filter-followup','filter-maturity','filter-division'].forEach(id=>{
     document.getElementById(id).addEventListener('change',()=>{
@@ -743,16 +854,17 @@ function attachSidebarListeners(){
   });
   ['search-input','score-min','score-max'].forEach(id=>document.getElementById(id).addEventListener('input',applyFilters));
 }
-
 function countActiveFilters(){
-  return ['filter-already','filter-opened','filter-app','filter-tech','filter-behaviour','filter-interest','filter-opp','filter-barrier','filter-followup','filter-maturity','filter-division','search-input','score-min','score-max']
+  return['filter-already','filter-opened','filter-app','filter-tech','filter-behaviour','filter-interest','filter-opp','filter-barrier','filter-followup','filter-maturity','filter-division','search-input','score-min','score-max']
     .filter(id=>{const el=document.getElementById(id);return el&&el.value!=='';}).length;
 }
 function updateFilterBadge(){const n=countActiveFilters(),el=document.getElementById('filter-count');if(el){el.textContent=n;el.classList.toggle('has-filters',n>0);}}
 
-// ── FILTERS ────────────────────────────────────────────────────────────────
+// ── DATE PARSE ──────────────────────────────────────────────────────────────
 const pd=s=>{if(!s)return null;const p=s.split('/');return p.length===3?new Date(+p[2],+p[1]-1,+p[0]):null;};
+const daysBetween=(d1,d2)=>Math.floor((d2-d1)/86400000);
 
+// ── FILTERS ─────────────────────────────────────────────────────────────────
 function applyFilters(){
   const g=id=>(document.getElementById(id)||{value:''}).value;
   const rsm=g('tf-rsm'),asm=g('tf-asm'),rep=g('tf-rep');
@@ -789,25 +901,22 @@ function applyFilters(){
   currentPage=1;
   updateKPIs();updateCharts();renderTable();renderRepTable();updateFilterBadge();
   if(COV_DATA.length)renderCovTable();
-  if(ORD_DATA)renderOrdersTab();
+  if(ORD_DATA)renderOrdersSection();
   renderOverviewOrderKPIs();
+  buildAlerts();
 }
 
 function resetAllFilters(){
   ['filter-already','filter-opened','filter-app','filter-tech','filter-behaviour','filter-interest','filter-opp','filter-barrier','filter-followup','filter-maturity','filter-division'].forEach(id=>document.getElementById(id).value='');
   ['search-input','score-min','score-max'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('tf-rsm').value='';
-  document.getElementById('tf-asm').value='';
-  document.getElementById('tf-rep').value='';
-  document.getElementById('tf-date-from').value='';
-  document.getElementById('tf-date-to').value='';
+  document.getElementById('tf-rsm').value='';document.getElementById('tf-asm').value='';document.getElementById('tf-rep').value='';
+  document.getElementById('tf-date-from').value='';document.getElementById('tf-date-to').value='';
   refreshAsmOptions('','');
   document.querySelectorAll('.qp-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('qp-all').classList.add('active');
   if(activeKpiFilter.cardId){document.getElementById(activeKpiFilter.cardId)?.classList.remove('active-filter');activeKpiFilter={cardId:null,field:null,value:null};}
   applyFilters();
 }
-
 function resetSidebarFilters(){
   ['filter-already','filter-opened','filter-app','filter-tech','filter-behaviour','filter-interest','filter-opp','filter-barrier','filter-followup','filter-maturity','filter-division'].forEach(id=>document.getElementById(id).value='');
   ['search-input','score-min','score-max'].forEach(id=>document.getElementById(id).value='');
@@ -815,9 +924,8 @@ function resetSidebarFilters(){
   applyFilters();
 }
 
-// ── KPIs ───────────────────────────────────────────────────────────────────
+// ── KPIs ────────────────────────────────────────────────────────────────────
 function pct(n,t){return t?Math.round(n/t*100)+'%':'0%';}
-
 function updateKPIs(){
   const n=filtered.length;
   const opened=filtered.filter(r=>r['Opened During Visit']==='Yes').length;
@@ -830,10 +938,7 @@ function updateKPIs(){
   const highInt=filtered.filter(r=>r['Interest Level']==='High').length;
   const repsSet=new Set(filtered.map(r=>r['Sales Rep']).filter(Boolean));
   const custsSet=new Set(filtered.map(r=>r['Customer Number']).filter(Boolean));
-
-  // Ride-alongs = unique Rep+Date combinations
   const raSet=new Set(filtered.map(r=>(r['Sales Rep']||'')+'__'+(r['Date']||'')).filter(k=>k!=='__'));
-
   document.getElementById('kpi-total').textContent=n.toLocaleString();
   document.getElementById('kpi-reps').textContent=repsSet.size;
   document.getElementById('kpi-customers').textContent=custsSet.size.toLocaleString();
@@ -848,8 +953,6 @@ function updateKPIs(){
   document.getElementById('kpi-avg-score').textContent=avg;
   document.getElementById('kpi-high-int').textContent=highInt;
   document.getElementById('kpi-high-int-pct').textContent=pct(highInt,n)+' of visits';
-
-  // Header indicators: Reps | Ride-Alongs | Visits (total unfiltered)
   document.getElementById('hdr-reps').textContent=repsSet.size;
   document.getElementById('hdr-ridealongs').textContent=raSet.size.toLocaleString();
   document.getElementById('hdr-visits').textContent=ALL_DATA.length.toLocaleString();
@@ -862,17 +965,13 @@ function renderOverviewOrderKPIs(){
   const rep=(document.getElementById('tf-rep')||{}).value||'';
   const dFrom=pd((document.getElementById('tf-date-from')||{value:''}).value);
   const dTo=pd((document.getElementById('tf-date-to')||{value:''}).value);
-
   if(ORD_DATA&&ORD_DATA.allOrders){
-    const fo=ORD_DATA.allOrders.filter(o=>{
-      if(rsm&&o.rsm!==rsm)return false;
-      if(asm&&o.asm!==asm)return false;
-      if(rep&&o.salesRep!==rep)return false;
+    const fo=(ORD_DATA.allOrders||[]).filter(o=>{
+      if(rsm&&o.rsm!==rsm)return false;if(asm&&o.asm!==asm)return false;if(rep&&o.salesRep!==rep)return false;
       if(dFrom||dTo){const d=pd(o.date);if(!d)return false;if(dFrom&&d<dFrom)return false;if(dTo&&d>dTo)return false;}
       return true;
     });
-    const tot=fo.length;
-    const val=fo.reduce((s,o)=>s+o.netVal,0);
+    const tot=fo.length,val=fo.reduce((s,o)=>s+o.netVal,0);
     document.getElementById('ord-kpi-total').textContent=tot.toLocaleString();
     document.getElementById('ord-kpi-avg').textContent='€'+(tot?Math.round(val/tot):0).toLocaleString();
     document.getElementById('ord-kpi-eshop').textContent=fo.filter(o=>o.reason==='015'||o.reason==='15').length.toLocaleString();
@@ -881,9 +980,7 @@ function renderOverviewOrderKPIs(){
     const visitedCusts=new Set(ALL_DATA.filter(r=>{
       if(dFrom){const d=pd(r['Date']);if(!d||d<dFrom)return false;}
       if(dTo){const d=pd(r['Date']);if(!d||d>dTo)return false;}
-      if(rsm&&r['RSM']!==rsm)return false;
-      if(asm&&r['ASM']!==asm)return false;
-      if(rep&&r['Sales Rep']!==rep)return false;
+      if(rsm&&r['RSM']!==rsm)return false;if(asm&&r['ASM']!==asm)return false;if(rep&&r['Sales Rep']!==rep)return false;
       return true;
     }).map(r=>r['Customer Number']).filter(Boolean));
     const converted=new Set(fo.filter(o=>visitedCusts.has(o.custNum)).map(o=>o.custNum)).size;
@@ -891,7 +988,6 @@ function renderOverviewOrderKPIs(){
     document.getElementById('ord-kpi-converted-pct').textContent=(visitedCusts.size?Math.round(converted/visitedCusts.size*100):0)+'% of visited customers';
     return;
   }
-  // Fallback to ORD_KPI when ORD_DATA not loaded yet
   if(!ORD_KPI)return;
   const ch=ORD_KPI.channelBreakdown||{};
   document.getElementById('ord-kpi-total').textContent=(ORD_KPI.totalOrders||0).toLocaleString();
@@ -905,17 +1001,14 @@ function renderOverviewOrderKPIs(){
 
 function kpiFilter(cardId,field,value){
   const el=document.getElementById(cardId);
-  if(activeKpiFilter.cardId===cardId){
-    activeKpiFilter={cardId:null,field:null,value:null};el.classList.remove('active-filter');
-    const sel=document.getElementById(fieldToFilterId(field));if(sel){sel.value='';applyFilters();}return;
-  }
+  if(activeKpiFilter.cardId===cardId){activeKpiFilter={cardId:null,field:null,value:null};el.classList.remove('active-filter');const sel=document.getElementById(fieldToFilterId(field));if(sel){sel.value='';applyFilters();}return;}
   if(activeKpiFilter.cardId){document.getElementById(activeKpiFilter.cardId)?.classList.remove('active-filter');const ps=document.getElementById(fieldToFilterId(activeKpiFilter.field));if(ps)ps.value='';}
   activeKpiFilter={cardId,field,value};el.classList.add('active-filter');
   const sel=document.getElementById(fieldToFilterId(field));if(sel){sel.value=value;applyFilters();}
 }
 function fieldToFilterId(f){return{'Opened During Visit':'filter-opened','Already Eshop Account':'filter-already','App Engaged':'filter-app','Follow Up Priority':'filter-followup','Opportunity Type':'filter-opp','Interest Level':'filter-interest'}[f]||'';}
 
-// ── CHARTS ────────────────────────────────────────────────────────────────
+// ── CHARTS ───────────────────────────────────────────────────────────────────
 function mkBarH(id,labels,data,colors){if(charts[id])charts[id].destroy();charts[id]=new Chart(document.getElementById(id),{type:'bar',data:{labels,datasets:[{data,backgroundColor:colors,borderRadius:4,borderSkipped:false}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8892a4',font:{size:10}}},y:{grid:{display:false},ticks:{color:'#e8eaf0',font:{size:10}}}}}});}
 function mkPie(id,labels,data,colors){if(charts[id])charts[id].destroy();charts[id]=new Chart(document.getElementById(id),{type:'doughnut',data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:1,borderColor:'#13161e'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'right',labels:{color:'#8892a4',font:{size:10},boxWidth:10,padding:8}}}}});}
 function mkLine(id,labels,data,color){
@@ -926,7 +1019,6 @@ function mkLine(id,labels,data,color){
   g.addColorStop(1,color?color+'00':'rgba(230,57,70,0)');
   charts[id]=new Chart(ctx,{type:'line',data:{labels,datasets:[{data,borderColor:color||'#e63946',backgroundColor:g,borderWidth:2,tension:0.4,pointRadius:2,fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8892a4',font:{size:10},maxTicksLimit:12}},y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8892a4',font:{size:10}}}}}});
 }
-
 function updateCharts(){
   const iV=['High','Medium','Pending','Not Interested','N/A'],iC=['#06d6a0','#ffd166','#118ab2','#e63946','#4a526a'];
   const iM={};iV.forEach(v=>iM[v]=0);filtered.forEach(r=>{if(iM[r['Interest Level']]!==undefined)iM[r['Interest Level']]++;});
@@ -951,7 +1043,7 @@ function updateCharts(){
   mkPie('chart-followup',['High','Medium','Low'],['High','Medium','Low'].map(f=>filtered.filter(r=>r['Follow Up Priority']===f).length),['#e63946','#ffd166','#4a526a']);
 }
 
-// ── DATA TABLE ─────────────────────────────────────────────────────────────
+// ── DATA TABLE ───────────────────────────────────────────────────────────────
 function sortBy(col){
   if(sortCol===col)sortDir*=-1;else{sortCol=col;sortDir=1;}
   document.querySelectorAll('thead th').forEach(th=>th.classList.remove('sort-asc','sort-desc'));
@@ -979,8 +1071,8 @@ function renderTable(){
   const start=(currentPage-1)*PAGE_SIZE,end=Math.min(start+PAGE_SIZE,total);
   document.getElementById('page-info').textContent=`Showing ${start+1}–${end} of ${total}`;
   document.getElementById('table-count-label').textContent='('+total+' records)';
-  document.getElementById('table-body').innerHTML=rows.slice(start,end).map(r=>`
-    <tr onclick="openModal(${filtered.indexOf(r)})">
+  document.getElementById('table-body').innerHTML=rows.slice(start,end).map((r,i)=>`
+    <tr onclick="openModal('${encodeURIComponent(r['Customer Number'])}','${encodeURIComponent(r['Date'])}')">
       <td>${r['Date']}</td><td title="${r['Sales Rep']}">${r['Sales Rep']}</td>
       <td style="font-family:monospace;font-size:11px">${r['Customer Number']}</td>
       <td style="font-weight:500" title="${r['Company Name']||''}">${r['Company Name']||'—'}</td>
@@ -998,7 +1090,7 @@ function renderTable(){
   renderPagination('pagination-btns',currentPage,pages,p=>{currentPage=p;renderTable();});
 }
 
-// ── PAGINATION ─────────────────────────────────────────────────────────────
+// ── PAGINATION ───────────────────────────────────────────────────────────────
 function renderPagination(cid,cur,pages,cb){
   const pb=document.getElementById(cid);pb.innerHTML='';
   const add=(lbl,pg,act,dis)=>{const b=document.createElement('button');b.className='page-btn'+(act?' active':'');b.textContent=lbl;if(!dis)b.onclick=()=>cb(pg);else b.disabled=true;pb.appendChild(b);};
@@ -1010,11 +1102,17 @@ function renderPagination(cid,cur,pages,cb){
   add('›',cur+1,false,cur>=pages);
 }
 
-// ── MODAL ──────────────────────────────────────────────────────────────────
-function openModal(idx){
-  const r=filtered[idx];if(!r)return;
-  document.getElementById('modal-title').textContent=r['Company Name']||'Customer '+r['Customer Number'];
-  document.getElementById('modal-sub').textContent=r['Customer Number']+'  ·  '+r['Sales Rep']+'  ·  '+r['Date'];
+// ── MODAL — expanded with visit timeline ─────────────────────────────────────
+function openModal(custNumEnc, dateEnc){
+  const custNum=decodeURIComponent(custNumEnc);
+  const clickedDate=decodeURIComponent(dateEnc);
+  // Find the clicked record
+  const r=ALL_DATA.find(x=>x['Customer Number']===custNum&&x['Date']===clickedDate)||ALL_DATA.find(x=>x['Customer Number']===custNum);
+  if(!r)return;
+
+  document.getElementById('modal-title').textContent=r['Company Name']||'Customer '+custNum;
+  document.getElementById('modal-sub').textContent=custNum+'  ·  '+r['Sales Rep']+'  ·  '+r['Date'];
+
   const fields=[
     ['Company Name',r['Company Name']],['RSM',r['RSM']],['ASM',r['ASM']],['Division',r['Division']],
     ['Had Account',r['Already Eshop Account']],['Opened During Visit',r['Opened During Visit']],
@@ -1026,16 +1124,71 @@ function openModal(idx){
   ];
   document.getElementById('modal-grid').innerHTML=fields.map(([l,v])=>`<div class="modal-field"><label>${l}</label><span>${v||'—'}</span></div>`).join('');
   document.getElementById('modal-notes').textContent=r['Notes']||'No notes recorded.';
+
+  // Build visit timeline for this customer from ALL_DATA
+  const allVisits=ALL_DATA.filter(x=>x['Customer Number']===custNum)
+    .sort((a,b)=>{const pa=pd(a['Date']),pb=pd(b['Date']);return pa&&pb?pa-pb:0;});
+
+  const tl=document.getElementById('modal-timeline');
+  const prog=document.getElementById('modal-progression');
+  document.getElementById('modal-timeline-count').textContent=allVisits.length+' visit'+(allVisits.length!==1?'s':'');
+
+  // Progression analysis (first vs last visit where there are multiple)
+  if(allVisits.length>1){
+    const first=allVisits[0],last=allVisits[allVisits.length-1];
+    const fields2=[
+      {label:'Interest',f:'Interest Level',up:['High'],down:['Not Interested','N/A']},
+      {label:'Behaviour',f:'Digital Behaviour',up:['Active User','New Activation'],down:['Non-Digital','Dormant Account']},
+      {label:'Maturity',f:'Digital Maturity Stage',up:['3 - Active Digital','4 - Integration Ready'],down:['0 - Not Assessed','1 - Aware / Resistant']},
+      {label:'Follow-Up',f:'Follow Up Priority',up:['High'],down:['Low']},
+    ];
+    const rows=fields2.map(({label,f,up,down})=>{
+      const v1=first[f]||'',v2=last[f]||'';
+      if(v1===v2)return `<div class="prog-row"><span class="prog-label">${label}</span><span class="prog-change prog-same">→ ${v2||'—'}</span></div>`;
+      const improved=up.includes(v2)&&!up.includes(v1);
+      const worsened=down.includes(v2)&&!down.includes(v1);
+      const cls=improved?'prog-up':worsened?'prog-down':'prog-same';
+      const arrow=improved?'↑':worsened?'↓':'→';
+      return `<div class="prog-row"><span class="prog-label">${label}</span><span style="color:var(--text3);font-size:10px">${v1}</span><span class="prog-arrow">${arrow}</span><span class="prog-change ${cls}">${v2||'—'}</span></div>`;
+    });
+    prog.innerHTML=`<div class="timeline-progression"><div class="prog-title">Progression: First vs Latest Visit</div>${rows.join('')}</div>`;
+  }else{prog.innerHTML='';}
+
+  tl.innerHTML=allVisits.map((v,i)=>{
+    const isLatest=i===allVisits.length-1;
+    const dObj=pd(v['Date']);
+    const daysAgo=dObj?daysBetween(dObj,new Date()):'';
+    return`<div class="timeline-visit${isLatest?' latest':''}">
+      <div class="timeline-visit-header">
+        <div>
+          <div class="timeline-visit-date">${v['Date']}${isLatest?' <span style="font-size:10px;color:var(--green);font-weight:700">LATEST</span>':''}</div>
+          <div class="timeline-visit-rep">${v['Sales Rep']}${daysAgo!==''?` · ${daysAgo}d ago`:''}</div>
+        </div>
+        ${bFU(v['Follow Up Priority'])}
+      </div>
+      <div class="timeline-visit-fields">
+        ${v['Interest Level']?`<span class="tfield">Interest: ${v['Interest Level']}</span>`:''}
+        ${v['Digital Behaviour']?`<span class="tfield">Behaviour: ${v['Digital Behaviour']}</span>`:''}
+        ${v['Tech Savvy Level']?`<span class="tfield">Tech: ${v['Tech Savvy Level']}</span>`:''}
+        ${v['Barrier Type']?`<span class="tfield" style="color:var(--accent2)">Barrier: ${v['Barrier Type']}</span>`:''}
+        ${v['Opportunity Type']?`<span class="tfield" style="color:var(--green)">Opp: ${v['Opportunity Type']}</span>`:''}
+      </div>
+      ${v['Notes']?`<div style="margin-top:8px;font-size:11px;color:var(--text2);line-height:1.6;border-left:2px solid var(--border);padding-left:8px">${v['Notes']}</div>`:''}
+    </div>`;
+  }).join('');
+
+  // Order history
   const ordSec=document.getElementById('modal-orders-section');
-  if(r['Customer Number']){
+  if(custNum){
     ordSec.style.display='block';
     document.getElementById('modal-orders-status').innerHTML='<span class="spinner"></span>';
     document.getElementById('modal-orders-kpis').innerHTML='';
     document.getElementById('modal-orders-body').innerHTML='';
-    fetchCustomerOrders(r['Customer Number']);
+    fetchCustomerOrders(custNum);
   }else{ordSec.style.display='none';}
   document.getElementById('modal').classList.add('open');
 }
+
 async function fetchCustomerOrders(custNum){
   try{
     const r=await fetch(SCRIPT_URL+'?action=customer_orders&customer='+encodeURIComponent(custNum));
@@ -1047,24 +1200,120 @@ async function fetchCustomerOrders(custNum){
       <div class="modal-order-kpi"><div class="modal-order-kpi-label">Total Value</div><div class="modal-order-kpi-value">€${d.totalValue.toLocaleString()}</div></div>
       <div class="modal-order-kpi"><div class="modal-order-kpi-label">Avg Value</div><div class="modal-order-kpi-value">€${d.avgValue.toLocaleString()}</div></div>`;
     document.getElementById('modal-orders-body').innerHTML=`<table class="modal-orders-table"><thead><tr><th>Date</th><th>Channel</th><th>Value €</th></tr></thead><tbody>
-      ${d.orders.slice(0,10).map(o=>`<tr><td>${o.date||'—'}</td><td>${o.channel}</td><td style="color:var(--green);font-weight:600">€${o.netVal.toLocaleString()}</td></tr>`).join('')}
-      </tbody></table>${d.count>10?`<div style="font-size:10px;color:var(--text3);padding:6px 8px">Showing 10 of ${d.count} orders</div>`:''}`;
+      ${d.orders.slice(0,15).map(o=>`<tr><td>${o.date||'—'}</td><td>${o.channel}</td><td style="color:var(--green);font-weight:600">€${o.netVal.toLocaleString()}</td></tr>`).join('')}
+      </tbody></table>${d.count>15?`<div style="font-size:10px;color:var(--text3);padding:6px 8px">Showing 15 of ${d.count} orders</div>`:''}`;
   }catch(e){document.getElementById('modal-orders-status').textContent='⚠ Could not load';}
 }
 function closeModal(e){if(e.target===document.getElementById('modal'))document.getElementById('modal').classList.remove('open');}
 
-// ── EXPORT ─────────────────────────────────────────────────────────────────
-function exportCSV(){
-  const cols=['Date','Sales Rep','Customer Number','Company Name','RSM','ASM','Division','Already Eshop Account','Opened During Visit','App Engaged','Tech Savvy Level','Digital Behaviour','Interest Level','Opportunity Type','Barrier Type','Follow Up Priority','Potential Score','Digital Maturity Stage','Notes'];
-  const esc=v=>'"'+String(v||'').replace(/"/g,'""')+'"';
-  const rows=[cols.map(esc).join(',')];
-  filtered.forEach(r=>rows.push(cols.map(c=>esc(r[c])).join(',')));
-  const blob=new Blob([rows.join('\n')],{type:'text/csv;charset=utf-8;'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Wurth_RideAlong_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
+// ── EXPORT EXCEL ─────────────────────────────────────────────────────────────
+function exportExcel(){
+  const cols=['Date','Sales Rep','Customer Number','Company Name','RSM','ASM','Division',
+    'Already Eshop Account','Opened During Visit','App Engaged','Tech Savvy Level',
+    'Digital Behaviour','Interest Level','Opportunity Type','Barrier Type',
+    'Follow Up Priority','Potential Score','Digital Maturity Stage','Notes'];
+  const wsData=[cols,...filtered.map(r=>cols.map(c=>r[c]||''))];
+  const wb=XLSX.utils.book_new();
+  const ws=XLSX.utils.aoa_to_sheet(wsData);
+  // Column widths
+  ws['!cols']=cols.map((c,i)=>({wch:i===cols.length-1?40:i<3?14:18}));
+  XLSX.utils.book_append_sheet(wb,'Visit Data',ws);
+  // Metadata sheet
+  const meta=[['Report Generated',new Date().toLocaleString('el-GR')],['Total Records',filtered.length],
+    ['RSM Filter',(document.getElementById('tf-rsm')||{}).value||'All'],
+    ['ASM Filter',(document.getElementById('tf-asm')||{}).value||'All'],
+    ['Rep Filter',(document.getElementById('tf-rep')||{}).value||'All'],
+    ['Date From',(document.getElementById('tf-date-from')||{}).value||'—'],
+    ['Date To',(document.getElementById('tf-date-to')||{}).value||'—'],
+  ];
+  const wsm=XLSX.utils.aoa_to_sheet(meta);
+  wsm['!cols']=[{wch:22},{wch:30}];
+  XLSX.utils.book_append_sheet(wb,'Report Info',wsm);
+  XLSX.writeFile(wb,'Wurth_RideAlong_'+new Date().toISOString().slice(0,10)+'.xlsx',{bookType:'xlsx',type:'binary'});
 }
 
-// ── REP PERFORMANCE ────────────────────────────────────────────────────────
-function filterByRep(name){document.getElementById('tf-rep').value=name;refreshRepOptions(name);applyFilters();switchTab('data');}
+// ── EXPORT PDF ───────────────────────────────────────────────────────────────
+function exportPDF(){
+  const rsm=(document.getElementById('tf-rsm')||{}).value||'All RSMs';
+  const asm=(document.getElementById('tf-asm')||{}).value||'All ASMs';
+  const rep=(document.getElementById('tf-rep')||{}).value||'All Reps';
+  const dFrom=(document.getElementById('tf-date-from')||{}).value||'—';
+  const dTo=(document.getElementById('tf-date-to')||{}).value||'—';
+  const n=filtered.length;
+  const opened=filtered.filter(r=>r['Opened During Visit']==='Yes').length;
+  const had=filtered.filter(r=>r['Already Eshop Account']==='Yes').length;
+  const highInt=filtered.filter(r=>r['Interest Level']==='High').length;
+  const highFU=filtered.filter(r=>r['Follow Up Priority']==='High').length;
+  const eproc=filtered.filter(r=>r['Opportunity Type']==='e-Procurement').length;
+  const scores=filtered.map(r=>+r['Potential Score']).filter(s=>s>0);
+  const avg=scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length):0;
+  const topFU=filtered.filter(r=>r['Follow Up Priority']==='High')
+    .sort((a,b)=>(+b['Potential Score'])-(+a['Potential Score'])).slice(0,20);
+  const barrierMap={};filtered.forEach(r=>{if(r['Barrier Type'])barrierMap[r['Barrier Type']]=(barrierMap[r['Barrier Type']]||0)+1;});
+  const barrierRows=Object.entries(barrierMap).sort((a,b)=>b[1]-a[1]).slice(0,8);
+
+  const win=window.open('','_blank');
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8">
+<title>Würth Hellas — Ride-Along Summary</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:"Barlow","Helvetica Neue",Arial,sans-serif;font-size:12px;color:#1a1a2e;background:#fff;padding:28px;}
+h1{font-size:26px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#e63946;margin-bottom:4px;}
+.subtitle{font-size:11px;color:#666;letter-spacing:1px;text-transform:uppercase;margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid #e63946;}
+.filter-context{background:#f5f5f8;border-radius:6px;padding:10px 14px;font-size:11px;color:#444;margin-bottom:20px;display:flex;gap:18px;flex-wrap:wrap;}
+.filter-context span{font-weight:600;color:#1a1a2e;}
+h2{font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#e63946;margin:20px 0 10px;border-bottom:1px solid #ddd;padding-bottom:5px;}
+.kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px;}
+.kpi{background:#f5f5f8;border-radius:6px;padding:12px;text-align:center;border-top:3px solid #e63946;}
+.kpi-val{font-size:26px;font-weight:800;color:#e63946;line-height:1;}
+.kpi-lbl{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#666;margin-top:3px;}
+.kpi-sub{font-size:9px;color:#999;margin-top:2px;}
+table{width:100%;border-collapse:collapse;margin-bottom:16px;}
+th{background:#f5f5f8;padding:7px 10px;text-align:left;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#444;border-bottom:2px solid #ddd;}
+td{padding:6px 10px;border-bottom:1px solid #eee;font-size:11px;}
+tr:hover td{background:#fafafa;}
+.bar-wrap{display:flex;align-items:center;gap:8px;}
+.bar-bg{flex:1;height:6px;background:#eee;border-radius:3px;}
+.bar-fill{height:100%;border-radius:3px;background:#e63946;}
+.footer{margin-top:28px;padding-top:12px;border-top:1px solid #ddd;font-size:10px;color:#999;display:flex;justify-content:space-between;}
+@media print{body{padding:15px;}@page{margin:1.5cm;}}
+</style>
+</head><body>
+<h1>WÜRTH HELLAS</h1>
+<div class="subtitle">Digital Ride-Along Intelligence — Summary Report · ${new Date().toLocaleDateString('el-GR')}</div>
+<div class="filter-context">
+  <div>RSM: <span>${rsm}</span></div>
+  <div>ASM: <span>${asm}</span></div>
+  <div>Rep: <span>${rep}</span></div>
+  <div>Period: <span>${dFrom} → ${dTo}</span></div>
+  <div>Records: <span>${n.toLocaleString()}</span></div>
+</div>
+<h2>Key Metrics</h2>
+<div class="kpi-grid">
+  <div class="kpi"><div class="kpi-val">${n.toLocaleString()}</div><div class="kpi-lbl">Total Visits</div></div>
+  <div class="kpi"><div class="kpi-val">${opened}</div><div class="kpi-lbl">Accounts Opened</div><div class="kpi-sub">${pct(opened,n)} of visits</div></div>
+  <div class="kpi"><div class="kpi-val">${had}</div><div class="kpi-lbl">Had Account</div><div class="kpi-sub">${pct(had,n)} of visits</div></div>
+  <div class="kpi"><div class="kpi-val">${highInt}</div><div class="kpi-lbl">High Interest</div><div class="kpi-sub">${pct(highInt,n)} of visits</div></div>
+  <div class="kpi"><div class="kpi-val">${avg}</div><div class="kpi-lbl">Avg Potential Score</div><div class="kpi-sub">out of 100</div></div>
+  <div class="kpi" style="border-top-color:#ffd166"><div class="kpi-val" style="color:#ffd166">${highFU}</div><div class="kpi-lbl">High Follow-Up</div></div>
+  <div class="kpi" style="border-top-color:#9b5de5"><div class="kpi-val" style="color:#9b5de5">${eproc}</div><div class="kpi-lbl">e-Proc Leads</div></div>
+</div>
+<h2>High Follow-Up Priority — Top ${topFU.length} Customers</h2>
+<table><thead><tr><th>#</th><th>Customer</th><th>Company</th><th>Sales Rep</th><th>Interest</th><th>Behaviour</th><th>Barrier</th><th>Score</th><th>Last Visit</th></tr></thead><tbody>
+${topFU.map((r,i)=>`<tr><td style="color:#999">${i+1}</td><td style="font-family:monospace">${r['Customer Number']}</td><td style="font-weight:600">${r['Company Name']||'—'}</td><td>${r['Sales Rep']}</td><td>${r['Interest Level']||'—'}</td><td>${r['Digital Behaviour']||'—'}</td><td>${r['Barrier Type']||'—'}</td><td style="font-weight:700;color:#e63946">${r['Potential Score']}</td><td>${r['Date']}</td></tr>`).join('')}
+</tbody></table>
+<h2>Barrier Breakdown</h2>
+<table><thead><tr><th>Barrier Type</th><th>Count</th><th>Share</th><th></th></tr></thead><tbody>
+${barrierRows.map(([b,c])=>`<tr><td>${b}</td><td style="font-weight:700">${c}</td><td style="color:#666">${pct(c,n)}</td><td style="width:160px"><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:${Math.round(c/barrierRows[0][1]*100)}%"></div></div></div></td></tr>`).join('')}
+</tbody></table>
+<div class="footer"><span>Würth Hellas — Digital Ride-Along Dashboard</span><span>Generated: ${new Date().toLocaleString('el-GR')}</span></div>
+</body></html>`);
+  win.document.close();
+  setTimeout(()=>win.print(),600);
+}
+
+// ── REP PERFORMANCE ──────────────────────────────────────────────────────────
+function filterByRep(name){document.getElementById('tf-rep').value=name;refreshRepOptions(name);applyFilters();switchTab('fielddata');switchFieldData('visits');}
 function sortRep(col){
   if(repSortCol===col)repSortDir*=-1;else{repSortCol=col;repSortDir=col==='name'?1:-1;}
   document.querySelectorAll('.rep-table th').forEach(th=>th.classList.remove('rep-sort-asc','rep-sort-desc'));
@@ -1104,28 +1353,9 @@ function renderRepTable(){
   const idx=cols.indexOf(repSortCol);if(idx>=0)document.querySelectorAll('.rep-table th')[idx].classList.add(repSortDir===1?'rep-sort-asc':'rep-sort-desc');
 }
 
-// ── COVERAGE ───────────────────────────────────────────────────────────────
-function updateCovKPIs(){
-  const total=COV_DATA.reduce((s,d)=>s+d.total,0);
-  const visited=COV_DATA.reduce((s,d)=>s+d.visited,0);
-  const ordered=COV_DATA.reduce((s,d)=>s+(d.ordered||0),0);
-  document.getElementById('cov-kpi-total').textContent=total.toLocaleString();
-  document.getElementById('cov-kpi-visited').textContent=visited.toLocaleString();
-  document.getElementById('cov-kpi-unvisited').textContent=(total-visited).toLocaleString();
-  document.getElementById('cov-kpi-pct').textContent=(total?Math.round(visited/total*100):0)+'%';
-  document.getElementById('cov-kpi-ordered').textContent=ordered.toLocaleString();
-}
-function setCovVisitFilter(mode){
-  covVisitFilter=mode;
-  ['all','visited','unvisited'].forEach(m=>document.getElementById('vs-'+m).classList.toggle('active',m===mode));
-  renderCovTable();
-}
-function resetCovFilters(){
-  const s=document.getElementById('cov-search');if(s)s.value='';
-  covVisitFilter='all';
-  ['all','visited','unvisited'].forEach(m=>document.getElementById('vs-'+m).classList.toggle('active',m==='all'));
-  renderCovTable();
-}
+// ── COVERAGE ─────────────────────────────────────────────────────────────────
+function setCovVisitFilter(mode){covVisitFilter=mode;['all','visited','unvisited'].forEach(m=>document.getElementById('vs-'+m).classList.toggle('active',m===mode));renderCovTable();}
+function resetCovFilters(){const s=document.getElementById('cov-search');if(s)s.value='';covVisitFilter='all';['all','visited','unvisited'].forEach(m=>document.getElementById('vs-'+m).classList.toggle('active',m==='all'));renderCovTable();}
 function sortCov(col){
   if(covSortCol===col)covSortDir*=-1;else{covSortCol=col;covSortDir=(col==='rep'||col==='rsm'||col==='asm')?1:-1;}
   document.querySelectorAll('.cov-table th').forEach(th=>th.classList.remove('cov-sort-asc','cov-sort-desc'));
@@ -1141,59 +1371,29 @@ function renderCovTable(){
   const dFrom=pd((document.getElementById('tf-date-from')||{value:''}).value);
   const dTo=pd((document.getElementById('tf-date-to')||{value:''}).value);
   const dateFiltered=!!(dFrom||dTo);
-
-  // Build per-rep visited sets from date-filtered ALL_DATA
   const repVisitedMap={};
-  if(dateFiltered){
-    filtered.forEach(r=>{
-      const rep=r['Sales Rep'],cust=r['Customer Number'];
-      if(!rep||!cust)return;
-      if(!repVisitedMap[rep])repVisitedMap[rep]=new Set();
-      repVisitedMap[rep].add(cust);
-    });
-  }
-
-// Build per-rep ordered sets from date-filtered allOrders
+  if(dateFiltered){filtered.forEach(r=>{const rep=r['Sales Rep'],cust=r['Customer Number'];if(!rep||!cust)return;if(!repVisitedMap[rep])repVisitedMap[rep]=new Set();repVisitedMap[rep].add(cust);});}
   const repOrderedMap={};
   if(dateFiltered&&ORD_DATA&&ORD_DATA.allOrders){
-    ORD_DATA.allOrders.filter(o=>{
-      const d=pd(o.date);if(!d)return false;
-      if(dFrom&&d<dFrom)return false;
-      if(dTo&&d>dTo)return false;
-      return true;
-    }).forEach(o=>{
-      if(!repOrderedMap[o.salesRep])repOrderedMap[o.salesRep]=new Set();
-      repOrderedMap[o.salesRep].add(o.custNum);
-    });
+    ORD_DATA.allOrders.filter(o=>{const d=pd(o.date);if(!d)return false;if(dFrom&&d<dFrom)return false;if(dTo&&d>dTo)return false;return true;})
+      .forEach(o=>{if(!repOrderedMap[o.salesRep])repOrderedMap[o.salesRep]=new Set();repOrderedMap[o.salesRep].add(o.custNum);});
   }
-
   let rows=COV_DATA.map(d=>{
     if(!dateFiltered)return d;
     const visited=(repVisitedMap[d.rep]||new Set()).size;
-    const unvisited=d.total-visited;
-    const pct=d.total?Math.round(visited/d.total*100):0;
     const ordered=(repOrderedMap[d.rep]||new Set()).size;
-    return{...d,visited,unvisited,pct,ordered};
+    return{...d,visited,unvisited:d.total-visited,pct:d.total?Math.round(visited/d.total*100):0,ordered};
   });
-
   if(search)rows=rows.filter(d=>(d.rep+d.rsm+d.asm).toLowerCase().includes(search));
-  if(rsmF)rows=rows.filter(d=>d.rsm===rsmF);
-  if(asmF)rows=rows.filter(d=>d.asm===asmF);
-  if(repF)rows=rows.filter(d=>d.rep===repF);
-  if(covVisitFilter==='visited')rows=rows.filter(d=>d.visited>0);
-  else if(covVisitFilter==='unvisited')rows=rows.filter(d=>d.visited===0);
+  if(rsmF)rows=rows.filter(d=>d.rsm===rsmF);if(asmF)rows=rows.filter(d=>d.asm===asmF);if(repF)rows=rows.filter(d=>d.rep===repF);
+  if(covVisitFilter==='visited')rows=rows.filter(d=>d.visited>0);else if(covVisitFilter==='unvisited')rows=rows.filter(d=>d.visited===0);
   rows.sort((a,b)=>{let va=a[covSortCol],vb=b[covSortCol];if(typeof va==='string')return va.localeCompare(vb)*covSortDir;return(va-vb)*covSortDir;});
-
-  // Update KPI cards
-  const totalCusts=rows.reduce((s,d)=>s+d.total,0);
-  const totalVisited=rows.reduce((s,d)=>s+d.visited,0);
-  const totalOrdered=rows.reduce((s,d)=>s+(d.ordered||0),0);
+  const totalCusts=rows.reduce((s,d)=>s+d.total,0),totalVisited=rows.reduce((s,d)=>s+d.visited,0),totalOrdered=rows.reduce((s,d)=>s+(d.ordered||0),0);
   document.getElementById('cov-kpi-total').textContent=totalCusts.toLocaleString();
   document.getElementById('cov-kpi-visited').textContent=totalVisited.toLocaleString();
   document.getElementById('cov-kpi-unvisited').textContent=(totalCusts-totalVisited).toLocaleString();
   document.getElementById('cov-kpi-pct').textContent=(totalCusts?Math.round(totalVisited/totalCusts*100):0)+'%';
   document.getElementById('cov-kpi-ordered').textContent=totalOrdered.toLocaleString();
-
   if(!rows.length){document.getElementById('cov-tbody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--text3)">No data for current filters.</td></tr>';return;}
   document.getElementById('cov-tbody').innerHTML=rows.map(d=>{
     const c=d.pct>=75?'var(--green)':d.pct>=40?'var(--accent3)':'var(--accent)';
@@ -1208,10 +1408,9 @@ function renderCovTable(){
     </tr>`;}).join('');
 }
 
-// ── DRILL DOWN ─────────────────────────────────────────────────────────────
+// ── DRILL DOWN ───────────────────────────────────────────────────────────────
 async function openDrill(repName){
-  const panel=document.getElementById('drill-panel');
-  panel.style.display='block';
+  const panel=document.getElementById('drill-panel');panel.style.display='block';
   document.getElementById('drill-title').textContent='Loading '+repName+'…';
   document.getElementById('drill-body').innerHTML='<div class="drill-empty"><span class="spinner"></span> Loading…</div>';
   document.getElementById('drill-division').innerHTML='<option value="">All Divisions</option>';
@@ -1220,14 +1419,11 @@ async function openDrill(repName){
   try{
     const r=await fetch(SCRIPT_URL+'?action=coverage&rep='+encodeURIComponent(repName));
     if(!r.ok)throw new Error('HTTP '+r.status);
-    const d=await r.json();
-    if(d.error)throw new Error(d.error);
+    const d=await r.json();if(d.error)throw new Error(d.error);
     drillData=d;
     const divs=[...new Set([...d.unvisited,...d.visited].map(c=>c.division).filter(Boolean))].sort();
-    const sel=document.getElementById('drill-division');
-    divs.forEach(div=>{const o=document.createElement('option');o.value=o.textContent=div;sel.appendChild(o);});
-    renderDrill();
-    setTimeout(()=>panel.scrollIntoView({behavior:'smooth',block:'start'}),50);
+    const sel=document.getElementById('drill-division');divs.forEach(div=>{const o=document.createElement('option');o.value=o.textContent=div;sel.appendChild(o);});
+    renderDrill();setTimeout(()=>panel.scrollIntoView({behavior:'smooth',block:'start'}),50);
   }catch(e){document.getElementById('drill-body').innerHTML=`<div class="drill-empty">⚠ ${e.message}</div>`;}
 }
 function sortDrill(col){if(drillSortCol===col)drillSortDir*=-1;else{drillSortCol=col;drillSortDir=col==='lastVisited'?-1:1;}drillPage=1;renderDrill();}
@@ -1240,25 +1436,17 @@ function renderDrill(){
   const visitedSet=new Set(drillData.visited.map(c=>c.num));
   let rows=showMode==='all'?[...drillData.unvisited,...drillData.visited]:[...drillData.unvisited];
   rows.sort((a,b)=>{
-    if(drillSortCol==='lastVisited'){
-      const pa=a.lastVisited?a.lastVisited.split('/'):null,pb=b.lastVisited?b.lastVisited.split('/'):null;
-      const va=pa?new Date(+pa[2],+pa[1]-1,+pa[0]):new Date(0);
-      const vb=pb?new Date(+pb[2],+pb[1]-1,+pb[0]):new Date(0);
-      return va<vb?-drillSortDir:va>vb?drillSortDir:0;
-    }
-    const va=String(a[drillSortCol]||'').toLowerCase(),vb=String(b[drillSortCol]||'').toLowerCase();
-    return va<vb?-drillSortDir:va>vb?drillSortDir:0;
+    if(drillSortCol==='lastVisited'){const pa=a.lastVisited?a.lastVisited.split('/'):null,pb=b.lastVisited?b.lastVisited.split('/'):null;const va=pa?new Date(+pa[2],+pa[1]-1,+pa[0]):new Date(0),vb=pb?new Date(+pb[2],+pb[1]-1,+pb[0]):new Date(0);return va<vb?-drillSortDir:va>vb?drillSortDir:0;}
+    const va=String(a[drillSortCol]||'').toLowerCase(),vb=String(b[drillSortCol]||'').toLowerCase();return va<vb?-drillSortDir:va>vb?drillSortDir:0;
   });
   if(divFilter)rows=rows.filter(c=>c.division===divFilter);
   if(search)rows=rows.filter(c=>(c.num+c.name+c.division).toLowerCase().includes(search));
   const total=rows.length,pages=Math.max(1,Math.ceil(total/DRILL_SIZE));
   if(drillPage>pages)drillPage=1;
   const start=(drillPage-1)*DRILL_SIZE,end=Math.min(start+DRILL_SIZE,total);
-  document.getElementById('drill-title').textContent=showMode==='all'
-    ?`${drillData.rep} — ${drillData.visitedCount} visited · ${drillData.unvisitedCount} unvisited`
-    :`${drillData.rep} — ${drillData.unvisitedCount} Unvisited Customers`;
+  document.getElementById('drill-title').textContent=showMode==='all'?`${drillData.rep} — ${drillData.visitedCount} visited · ${drillData.unvisitedCount} unvisited`:`${drillData.rep} — ${drillData.unvisitedCount} Unvisited Customers`;
   ['num','name','division','lastVisited','orderCount','status'].forEach(c=>{const el=document.getElementById('dh-'+c);if(el)el.textContent=drillSortCol===c?(drillSortDir===1?'↑':'↓'):'';});
-  if(!rows.length){document.getElementById('drill-body').innerHTML='<div class="drill-empty" style="color:var(--green)">✓ All customers visited for this filter!</div>';document.getElementById('drill-page-info').textContent='';document.getElementById('drill-page-btns').innerHTML='';return;}
+  if(!rows.length){document.getElementById('drill-body').innerHTML='<div class="drill-empty" style="color:var(--green)">✓ All customers visited!</div>';document.getElementById('drill-page-info').textContent='';document.getElementById('drill-page-btns').innerHTML='';return;}
   document.getElementById('drill-body').innerHTML=`<div class="table-wrap"><table class="drill-table"><thead><tr>
     <th onclick="sortDrill('num')" style="cursor:pointer">Customer # <span id="dh-num"></span></th>
     <th onclick="sortDrill('name')" style="cursor:pointer">Company Name <span id="dh-name"></span></th>
@@ -1267,93 +1455,56 @@ function renderDrill(){
     <th onclick="sortDrill('orderCount')" style="cursor:pointer">Orders <span id="dh-orderCount"></span></th>
     <th onclick="sortDrill('status')" style="cursor:pointer">Status <span id="dh-status"></span></th>
   </tr></thead><tbody>${rows.slice(start,end).map(c=>{
-    const wasVisited=visitedSet.has(c.num);
-    const lv=c.lastVisited||'';
+    const wasVisited=visitedSet.has(c.num);const lv=c.lastVisited||'';
     let daysAgo='',stale=false;
     if(lv){const parts=lv.split('/');if(parts.length===3){daysAgo=Math.floor((new Date()-new Date(+parts[2],+parts[1]-1,+parts[0]))/86400000);stale=daysAgo>180;}}
     const oc=c.orderCount||0;
-    return`<tr>
-      <td style="font-family:monospace;font-size:11px">${c.num}</td>
-      <td style="font-weight:500">${c.name||'—'}</td>
+    return`<tr><td style="font-family:monospace;font-size:11px">${c.num}</td><td style="font-weight:500">${c.name||'—'}</td>
       <td style="color:var(--text2)">${c.division||'—'}</td>
       <td style="color:${stale?'var(--accent)':lv?'var(--green)':'var(--text3)'}">${lv||'Never'}${stale?' ⚠':''}${daysAgo!==''?` <span style="font-size:10px;color:var(--text3)">(${daysAgo}d ago)</span>`:''}</td>
       <td style="text-align:center;color:${oc>0?'var(--purple)':'var(--text3)'};font-weight:${oc>0?'700':'400'}">${oc>0?oc:'—'}</td>
-      <td>${wasVisited?'<span class="badge by">Visited</span>':'<span class="badge bni">Not Visited</span>'}</td>
-    </tr>`;}).join('')}</tbody></table></div>`;
+      <td>${wasVisited?'<span class="badge by">Visited</span>':'<span class="badge bni">Not Visited</span>'}</td></tr>`;}).join('')}</tbody></table></div>`;
   document.getElementById('drill-page-info').textContent=`Showing ${start+1}–${end} of ${total}`;
   renderPagination('drill-page-btns',drillPage,pages,p=>{drillPage=p;renderDrill();});
 }
 
-// ── ORDERS TAB ─────────────────────────────────────────────────────────────
-function setOrdVisitFilter(mode){
-  ordVisitFilter=mode;
-  ['all','visited','unvisited'].forEach(m=>document.getElementById('ord-vs-'+m).classList.toggle('active',m===mode));
-  if(ORD_DATA){renderOrdRepTable();renderOrdCustTable();}
-}
-function resetOrdFilters(){
-  ordVisitFilter='all';
-  ['all','visited','unvisited'].forEach(m=>document.getElementById('ord-vs-'+m).classList.toggle('active',m==='all'));
-  const s=document.getElementById('ord-search');if(s)s.value='';
-  const cs=document.getElementById('ord-cust-search');if(cs)cs.value='';
-  if(ORD_DATA){renderOrdRepTable();renderOrdCustTable();}
-}
+// ── ORDERS ───────────────────────────────────────────────────────────────────
+function setOrdVisitFilter(mode){ordVisitFilter=mode;['all','visited','unvisited'].forEach(m=>document.getElementById('ord-vs-'+m).classList.toggle('active',m===mode));if(ORD_DATA){renderOrdRepTable();renderOrdCustTable();}}
+function resetOrdFilters(){ordVisitFilter='all';['all','visited','unvisited'].forEach(m=>document.getElementById('ord-vs-'+m).classList.toggle('active',m==='all'));const s=document.getElementById('ord-search');if(s)s.value='';const cs=document.getElementById('ord-cust-search');if(cs)cs.value='';if(ORD_DATA){renderOrdRepTable();renderOrdCustTable();}}
 
-function renderOrdersTab(){
+function renderOrdersSection(){
   if(!ORD_DATA)return;
   const rsm=(document.getElementById('tf-rsm')||{}).value||'';
   const asm=(document.getElementById('tf-asm')||{}).value||'';
   const rep=(document.getElementById('tf-rep')||{}).value||'';
   const dFrom=pd((document.getElementById('tf-date-from')||{value:''}).value);
   const dTo=pd((document.getElementById('tf-date-to')||{value:''}).value);
-
-  // Filter allOrders by date + hierarchy for cards
   const fo=(ORD_DATA.allOrders||[]).filter(o=>{
-    if(rsm&&o.rsm!==rsm)return false;
-    if(asm&&o.asm!==asm)return false;
-    if(rep&&o.salesRep!==rep)return false;
+    if(rsm&&o.rsm!==rsm)return false;if(asm&&o.asm!==asm)return false;if(rep&&o.salesRep!==rep)return false;
     if(dFrom||dTo){const d=pd(o.date);if(!d)return false;if(dFrom&&d<dFrom)return false;if(dTo&&d>dTo)return false;}
     return true;
   });
-  const tot=fo.length;
-  const val=fo.reduce((s,o)=>s+o.netVal,0);
+  const tot=fo.length,val=fo.reduce((s,o)=>s+o.netVal,0);
   document.getElementById('ord-total').textContent=tot.toLocaleString();
   document.getElementById('ord-value').textContent='€'+Math.round(val).toLocaleString();
   document.getElementById('ord-avg').textContent=tot?'€'+Math.round(val/tot).toLocaleString():'€0';
   document.getElementById('ord-ch-eshop').textContent=fo.filter(o=>o.reason==='015'||o.reason==='15').length.toLocaleString();
   document.getElementById('ord-ch-oci').textContent=fo.filter(o=>o.reason==='315').length.toLocaleString();
   document.getElementById('ord-ch-app').textContent=fo.filter(o=>o.reason==='303'||o.reason==='304').length.toLocaleString();
-  if(ORD_DATA.unmatchedCount>0)document.getElementById('ord-unmatched-note').textContent=`ℹ ${ORD_DATA.unmatchedCount} orders unmatched to a rep`;
-  
-  // Timeline — filter by date
-  const tl=ORD_DATA.timeline.filter(t=>{
-    if(!dFrom&&!dTo)return true;
-    const[y,m]=t.month.split('-');
-    const monthStart=new Date(+y,+m-1,1),monthEnd=new Date(+y,+m,0);
-    if(dFrom&&monthEnd<dFrom)return false;
-    if(dTo&&monthStart>dTo)return false;
-    return true;
-  });
+  if(ORD_DATA.unmatchedCount>0)document.getElementById('ord-unmatched-note').textContent=`ℹ ${ORD_DATA.unmatchedCount} orders unmatched`;
+  const tl=ORD_DATA.timeline.filter(t=>{if(!dFrom&&!dTo)return true;const[y,m]=t.month.split('-');const ms=new Date(+y,+m-1,1),me=new Date(+y,+m,0);if(dFrom&&me<dFrom)return false;if(dTo&&ms>dTo)return false;return true;});
   const mo=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   if(charts['ord-chart-timeline'])charts['ord-chart-timeline'].destroy();
   const ctx=document.getElementById('ord-chart-timeline').getContext('2d');
   const g=ctx.createLinearGradient(0,0,0,150);g.addColorStop(0,'rgba(6,214,160,.3)');g.addColorStop(1,'rgba(6,214,160,0)');
   charts['ord-chart-timeline']=new Chart(ctx,{type:'line',data:{labels:tl.map(t=>{const[y,m]=t.month.split('-');return mo[+m]+' '+y.slice(2);}),datasets:[{label:'Orders',data:tl.map(t=>t.orders),borderColor:'#06d6a0',backgroundColor:g,borderWidth:2,tension:0.4,pointRadius:2,fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8892a4',font:{size:10},maxTicksLimit:12}},y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8892a4',font:{size:10}}}}}});
-
-  // Channel donut
-  const eshop=fo.filter(o=>o.reason==='015'||o.reason==='15').length;
-  const oci=fo.filter(o=>o.reason==='315').length;
-  const appC=fo.filter(o=>o.reason==='303'||o.reason==='304').length;
+  const eshop=fo.filter(o=>o.reason==='015'||o.reason==='15').length,oci=fo.filter(o=>o.reason==='315').length,appC=fo.filter(o=>o.reason==='303'||o.reason==='304').length;
   if(charts['ord-chart-channels'])charts['ord-chart-channels'].destroy();
   charts['ord-chart-channels']=new Chart(document.getElementById('ord-chart-channels'),{type:'doughnut',data:{labels:['e-Shop','OCI','App'],datasets:[{data:[eshop,oci,appC],backgroundColor:['#06d6a0','#9b5de5','#ff6b6b'],borderWidth:1,borderColor:'#13161e'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{position:'bottom',labels:{color:'#8892a4',font:{size:10},boxWidth:10,padding:8}}}}});
-
   renderOrdRepTable();renderOrdCustTable();
   renderOverviewOrderKPIs();
 }
-
-function sortOrd(col){
-  if(ordSortCol===col)ordSortDir*=-1;else{ordSortCol=col;ordSortDir=(col==='rep'||col==='rsm'||col==='asm')?1:-1;}
-  renderOrdRepTable();
-}
+function sortOrd(col){if(ordSortCol===col)ordSortDir*=-1;else{ordSortCol=col;ordSortDir=(col==='rep'||col==='rsm'||col==='asm')?1:-1;}renderOrdRepTable();}
 function renderOrdRepTable(){
   if(!ORD_DATA)return;
   const rsm=(document.getElementById('tf-rsm')||{}).value||'';
@@ -1362,9 +1513,7 @@ function renderOrdRepTable(){
   const search=(document.getElementById('ord-search')||{value:''}).value.toLowerCase();
   const visitedReps=new Set(filtered.map(r=>r['Sales Rep']).filter(Boolean));
   let rows=[...ORD_DATA.repList].filter(r=>{
-    if(rsm&&r.rsm!==rsm)return false;
-    if(asm&&r.asm!==asm)return false;
-    if(rep&&r.rep!==rep)return false;
+    if(rsm&&r.rsm!==rsm)return false;if(asm&&r.asm!==asm)return false;if(rep&&r.rep!==rep)return false;
     if(search&&!(r.rep+r.rsm+r.asm).toLowerCase().includes(search))return false;
     if(ordVisitFilter==='visited'&&!visitedReps.has(r.rep))return false;
     if(ordVisitFilter==='unvisited'&&visitedReps.has(r.rep))return false;
@@ -1372,20 +1521,15 @@ function renderOrdRepTable(){
   });
   rows.sort((a,b)=>{const va=a[ordSortCol],vb=b[ordSortCol];if(typeof va==='string')return va.localeCompare(vb)*ordSortDir;return(va-vb)*ordSortDir;});
   document.getElementById('ord-rep-tbody').innerHTML=rows.length?rows.map(r=>`
-    <tr>
-      <td style="font-weight:600">${r.rep}</td>
-      <td style="color:var(--text2)">${r.rsm||'—'}</td><td style="color:var(--text2)">${r.asm||'—'}</td>
-      <td style="text-align:center;font-weight:700;color:var(--green)">${r.totalOrders.toLocaleString()}</td>
-      <td style="text-align:center;font-weight:600">€${r.totalValue.toLocaleString()}</td>
-      <td style="text-align:center">€${r.avgOrderValue.toLocaleString()}</td>
-      <td style="text-align:center;color:var(--green)">${r.eshop}</td>
-      <td style="text-align:center;color:var(--purple)">${r.oci}</td>
-      <td style="text-align:center;color:var(--accent2)">${r.app}</td>
-      <td style="text-align:center;color:var(--blue);font-weight:600">${r.convertedCustomers}</td>
-      <td style="text-align:center">${r.uniqueCustomers}</td>
-    </tr>`).join(''):'<tr><td colspan="11" style="text-align:center;padding:24px;color:var(--text3)">No data for current filters</td></tr>';
+    <tr><td style="font-weight:600">${r.rep}</td><td style="color:var(--text2)">${r.rsm||'—'}</td><td style="color:var(--text2)">${r.asm||'—'}</td>
+    <td style="text-align:center;font-weight:700;color:var(--green)">${r.totalOrders.toLocaleString()}</td>
+    <td style="text-align:center;font-weight:600">€${r.totalValue.toLocaleString()}</td>
+    <td style="text-align:center">€${r.avgOrderValue.toLocaleString()}</td>
+    <td style="text-align:center;color:var(--green)">${r.eshop}</td><td style="text-align:center;color:var(--purple)">${r.oci}</td><td style="text-align:center;color:var(--accent2)">${r.app}</td>
+    <td style="text-align:center;color:var(--blue);font-weight:600">${r.convertedCustomers}</td>
+    <td style="text-align:center">${r.uniqueCustomers}</td></tr>`).join('')
+    :'<tr><td colspan="11" style="text-align:center;padding:24px;color:var(--text3)">No data</td></tr>';
 }
-
 function sortOrdCust(col){if(ordCustSortCol===col)ordCustSortDir*=-1;else{ordCustSortCol=col;ordCustSortDir=(col==='custNum'||col==='name'||col==='rep'||col==='division')?1:-1;}ordCustPage=1;renderOrdCustTable();}
 function renderOrdCustTable(){
   if(!ORD_DATA)return;
@@ -1395,9 +1539,7 @@ function renderOrdCustTable(){
   const search=(document.getElementById('ord-cust-search')||{value:''}).value.toLowerCase();
   const visitedCusts=new Set(filtered.map(r=>r['Customer Number']).filter(Boolean));
   let rows=[...ORD_DATA.topCustomers].filter(c=>{
-    if(rsm&&c.rsm!==rsm)return false;
-    if(asm&&c.asm!==asm)return false;
-    if(rep&&c.rep!==rep)return false;
+    if(rsm&&c.rsm!==rsm)return false;if(asm&&c.asm!==asm)return false;if(rep&&c.rep!==rep)return false;
     if(search&&!(c.custNum+c.name+c.rep+c.division).toLowerCase().includes(search))return false;
     if(ordVisitFilter==='visited'&&!visitedCusts.has(c.custNum))return false;
     if(ordVisitFilter==='unvisited'&&visitedCusts.has(c.custNum))return false;
@@ -1409,27 +1551,181 @@ function renderOrdCustTable(){
   const start=(ordCustPage-1)*ORD_CUST_SIZE,end=Math.min(start+ORD_CUST_SIZE,total);
   document.getElementById('ord-cust-page-info').textContent=`Showing ${start+1}–${end} of ${total}`;
   document.getElementById('ord-cust-tbody').innerHTML=rows.length?rows.slice(start,end).map(c=>`
-    <tr>
-      <td style="font-family:monospace;font-size:11px">${c.custNum}</td>
-      <td style="font-weight:500">${c.name||'—'}</td>
-      <td style="color:var(--text2)">${c.rep||'—'}</td><td style="color:var(--text2)">${c.division||'—'}</td>
-      <td style="text-align:center;font-weight:700;color:var(--green)">${c.orders}</td>
-      <td style="text-align:center;font-weight:600">€${c.value.toLocaleString()}</td>
-      <td style="text-align:center">€${c.avgVal.toLocaleString()}</td>
-      <td style="font-size:11px;color:var(--text2)">${c.channels}</td>
-    </tr>`).join(''):'<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--text3)">No data</td></tr>';
+    <tr><td style="font-family:monospace;font-size:11px">${c.custNum}</td><td style="font-weight:500">${c.name||'—'}</td>
+    <td style="color:var(--text2)">${c.rep||'—'}</td><td style="color:var(--text2)">${c.division||'—'}</td>
+    <td style="text-align:center;font-weight:700;color:var(--green)">${c.orders}</td>
+    <td style="text-align:center;font-weight:600">€${c.value.toLocaleString()}</td>
+    <td style="text-align:center">€${c.avgVal.toLocaleString()}</td>
+    <td style="font-size:11px;color:var(--text2)">${c.channels}</td></tr>`).join('')
+    :'<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--text3)">No data</td></tr>';
   renderPagination('ord-cust-page-btns',ordCustPage,pages,p=>{ordCustPage=p;renderOrdCustTable();});
 }
 
-// ── TAB SWITCH ─────────────────────────────────────────────────────────────
+// ── ALERTS ───────────────────────────────────────────────────────────────────
+function buildAlerts(){
+  const rsm=(document.getElementById('tf-rsm')||{}).value||'';
+  const asm=(document.getElementById('tf-asm')||{}).value||'';
+  const rep=(document.getElementById('tf-rep')||{}).value||'';
+  const now=new Date();
+
+  // 1. High Follow-Up overdue: from filtered visit data
+  //    Per customer: get their latest visit, check if FollowUp=High and no revisit in last OVERDUE_DAYS
+  const custVisitMap={};
+  ALL_DATA.forEach(r=>{
+    if(!r['Customer Number'])return;
+    const cn=r['Customer Number'];
+    if(!custVisitMap[cn])custVisitMap[cn]=[];
+    custVisitMap[cn].push(r);
+  });
+
+  const fuAlerts=[];
+  Object.entries(custVisitMap).forEach(([cn,visits])=>{
+    const sorted=visits.sort((a,b)=>{const pa=pd(a['Date']),pb=pd(b['Date']);return pa&&pb?pb-pa:0;});
+    const latest=sorted[0];
+    if(!latest||latest['Follow Up Priority']!=='High')return;
+    // Apply hierarchy filter
+    if(rsm&&latest['RSM']!==rsm)return;
+    if(asm&&latest['ASM']!==asm)return;
+    if(rep&&latest['Sales Rep']!==rep)return;
+    const latestDate=pd(latest['Date']);
+    if(!latestDate)return;
+    const daysAgo=daysBetween(latestDate,now);
+    if(daysAgo<OVERDUE_DAYS)return; // recently revisited or recent high FU — not overdue yet
+    fuAlerts.push({
+      type:'followup',typeLabel:'Overdue F/U',
+      custNum:cn,name:latest['Company Name']||'—',
+      rep:latest['Sales Rep']||'—',rsm:latest['RSM']||'—',asm:latest['ASM']||'—',
+      lastVisit:latest['Date'],daysSinceVisit:daysAgo,
+      lastOrder:'—',daysSinceOrder:null,
+      interest:latest['Interest Level']||'—',followUp:latest['Follow Up Priority']||'—',
+      score:+(latest['Potential Score']||0)
+    });
+  });
+
+  // 2. Churned digital buyers: from ORD_DATA
+  const churnAlerts=[];
+  if(ORD_DATA&&ORD_DATA.allOrders){
+    const custLastOrder={};
+    ORD_DATA.allOrders.forEach(o=>{
+      const d=pd(o.date);if(!d)return;
+      if(!custLastOrder[o.custNum]||d>custLastOrder[o.custNum].date){
+        custLastOrder[o.custNum]={date:d,dateStr:o.date,rsm:o.rsm,asm:o.asm,salesRep:o.salesRep,custNum:o.custNum,name:o.name};
+      }
+    });
+    Object.values(custLastOrder).forEach(o=>{
+      if(rsm&&o.rsm!==rsm)return;
+      if(asm&&o.asm!==asm)return;
+      if(rep&&o.salesRep!==rep)return;
+      const daysAgo=daysBetween(o.date,now);
+      if(daysAgo<CHURN_DAYS)return;
+      // Find their last visit info if any
+      const visits=custVisitMap[o.custNum]||[];
+      const latestVisit=visits.sort((a,b)=>{const pa=pd(a['Date']),pb=pd(b['Date']);return pa&&pb?pb-pa:0;})[0];
+      churnAlerts.push({
+        type:'churn',typeLabel:'Churned Buyer',
+        custNum:o.custNum,name:o.name||'—',
+        rep:o.salesRep||'—',rsm:o.rsm||'—',asm:o.asm||'—',
+        lastVisit:latestVisit?latestVisit['Date']:'—',
+        daysSinceVisit:latestVisit&&pd(latestVisit['Date'])?daysBetween(pd(latestVisit['Date']),now):null,
+        lastOrder:o.dateStr,daysSinceOrder:daysAgo,
+        interest:latestVisit?latestVisit['Interest Level']||'—':'—',
+        followUp:latestVisit?latestVisit['Follow Up Priority']||'—':'—',
+        score:latestVisit?+(latestVisit['Potential Score']||0):0
+      });
+    });
+  }
+
+  alertRows=[...fuAlerts,...churnAlerts];
+  const fuCount=fuAlerts.length,churnCount=churnAlerts.length,total=alertRows.length;
+  document.getElementById('al-kpi-fu').textContent=fuCount;
+  document.getElementById('al-kpi-churn').textContent=churnCount;
+  document.getElementById('al-kpi-total').textContent=total;
+  // Badge on tab
+  const badge=document.getElementById('alert-badge');
+  badge.textContent=total;badge.classList.toggle('visible',total>0);
+  alertPage=1;
+  renderAlerts();
+}
+
+function setAlertType(type){
+  alertType=type;alertPage=1;
+  ['all','fu','churn'].forEach(t=>document.getElementById('al-type-'+(t==='fu'?'fu':t==='churn'?'churn':'all')).classList.toggle('active',
+    (type==='all'&&t==='all')||(type==='followup'&&t==='fu')||(type==='churn'&&t==='churn')));
+  renderAlerts();
+}
+
+function sortAlerts(col){
+  if(alertSortCol===col)alertSortDir*=-1;else{alertSortCol=col;alertSortDir=['custNum','name','rep','rsm','asm','type'].includes(col)?1:-1;}
+  document.querySelectorAll('.alert-table th').forEach(th=>th.classList.remove('al-sort-asc','al-sort-desc'));
+  const cols=['type','custNum','name','rep','rsm','asm','lastVisit','daysSinceVisit','lastOrder','daysSinceOrder','interest','followUp'];
+  const idx=cols.indexOf(col);if(idx>=0)document.querySelectorAll('.alert-table th')[idx].classList.add(alertSortDir===1?'al-sort-asc':'al-sort-desc');
+  alertPage=1;renderAlerts();
+}
+
+function renderAlerts(){
+  const search=(document.getElementById('al-search')||{value:''}).value.toLowerCase();
+  let rows=alertRows.filter(a=>{
+    if(alertType==='followup'&&a.type!=='followup')return false;
+    if(alertType==='churn'&&a.type!=='churn')return false;
+    if(search&&!(a.custNum+a.name+a.rep+a.rsm+a.asm).toLowerCase().includes(search))return false;
+    return true;
+  });
+  rows.sort((a,b)=>{
+    let va=a[alertSortCol],vb=b[alertSortCol];
+    if(va===null||va===undefined)va=-1;if(vb===null||vb===undefined)vb=-1;
+    if(typeof va==='string')return va.localeCompare(vb)*alertSortDir;
+    return(va-vb)*alertSortDir;
+  });
+  const total=rows.length,pages=Math.max(1,Math.ceil(total/AL_PAGE_SIZE));
+  if(alertPage>pages)alertPage=1;
+  const start=(alertPage-1)*AL_PAGE_SIZE,end=Math.min(start+AL_PAGE_SIZE,total);
+  document.getElementById('al-count-label').textContent='('+total+' alerts)';
+  document.getElementById('al-page-info').textContent=`Showing ${start+1}–${end} of ${total}`;
+  const daysPill=d=>{if(d===null||d===undefined)return'<span style="color:var(--text3)">—</span>';const c=d>90?'pill-days-high':d>45?'pill-days-med':'';return`<span class="alert-pill ${c}">${d}d</span>`;};
+  document.getElementById('alert-tbody').innerHTML=rows.length?rows.slice(start,end).map(a=>`
+    <tr>
+      <td><span class="alert-pill ${a.type==='followup'?'pill-fu':'pill-churn'}">${a.typeLabel}</span></td>
+      <td style="font-family:monospace;font-size:11px">${a.custNum}</td>
+      <td style="font-weight:600">${a.name}</td>
+      <td>${a.rep}</td><td style="color:var(--text2)">${a.rsm}</td><td style="color:var(--text2)">${a.asm}</td>
+      <td style="color:var(--text2)">${a.lastVisit}</td>
+      <td>${daysPill(a.daysSinceVisit)}</td>
+      <td style="color:var(--text2)">${a.lastOrder}</td>
+      <td>${daysPill(a.daysSinceOrder)}</td>
+      <td>${bInt(a.interest)}</td>
+      <td>${bFU(a.followUp)}</td>
+    </tr>`).join(''):'<tr><td colspan="12" style="text-align:center;padding:32px;color:var(--green)">✓ No alerts for current filters</td></tr>';
+  renderPagination('al-page-btns',alertPage,pages,p=>{alertPage=p;renderAlerts();});
+}
+
+// ── TAB / VIEW SWITCHING ──────────────────────────────────────────────────────
 function switchTab(name){
-  const names=['overview','data','reps','coverage','orders'];
+  const names=['overview','fielddata','operations','alerts'];
   document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',names[i]===name));
   document.querySelectorAll('.tab-content').forEach(tc=>tc.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
-  if(name==='data')renderTable();
-  if(name==='coverage'&&COV_DATA.length===0)fetchCoverageSummary();
-  if(name==='orders')fetchOrdersData();
+  if(name==='fielddata')renderTable();
+  if(name==='operations'){
+    if(COV_DATA.length===0)fetchCoverageSummary();
+    if(ORD_DATA)renderOrdersSection();
+  }
+  if(name==='alerts')buildAlerts();
+}
+function switchFieldData(view){
+  ['visits','reps'].forEach(v=>{
+    document.getElementById('fd-'+v).style.display=v===view?'block':'none';
+    document.getElementById('fd-btn-'+v).classList.toggle('active',v===view);
+  });
+  if(view==='visits')renderTable();
+  if(view==='reps')renderRepTable();
+}
+function switchOperations(view){
+  ['coverage','orders'].forEach(v=>{
+    document.getElementById('op-'+v).style.display=v===view?'block':'none';
+    document.getElementById('op-btn-'+v).classList.toggle('active',v===view);
+  });
+  if(view==='orders'&&ORD_DATA)renderOrdersSection();
+  if(view==='coverage')renderCovTable();
 }
 </script>
 </body>
