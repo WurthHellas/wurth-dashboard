@@ -1212,24 +1212,37 @@ function exportExcel(){
     'Already Eshop Account','Opened During Visit','App Engaged','Tech Savvy Level',
     'Digital Behaviour','Interest Level','Opportunity Type','Barrier Type',
     'Follow Up Priority','Potential Score','Digital Maturity Stage','Notes'];
-  const wsData=[cols,...filtered.map(r=>cols.map(c=>r[c]||''))];
-  const wb=XLSX.utils.book_new();
-  const ws=XLSX.utils.aoa_to_sheet(wsData);
-  // Column widths
-  ws['!cols']=cols.map((c,i)=>({wch:i===cols.length-1?40:i<3?14:18}));
-  XLSX.utils.book_append_sheet(wb,'Visit Data',ws);
-  // Metadata sheet
-  const meta=[['Report Generated',new Date().toLocaleString('el-GR')],['Total Records',filtered.length],
-    ['RSM Filter',(document.getElementById('tf-rsm')||{}).value||'All'],
-    ['ASM Filter',(document.getElementById('tf-asm')||{}).value||'All'],
-    ['Rep Filter',(document.getElementById('tf-rep')||{}).value||'All'],
-    ['Date From',(document.getElementById('tf-date-from')||{}).value||'—'],
-    ['Date To',(document.getElementById('tf-date-to')||{}).value||'—'],
-  ];
-  const wsm=XLSX.utils.aoa_to_sheet(meta);
-  wsm['!cols']=[{wch:22},{wch:30}];
-  XLSX.utils.book_append_sheet(wb,'Report Info',wsm);
-  XLSX.writeFile(wb,'Wurth_RideAlong_'+new Date().toISOString().slice(0,10)+'.xlsx',{bookType:'xlsx',type:'binary'});
+  try{
+    if(typeof XLSX==='undefined')throw new Error('SheetJS not loaded');
+    const wsData=[cols,...filtered.map(r=>cols.map(c=>(r[c]!==undefined&&r[c]!==null)?r[c]:''))];
+    const wb=XLSX.utils.book_new();
+    const ws=XLSX.utils.aoa_to_sheet(wsData);
+    ws['!cols']=cols.map((c,i)=>({wch:i===cols.length-1?45:i<3?14:20}));
+    XLSX.utils.book_append_sheet(wb,'Visit Data',ws);
+    const meta=[
+      ['Report Generated',new Date().toLocaleString('el-GR')],
+      ['Total Records',filtered.length],
+      ['RSM Filter',(document.getElementById('tf-rsm')||{}).value||'All'],
+      ['ASM Filter',(document.getElementById('tf-asm')||{}).value||'All'],
+      ['Rep Filter',(document.getElementById('tf-rep')||{}).value||'All'],
+      ['Date From',(document.getElementById('tf-date-from')||{}).value||'—'],
+      ['Date To',(document.getElementById('tf-date-to')||{}).value||'—'],
+    ];
+    const wsm=XLSX.utils.aoa_to_sheet(meta);
+    wsm['!cols']=[{wch:22},{wch:30}];
+    XLSX.utils.book_append_sheet(wb,'Report Info',wsm);
+    XLSX.writeFile(wb,'Wurth_RideAlong_'+new Date().toISOString().slice(0,10)+'.xlsx');
+  }catch(err){
+    // Fallback: UTF-8 BOM CSV — Greek characters render correctly in Excel when opened
+    console.warn('XLSX export failed, falling back to CSV:',err);
+    const esc=v=>'"'+String(v===undefined||v===null?'':v).replace(/"/g,'""')+'"';
+    const rows=[cols.map(esc).join(','),...filtered.map(r=>cols.map(c=>esc(r[c])).join(','))];
+    const blob=new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8;'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+    a.download='Wurth_RideAlong_'+new Date().toISOString().slice(0,10)+'.csv';
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+  }
 }
 
 // ── EXPORT PDF ───────────────────────────────────────────────────────────────
