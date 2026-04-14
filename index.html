@@ -1223,7 +1223,7 @@ function exportExcel(){
     XLSX.utils.book_append_sheet(wb,'Visit Data',ws);
     const meta=[
       ['Report Generated',new Date().toLocaleString('el-GR')],
-      ['Total Records',filtered.length],
+      ['Total Records',String(filtered.length)],
       ['RSM Filter',(document.getElementById('tf-rsm')||{}).value||'All'],
       ['ASM Filter',(document.getElementById('tf-asm')||{}).value||'All'],
       ['Rep Filter',(document.getElementById('tf-rep')||{}).value||'All'],
@@ -1231,7 +1231,6 @@ function exportExcel(){
       ['Date To',(document.getElementById('tf-date-to')||{}).value||'—'],
     ];
     const wsm=XLSX.utils.aoa_to_sheet(meta);
-    wsm['!cols']=[{wch:22},{wch:30}];
     XLSX.utils.book_append_sheet(wb,'Report Info',wsm);
     const wbout=XLSX.write(wb,{bookType:'xlsx',type:'array'});
     const blob=new Blob([wbout],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
