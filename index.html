@@ -1217,7 +1217,7 @@ function exportExcel(){
     const wsData=[cols,...filtered.map(r=>cols.map(c=>(r[c]!==undefined&&r[c]!==null)?r[c]:''))];
     const wb=XLSX.utils.book_new();
     const ws=XLSX.utils.aoa_to_sheet(wsData);
-    ws['!cols']=cols.map((c,i)=>({wch:i===cols.length-1?45:i<3?14:20}));
+    
     XLSX.utils.book_append_sheet(wb,'Visit Data',ws);
     const meta=[
       ['Report Generated',new Date().toLocaleString('el-GR')],
@@ -1231,7 +1231,12 @@ function exportExcel(){
     const wsm=XLSX.utils.aoa_to_sheet(meta);
     wsm['!cols']=[{wch:22},{wch:30}];
     XLSX.utils.book_append_sheet(wb,'Report Info',wsm);
-    XLSX.writeFile(wb,'Wurth_RideAlong_'+new Date().toISOString().slice(0,10)+'.xlsx');
+    const wbout=XLSX.write(wb,{bookType:'xlsx',type:'array'});
+    const blob=new Blob([wbout],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');a.href=url;a.download='Wurth_RideAlong_'+new Date().toISOString().slice(0,10)+'.xlsx';
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
   }catch(err){
     // Fallback: UTF-8 BOM CSV — Greek characters render correctly in Excel when opened
     console.warn('XLSX export failed, falling back to CSV:',err);
