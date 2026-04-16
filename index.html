@@ -1215,7 +1215,7 @@ function exportExcel(){
   try{
     if(typeof XLSX==='undefined')throw new Error('SheetJS not loaded');
     const wsData=[cols,...filtered.map(r=>cols.map(c=>(r[c]!==undefined&&r[c]!==null)?String(r[c]):''))];
-    const wb={SheetNames:[],Sheets:{}};
+    const wb=XLSX.utils.book_new();wb.SheetNames.length=0;
     const ws=XLSX.utils.aoa_to_sheet(wsData);
     ws['!cols']=[{wpx:80},{wpx:110},{wpx:90},{wpx:160},{wpx:80},{wpx:80},{wpx:90},{wpx:70},{wpx:70},{wpx:55},{wpx:70},{wpx:110},{wpx:85},{wpx:110},{wpx:110},{wpx:75},{wpx:55},{wpx:130},{wpx:280}];
     ws['!freeze']={xSplit:0,ySplit:1,topLeftCell:'A2',activePane:'bottomLeft'};
