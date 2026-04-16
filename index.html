@@ -114,18 +114,11 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
 .score-bar-bg{flex:1;height:5px;background:var(--surface3);border-radius:3px;min-width:45px;}
 .score-bar-fill{height:100%;border-radius:3px;}
 /* TOOLTIPS */
-.tip{position:relative;display:inline-flex;align-items:center;margin-left:4px;cursor:help;}
+.tip{display:inline-flex;align-items:center;margin-left:4px;cursor:help;vertical-align:middle;}
 .tip-icon{width:13px;height:13px;border-radius:50%;background:var(--surface3);border:1px solid var(--border);color:var(--text3);font-size:9px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;line-height:1;transition:all .15s;flex-shrink:0;}
 .tip:hover .tip-icon,.tip.active .tip-icon{background:var(--accent);border-color:var(--accent);color:#fff;}
-.tip-box{position:absolute;bottom:calc(100% + 7px);left:50%;transform:translateX(-50%);background:#1e2235;border:1px solid var(--border);border-radius:8px;padding:9px 12px;width:220px;font-size:11px;font-weight:400;color:var(--text);line-height:1.55;letter-spacing:0;text-transform:none;font-family:var(--font-body);z-index:300;pointer-events:none;opacity:0;transition:opacity .15s;white-space:normal;box-shadow:0 4px 20px rgba(0,0,0,.4);}
-.tip-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#1e2235;}
-@media(hover:hover){.tip:hover .tip-box{opacity:1;pointer-events:auto;}}
-.tip.active .tip-box{opacity:1;pointer-events:auto;}
-/* keep tooltip inside viewport on right edge */
-thead th:last-child .tip-box,thead th:nth-last-child(2) .tip-box{left:auto;right:0;transform:none;}
-thead th:last-child .tip-box::after,thead th:nth-last-child(2) .tip-box::after{left:auto;right:12px;transform:none;}
-.sidebar .tip-box{left:0;transform:none;}
-.sidebar .tip-box::after{left:10px;transform:none;}
+#tip-popup{position:fixed;z-index:9999;background:#1e2235;border:1px solid var(--border);border-radius:8px;padding:9px 12px;width:220px;font-size:11px;font-weight:400;color:var(--text);line-height:1.55;font-family:var(--font-body);box-shadow:0 4px 20px rgba(0,0,0,.5);pointer-events:none;display:none;white-space:normal;}
+#tip-popup::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#1e2235;}
 /* PAGINATION */
 .pagination{padding:9px 17px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border);}
 .pagination-btns{display:flex;gap:3px;}
@@ -391,11 +384,11 @@ thead th:last-child .tip-box::after,thead th:nth-last-child(2) .tip-box::after{l
       <div class="filter-group"><label class="filter-label">Maturity Stage</label><select id="filter-maturity"><option value="">All</option></select></div>
     </div>
     <div class="filter-section">
-      <div class="filter-section-title">⚡ Activation Potential <span class="tip"><span class="tip-icon">i</span><span class="tip-box">Filter by customer's digital activation potential score (0–100). Higher = more worth investing in digitally.</span></span></div>
+      <div class="filter-section-title">⚡ Activation Potential <span class="tip" data-tip="Filter by customer's digital activation potential score (0–100). Higher = more worth investing in digitally."><span class="tip-icon">i</span></span></div>
       <div class="filter-group"><div class="range-row"><input type="number" id="score-min" placeholder="Min" min="0" max="100"><input type="number" id="score-max" placeholder="Max" min="0" max="100"></div></div>
     </div>
     <div class="filter-section">
-      <div class="filter-section-title">🎯 Visit Outcome Score <span class="tip"><span class="tip-icon">i</span><span class="tip-box">Filter by how productive individual visits were (0–100). Absent and N/A visits always score 0.</span></span></div>
+      <div class="filter-section-title">🎯 Visit Outcome Score <span class="tip" data-tip="Filter by how productive individual visits were (0–100). Absent and N/A visits always score 0."><span class="tip-icon">i</span></span></div>
       <div class="filter-group"><div class="range-row"><input type="number" id="outcome-min" placeholder="Min" min="0" max="100"><input type="number" id="outcome-max" placeholder="Max" min="0" max="100"></div></div>
     </div>
     <button class="reset-btn" onclick="resetSidebarFilters()">✕ Reset Classification Filters</button>
@@ -423,8 +416,8 @@ thead th:last-child .tip-box::after,thead th:nth-last-child(2) .tip-box::after{l
         <div class="kpi-card clickable" id="kpicard-app" style="--card-accent:var(--blue)" onclick="kpiFilter('kpicard-app','App Engaged','Yes')"><div class="kpi-label">App Engaged</div><div class="kpi-value" id="kpi-app">—</div><div class="kpi-sub" id="kpi-app-pct">—</div><div class="kpi-click-hint">▶ click to filter</div></div>
         <div class="kpi-card clickable" id="kpicard-highfu" style="--card-accent:var(--accent3)" onclick="kpiFilter('kpicard-highfu','Follow Up Priority','High')"><div class="kpi-label">High Follow-Up</div><div class="kpi-value" id="kpi-highfu">—</div><div class="kpi-sub">priority leads</div><div class="kpi-click-hint">▶ click to filter</div></div>
         <div class="kpi-card clickable" id="kpicard-eproc" style="--card-accent:var(--purple)" onclick="kpiFilter('kpicard-eproc','Opportunity Type','e-Procurement')"><div class="kpi-label">e-Proc Leads</div><div class="kpi-value" id="kpi-eproc">—</div><div class="kpi-sub">integration opps</div><div class="kpi-click-hint">▶ click to filter</div></div>
-        <div class="kpi-card" style="--card-accent:var(--accent)"><div class="kpi-label">Avg Activation <span class="tip"><span class="tip-icon">i</span><span class="tip-box">How digitally ready and worth investing in each customer is, based on behaviour, interest, tech level and barriers. Boosted +20 if they placed a digital order within 45 days of a visit.</span></span></div><div class="kpi-value" id="kpi-avg-score">—</div><div class="kpi-sub">activation potential</div></div>
-        <div class="kpi-card" style="--card-accent:var(--purple)"><div class="kpi-label">Avg Visit Outcome <span class="tip"><span class="tip-icon">i</span><span class="tip-box">How productive each individual visit was digitally. Rewards account openings, orders placed, ERP/OCI conversations and follow-ups booked. N/A and absent visits score 0 and are excluded from averages.</span></span></div><div class="kpi-value" id="kpi-avg-outcome">—</div><div class="kpi-sub">visit outcome score</div></div>
+        <div class="kpi-card" style="--card-accent:var(--accent)"><div class="kpi-label">Avg Activation <span class="tip" data-tip="How digitally ready and worth investing in each customer is, based on behaviour, interest, tech level and barriers. Boosted +20 if they placed a digital order within 45 days of a visit."><span class="tip-icon">i</span></span></div><div class="kpi-value" id="kpi-avg-score">—</div><div class="kpi-sub">activation potential</div></div>
+        <div class="kpi-card" style="--card-accent:var(--purple)"><div class="kpi-label">Avg Visit Outcome <span class="tip" data-tip="How productive each individual visit was digitally. Rewards account openings, orders placed, ERP/OCI conversations and follow-ups booked. N/A and absent visits score 0 and are excluded from averages."><span class="tip-icon">i</span></span></div><div class="kpi-value" id="kpi-avg-outcome">—</div><div class="kpi-sub">visit outcome score</div></div>
         <div class="kpi-card clickable" id="kpicard-highint" style="--card-accent:var(--green)" onclick="kpiFilter('kpicard-highint','Interest Level','High')"><div class="kpi-label">High Interest</div><div class="kpi-value" id="kpi-high-int">—</div><div class="kpi-sub" id="kpi-high-int-pct">—</div><div class="kpi-click-hint">▶ click to filter</div></div>
       </div>
       <div class="section-divider">🛒 Order Metrics <span id="ord-kpi-status" style="font-weight:400;font-size:10px;color:var(--text3);margin-left:6px"></span></div>
@@ -474,12 +467,12 @@ thead th:last-child .tip-box::after,thead th:nth-last-child(2) .tip-box::after{l
               <th onclick="sortBy('Customer Number')">Customer #</th><th onclick="sortBy('Company Name')">Company</th>
               <th onclick="sortBy('RSM')">RSM</th><th onclick="sortBy('ASM')">ASM</th><th onclick="sortBy('Division')">Division</th>
               <th onclick="sortBy('Already Eshop Account')">Had Acct</th><th onclick="sortBy('Opened During Visit')">Opened</th>
-              <th onclick="sortBy('App Engaged')">App</th><th onclick="sortBy('Tech Savvy Level')">Tech <span class="tip"><span class="tip-icon">i</span><span class="tip-box">Tech Savvy Level — High: uses ERP/SAP/OCI/EDI. Medium: browses, needs some guidance. Low: needs full assistance or low tech familiarity.</span></span></th>
-              <th onclick="sortBy('Digital Behaviour')">Behaviour <span class="tip"><span class="tip-icon">i</span><span class="tip-box">Digital Behaviour — Active User: orders independently. Browser Only: views but orders via rep. Dormant: had account, lapsed. New Activation: opened this visit. Non-Digital: no account/interest.</span></span></th><th onclick="sortBy('Interest Level')">Interest</th>
+              <th onclick="sortBy('App Engaged')">App</th><th onclick="sortBy('Tech Savvy Level')">Tech <span class="tip" data-tip="Tech Savvy Level — High: uses ERP/SAP/OCI/EDI. Medium: browses, needs some guidance. Low: needs full assistance or low tech familiarity."><span class="tip-icon">i</span></span></th>
+              <th onclick="sortBy('Digital Behaviour')">Behaviour <span class="tip" data-tip="Digital Behaviour — Active User: orders independently. Browser Only: views but orders via rep. Dormant: had account, lapsed. New Activation: opened this visit. Non-Digital: no account/interest."><span class="tip-icon">i</span></span></th><th onclick="sortBy('Interest Level')">Interest</th>
               <th onclick="sortBy('Opportunity Type')">Opportunity</th><th onclick="sortBy('Barrier Type')">Barrier</th>
               <th onclick="sortBy('Follow Up Priority')">Follow-Up</th>
-              <th onclick="sortBy('Activation Potential')">Activation <span class="tip"><span class="tip-icon">i</span><span class="tip-box">Activation Potential (0–100): how worth investing in this customer digitally. Based on behaviour, interest, tech and barriers. +20 if converted to digital order within 45 days.</span></span></th>
-              <th onclick="sortBy('Visit Outcome Score')">Visit Score <span class="tip"><span class="tip-icon">i</span><span class="tip-box">Visit Outcome Score (0–100): how productive this specific visit was. Rewards openings, orders placed, ERP conversations and booked follow-ups. Absent/N/A visits score 0.</span></span></th>
+              <th onclick="sortBy('Activation Potential')">Activation <span class="tip" data-tip="Activation Potential (0–100): how worth investing in this customer digitally. Based on behaviour, interest, tech and barriers. +20 if converted to digital order within 45 days."><span class="tip-icon">i</span></span></th>
+              <th onclick="sortBy('Visit Outcome Score')">Visit Score <span class="tip" data-tip="Visit Outcome Score (0–100): how productive this specific visit was. Rewards openings, orders placed, ERP conversations and booked follow-ups. Absent/N/A visits score 0."><span class="tip-icon">i</span></span></th>
               <th onclick="sortBy('Digital Maturity Stage')">Maturity</th><th>Notes</th>
             </tr></thead><tbody id="table-body"></tbody></table>
           </div>
@@ -504,8 +497,8 @@ thead th:last-child .tip-box::after,thead th:nth-last-child(2) .tip-box::after{l
               <th onclick="sortRep('opened')">Opened</th><th onclick="sortRep('app')">App</th>
               <th onclick="sortRep('highInt')">High Interest</th><th onclick="sortRep('highFU')">High Follow-Up</th>
               <th onclick="sortRep('eproc')">e-Proc</th>
-              <th onclick="sortRep('avg')">Avg Activation <span class="tip"><span class="tip-icon">i</span><span class="tip-box">Average Activation Potential across all visits by this rep (0–100).</span></span></th>
-              <th onclick="sortRep('avgOutcome')">Avg Visit Score <span class="tip"><span class="tip-icon">i</span><span class="tip-box">Average Visit Outcome Score across all visits by this rep (0–100). Absent/N/A visits excluded.</span></span></th>
+              <th onclick="sortRep('avg')">Avg Activation <span class="tip" data-tip="Average Activation Potential across all visits by this rep (0–100)."><span class="tip-icon">i</span></span></th>
+              <th onclick="sortRep('avgOutcome')">Avg Visit Score <span class="tip" data-tip="Average Visit Outcome Score across all visits by this rep (0–100). Absent/N/A visits excluded."><span class="tip-icon">i</span></span></th>
               <th onclick="sortRep('sr')">Success Rate</th>
             </tr></thead><tbody id="rep-tbody"></tbody></table>
           </div>
@@ -1738,17 +1731,46 @@ function renderAlerts(){
 }
 
 // ── TOOLTIP MOBILE TAP ────────────────────────────────────────────────────
-document.addEventListener('click',function(e){
-  const icon=e.target.closest('.tip');
-  if(icon){
-    e.stopPropagation();
-    const isActive=icon.classList.contains('active');
-    document.querySelectorAll('.tip.active').forEach(t=>t.classList.remove('active'));
-    if(!isActive)icon.classList.add('active');
-  } else {
-    document.querySelectorAll('.tip.active').forEach(t=>t.classList.remove('active'));
+(function(){
+  const popup=document.createElement('div');
+  popup.id='tip-popup';
+  document.body.appendChild(popup);
+
+  function showAt(icon){
+    const text=icon.closest('.tip').dataset.tip;
+    if(!text)return;
+    popup.textContent=text;
+    popup.style.display='block';
+    const r=icon.getBoundingClientRect();
+    const pw=220,ph=popup.offsetHeight||60;
+    let left=r.left+r.width/2-pw/2;
+    let top=r.top-ph-10;
+    // clamp horizontally
+    left=Math.max(8,Math.min(left,window.innerWidth-pw-8));
+    // flip below if too close to top
+    if(top<8){top=r.bottom+10;popup.style.setProperty('--arr','top');}
+    else{popup.style.removeProperty('--arr');}
+    popup.style.left=left+'px';
+    popup.style.top=top+'px';
   }
-});
+
+  // Desktop hover
+  document.addEventListener('mouseover',function(e){
+    const icon=e.target.closest('.tip-icon');
+    if(icon)showAt(icon);
+  });
+  document.addEventListener('mouseout',function(e){
+    if(e.target.closest('.tip-icon'))popup.style.display='none';
+  });
+
+  // Mobile tap
+  document.addEventListener('click',function(e){
+    const icon=e.target.closest('.tip-icon');
+    if(icon){e.stopPropagation();showAt(icon);return;}
+    popup.style.display='none';
+  });
+})();
+
 
 function switchTab(name){
   const names=['overview','fielddata','operations','alerts'];
