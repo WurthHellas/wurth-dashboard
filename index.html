@@ -1230,7 +1230,7 @@ function exportExcel(){
   }</Table></Worksheet></Workbook>`;
   const blob=new Blob(['\uFEFF'+xmlss],{type:'application/vnd.ms-excel;charset=utf-8'});
   const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');a.href=url;a.download='Wurth_RideAlong_'+new Date().toISOString().slice(0,10)+'.xls';
+  const a=document.createElement('a');a.href=url;a.download='Wurth_RideAlong_'+new Date().toISOString().slice(0,10)+'.xml';
   document.body.appendChild(a);a.click();document.body.removeChild(a);
   setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
