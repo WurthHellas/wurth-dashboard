@@ -549,9 +549,9 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
             </div>
             <div class="table-wrap">
               <table class="rep-mini-table">
-                <thead><tr>
-                  <th>Date</th><th>Customer #</th><th>Company</th><th>Interest</th>
-                  <th>Behaviour</th><th>Barrier</th><th>Follow-Up</th><th>Activation</th><th>Visit Score</th>
+               <thead><tr id="rep-detail-thead">
+                  <th onclick="sortRepDetail('Date')">Date</th><th onclick="sortRepDetail('Customer Number')">Customer #</th><th onclick="sortRepDetail('Company Name')">Company</th><th onclick="sortRepDetail('Interest Level')">Interest</th>
+                  <th onclick="sortRepDetail('Digital Behaviour')">Behaviour</th><th onclick="sortRepDetail('Barrier Type')">Barrier</th><th onclick="sortRepDetail('Follow Up Priority')">Follow-Up</th><th onclick="sortRepDetail('Activation Potential')">Activation</th><th onclick="sortRepDetail('Visit Outcome Score')">Visit Score</th>
                 </tr></thead>
                 <tbody id="rep-detail-visits-tbody"></tbody>
               </table>
@@ -1443,7 +1443,9 @@ function renderRepTable(){
 
 let activeRepDetail = null;
 function closeRepDetail(){
-  activeRepDetail=null;
+  let activeRepDetail = null;
+  let repDetailSortCol = 'Date';
+  let repDetailSortDir = -1;
   document.getElementById('rep-detail-panel').style.display='none';
   document.querySelectorAll('#rep-tbody tr').forEach(tr=>tr.style.background='');
 }
@@ -1509,11 +1511,25 @@ function showRepDetail(name){
   setTimeout(()=>panel.scrollIntoView({behavior:'smooth',block:'nearest'}),50);
 }
 function renderRepDetailVisits(){
+  function sortRepDetail(col){
+  if(repDetailSortCol===col)repDetailSortDir*=-1;else{repDetailSortCol=col;repDetailSortDir=col==='Date'?-1:1;}
+  renderRepDetailVisits();
+}
   if(!activeRepDetail)return;
   const search=(document.getElementById('rep-detail-search')||{value:''}).value.toLowerCase();
   let v=filtered.filter(r=>r['Sales Rep']===activeRepDetail);
   if(search)v=v.filter(r=>(r['Customer Number']+'|'+(r['Company Name']||'')+'|'+(r['Notes']||'')).toLowerCase().includes(search));
-  v.sort((a,b)=>{const pa=pd(a['Date']),pb=pd(b['Date']);return pa&&pb?pb-pa:0;});
+  v.sort((a,b)=>{
+    let va=a[repDetailSortCol]||'',vb=b[repDetailSortCol]||'';
+    if(repDetailSortCol==='Activation Potential'||repDetailSortCol==='Visit Outcome Score'){va=+va;vb=+vb;}
+    if(repDetailSortCol==='Date'){va=pd(va)||new Date(0);vb=pd(vb)||new Date(0);}
+    return va<vb?-repDetailSortDir:va>vb?repDetailSortDir:0;
+  });
+  const detailCols=['Date','Customer Number','Company Name','Interest Level','Digital Behaviour','Barrier Type','Follow Up Priority','Activation Potential','Visit Outcome Score'];
+  document.querySelectorAll('#rep-detail-thead th').forEach((th,i)=>{
+    th.classList.remove('rep-sort-asc','rep-sort-desc');
+    if(detailCols[i]===repDetailSortCol)th.classList.add(repDetailSortDir===1?'rep-sort-asc':'rep-sort-desc');
+  });
   document.getElementById('rep-detail-visits-tbody').innerHTML=v.length
     ?v.map(r=>`<tr onclick="openModal('${encodeURIComponent(r['Customer Number'])}','${encodeURIComponent(r['Date'])}')">
       <td style="white-space:nowrap">${r['Date']}</td>
