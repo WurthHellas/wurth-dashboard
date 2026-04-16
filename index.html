@@ -378,8 +378,12 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
       <div class="filter-group"><label class="filter-label">Maturity Stage</label><select id="filter-maturity"><option value="">All</option></select></div>
     </div>
     <div class="filter-section">
-      <div class="filter-section-title">⚡ Potential Score</div>
+      <div class="filter-section-title">⚡ Activation Potential</div>
       <div class="filter-group"><div class="range-row"><input type="number" id="score-min" placeholder="Min" min="0" max="100"><input type="number" id="score-max" placeholder="Max" min="0" max="100"></div></div>
+    </div>
+    <div class="filter-section">
+      <div class="filter-section-title">🎯 Visit Outcome Score</div>
+      <div class="filter-group"><div class="range-row"><input type="number" id="outcome-min" placeholder="Min" min="0" max="100"><input type="number" id="outcome-max" placeholder="Max" min="0" max="100"></div></div>
     </div>
     <button class="reset-btn" onclick="resetSidebarFilters()">✕ Reset Classification Filters</button>
   </aside>
@@ -406,7 +410,8 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
         <div class="kpi-card clickable" id="kpicard-app" style="--card-accent:var(--blue)" onclick="kpiFilter('kpicard-app','App Engaged','Yes')"><div class="kpi-label">App Engaged</div><div class="kpi-value" id="kpi-app">—</div><div class="kpi-sub" id="kpi-app-pct">—</div><div class="kpi-click-hint">▶ click to filter</div></div>
         <div class="kpi-card clickable" id="kpicard-highfu" style="--card-accent:var(--accent3)" onclick="kpiFilter('kpicard-highfu','Follow Up Priority','High')"><div class="kpi-label">High Follow-Up</div><div class="kpi-value" id="kpi-highfu">—</div><div class="kpi-sub">priority leads</div><div class="kpi-click-hint">▶ click to filter</div></div>
         <div class="kpi-card clickable" id="kpicard-eproc" style="--card-accent:var(--purple)" onclick="kpiFilter('kpicard-eproc','Opportunity Type','e-Procurement')"><div class="kpi-label">e-Proc Leads</div><div class="kpi-value" id="kpi-eproc">—</div><div class="kpi-sub">integration opps</div><div class="kpi-click-hint">▶ click to filter</div></div>
-        <div class="kpi-card" style="--card-accent:var(--accent)"><div class="kpi-label">Avg Potential</div><div class="kpi-value" id="kpi-avg-score">—</div><div class="kpi-sub">out of 100</div></div>
+        <div class="kpi-card" style="--card-accent:var(--accent)"><div class="kpi-label">Avg Activation</div><div class="kpi-value" id="kpi-avg-score">—</div><div class="kpi-sub">activation potential</div></div>
+        <div class="kpi-card" style="--card-accent:var(--purple)"><div class="kpi-label">Avg Visit Outcome</div><div class="kpi-value" id="kpi-avg-outcome">—</div><div class="kpi-sub">visit outcome score</div></div>
         <div class="kpi-card clickable" id="kpicard-highint" style="--card-accent:var(--green)" onclick="kpiFilter('kpicard-highint','Interest Level','High')"><div class="kpi-label">High Interest</div><div class="kpi-value" id="kpi-high-int">—</div><div class="kpi-sub" id="kpi-high-int-pct">—</div><div class="kpi-click-hint">▶ click to filter</div></div>
       </div>
       <div class="section-divider">🛒 Order Metrics <span id="ord-kpi-status" style="font-weight:400;font-size:10px;color:var(--text3);margin-left:6px"></span></div>
@@ -459,7 +464,9 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
               <th onclick="sortBy('App Engaged')">App</th><th onclick="sortBy('Tech Savvy Level')">Tech</th>
               <th onclick="sortBy('Digital Behaviour')">Behaviour</th><th onclick="sortBy('Interest Level')">Interest</th>
               <th onclick="sortBy('Opportunity Type')">Opportunity</th><th onclick="sortBy('Barrier Type')">Barrier</th>
-              <th onclick="sortBy('Follow Up Priority')">Follow-Up</th><th onclick="sortBy('Potential Score')">Score</th>
+              <th onclick="sortBy('Follow Up Priority')">Follow-Up</th>
+              <th onclick="sortBy('Activation Potential')">Activation</th>
+              <th onclick="sortBy('Visit Outcome Score')">Visit Score</th>
               <th onclick="sortBy('Digital Maturity Stage')">Maturity</th><th>Notes</th>
             </tr></thead><tbody id="table-body"></tbody></table>
           </div>
@@ -483,7 +490,8 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
               <th onclick="sortRep('visits')" class="rep-sort-desc">Visits</th>
               <th onclick="sortRep('opened')">Opened</th><th onclick="sortRep('app')">App</th>
               <th onclick="sortRep('highInt')">High Interest</th><th onclick="sortRep('highFU')">High Follow-Up</th>
-              <th onclick="sortRep('eproc')">e-Proc</th><th onclick="sortRep('avg')">Avg Score</th>
+              <th onclick="sortRep('eproc')">e-Proc</th><th onclick="sortRep('avg')">Avg Activation</th>
+              <th onclick="sortRep('avgOutcome')">Avg Visit Score</th>
               <th onclick="sortRep('sr')">Success Rate</th>
             </tr></thead><tbody id="rep-tbody"></tbody></table>
           </div>
@@ -852,10 +860,10 @@ function attachSidebarListeners(){
       applyFilters();
     });
   });
-  ['search-input','score-min','score-max'].forEach(id=>document.getElementById(id).addEventListener('input',applyFilters));
+  ['search-input','score-min','score-max','outcome-min','outcome-max'].forEach(id=>document.getElementById(id).addEventListener('input',applyFilters));
 }
 function countActiveFilters(){
-  return['filter-already','filter-opened','filter-app','filter-tech','filter-behaviour','filter-interest','filter-opp','filter-barrier','filter-followup','filter-maturity','filter-division','search-input','score-min','score-max']
+  return['filter-already','filter-opened','filter-app','filter-tech','filter-behaviour','filter-interest','filter-opp','filter-barrier','filter-followup','filter-maturity','filter-division','search-input','score-min','score-max','outcome-min','outcome-max']
     .filter(id=>{const el=document.getElementById(id);return el&&el.value!=='';}).length;
 }
 function updateFilterBadge(){const n=countActiveFilters(),el=document.getElementById('filter-count');if(el){el.textContent=n;el.classList.toggle('has-filters',n>0);}}
@@ -874,7 +882,8 @@ function applyFilters(){
     tech=g('filter-tech'),beh=g('filter-behaviour'),interest=g('filter-interest'),
     opp=g('filter-opp'),barrier=g('filter-barrier'),followup=g('filter-followup'),
     maturity=g('filter-maturity'),division=g('filter-division'),
-    search=g('search-input').toLowerCase(),scMin=g('score-min'),scMax=g('score-max');
+    search=g('search-input').toLowerCase(),scMin=g('score-min'),scMax=g('score-max'),
+    outMin=g('outcome-min'),outMax=g('outcome-max');
 
   filtered=ALL_DATA.filter(r=>{
     if(rsm&&r['RSM']!==rsm)return false;
@@ -891,8 +900,10 @@ function applyFilters(){
     if(followup&&r['Follow Up Priority']!==followup)return false;
     if(maturity&&r['Digital Maturity Stage']!==maturity)return false;
     if(division&&r['Division']!==division)return false;
-    if(scMin&&+r['Potential Score']<+scMin)return false;
-    if(scMax&&+r['Potential Score']>+scMax)return false;
+    if(scMin&&+r['Activation Potential']<+scMin)return false;
+    if(scMax&&+r['Activation Potential']>+scMax)return false;
+    if(outMin&&+r['Visit Outcome Score']<+outMin)return false;
+    if(outMax&&+r['Visit Outcome Score']>+outMax)return false;
     if(dFrom){const d=pd(r['Date']);if(!d||d<dFrom)return false;}
     if(dTo){const d=pd(r['Date']);if(!d||d>dTo)return false;}
     if(search&&!Object.values(r).join(' ').toLowerCase().includes(search))return false;
@@ -908,7 +919,7 @@ function applyFilters(){
 
 function resetAllFilters(){
   ['filter-already','filter-opened','filter-app','filter-tech','filter-behaviour','filter-interest','filter-opp','filter-barrier','filter-followup','filter-maturity','filter-division'].forEach(id=>document.getElementById(id).value='');
-  ['search-input','score-min','score-max'].forEach(id=>document.getElementById(id).value='');
+  ['search-input','score-min','score-max','outcome-min','outcome-max'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('tf-rsm').value='';document.getElementById('tf-asm').value='';document.getElementById('tf-rep').value='';
   document.getElementById('tf-date-from').value='';document.getElementById('tf-date-to').value='';
   refreshAsmOptions('','');
@@ -919,7 +930,7 @@ function resetAllFilters(){
 }
 function resetSidebarFilters(){
   ['filter-already','filter-opened','filter-app','filter-tech','filter-behaviour','filter-interest','filter-opp','filter-barrier','filter-followup','filter-maturity','filter-division'].forEach(id=>document.getElementById(id).value='');
-  ['search-input','score-min','score-max'].forEach(id=>document.getElementById(id).value='');
+  ['search-input','score-min','score-max','outcome-min','outcome-max'].forEach(id=>document.getElementById(id).value='');
   if(activeKpiFilter.cardId){document.getElementById(activeKpiFilter.cardId)?.classList.remove('active-filter');activeKpiFilter={cardId:null,field:null,value:null};}
   applyFilters();
 }
@@ -933,8 +944,10 @@ function updateKPIs(){
   const app=filtered.filter(r=>r['App Engaged']==='Yes').length;
   const highFU=filtered.filter(r=>r['Follow Up Priority']==='High').length;
   const eproc=filtered.filter(r=>r['Opportunity Type']==='e-Procurement').length;
-  const scores=filtered.map(r=>+r['Potential Score']).filter(s=>s>0);
+  const scores=filtered.map(r=>+r['Activation Potential']).filter(s=>s>0);
   const avg=scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length):0;
+  const outcomes=filtered.map(r=>+r['Visit Outcome Score']).filter(s=>s>0);
+  const avgOutcome=outcomes.length?Math.round(outcomes.reduce((a,b)=>a+b,0)/outcomes.length):0;
   const highInt=filtered.filter(r=>r['Interest Level']==='High').length;
   const repsSet=new Set(filtered.map(r=>r['Sales Rep']).filter(Boolean));
   const custsSet=new Set(filtered.map(r=>r['Customer Number']).filter(Boolean));
@@ -951,6 +964,7 @@ function updateKPIs(){
   document.getElementById('kpi-highfu').textContent=highFU;
   document.getElementById('kpi-eproc').textContent=eproc;
   document.getElementById('kpi-avg-score').textContent=avg;
+  document.getElementById('kpi-avg-outcome').textContent=avgOutcome;
   document.getElementById('kpi-high-int').textContent=highInt;
   document.getElementById('kpi-high-int-pct').textContent=pct(highInt,n)+' of visits';
   document.getElementById('hdr-reps').textContent=repsSet.size;
@@ -1028,7 +1042,7 @@ function updateCharts(){
   const mM={};mV.forEach(v=>mM[v]=0);filtered.forEach(r=>{if(mM[r['Digital Maturity Stage']]!==undefined)mM[r['Digital Maturity Stage']]++;});
   const nzM=mV.map((v,i)=>({v,c:mM[v],col:mC[i]})).filter(x=>x.c>0);
   mkPie('chart-maturity',nzM.map(x=>x.v.replace('- ','')),nzM.map(x=>x.c),nzM.map(x=>x.col));
-  const bV=['Prefers Personal','No Time','Not Interested','Absent','Pricing / Stock','Contract / Agreement','Low Tech Savvy','Company Change'],bC=['#e63946','#ffd166','#ff6b6b','#4a526a','#118ab2','#9b5de5','#06d6a0','#f4a261'];
+  const bV=['Prefers Personal','No Time','Not Interested','Absent','Pricing / Stock','Contract / Agreement','Low Tech Savvy','Operational Change','Bad Credit'],bC=['#e63946','#ffd166','#ff6b6b','#4a526a','#118ab2','#9b5de5','#06d6a0','#f4a261','#e63946'];
   const bP=bV.map((b,i)=>({b,c:filtered.filter(r=>r['Barrier Type']===b).length,col:bC[i]})).filter(x=>x.c>0).sort((a,b)=>b.c-a.c);
   mkBarH('chart-barriers',bP.map(x=>x.b),bP.map(x=>x.c),bP.map(x=>x.col));
   const oV=['e-Shop Order','New Registration','App Engagement','Re-Engagement','Quote Request','e-Procurement'],oC=['#06d6a0','#118ab2','#ffd166','#9b5de5','#f4a261','#e63946'];
@@ -1047,7 +1061,7 @@ function updateCharts(){
 function sortBy(col){
   if(sortCol===col)sortDir*=-1;else{sortCol=col;sortDir=1;}
   document.querySelectorAll('thead th').forEach(th=>th.classList.remove('sort-asc','sort-desc'));
-  const cols=['Date','Sales Rep','Customer Number','Company Name','RSM','ASM','Division','Already Eshop Account','Opened During Visit','App Engaged','Tech Savvy Level','Digital Behaviour','Interest Level','Opportunity Type','Barrier Type','Follow Up Priority','Potential Score','Digital Maturity Stage','Notes'];
+  const cols=['Date','Sales Rep','Customer Number','Company Name','RSM','ASM','Division','Already Eshop Account','Opened During Visit','App Engaged','Tech Savvy Level','Digital Behaviour','Interest Level','Opportunity Type','Barrier Type','Follow Up Priority','Activation Potential','Visit Outcome Score','Digital Maturity Stage','Notes'];
   const idx=cols.indexOf(col);if(idx>=0)document.querySelectorAll('thead th')[idx].classList.add(sortDir===1?'sort-asc':'sort-desc');
   renderTable();
 }
@@ -1062,7 +1076,7 @@ function renderTable(){
   if(ts)rows=rows.filter(r=>Object.values(r).join(' ').toLowerCase().includes(ts));
   rows.sort((a,b)=>{
     let va=a[sortCol]||'',vb=b[sortCol]||'';
-    if(sortCol==='Potential Score'){va=+va;vb=+vb;}
+    if(sortCol==='Activation Potential'||sortCol==='Visit Outcome Score'){va=+va;vb=+vb;}
     if(sortCol==='Date'){va=pd(va)||new Date(0);vb=pd(vb)||new Date(0);}
     return va<vb?-sortDir:va>vb?sortDir:0;
   });
@@ -1083,7 +1097,8 @@ function renderTable(){
       <td style="color:var(--text2)">${r['Digital Behaviour']||'—'}</td>
       <td>${bInt(r['Interest Level'])}</td><td style="color:var(--text2)">${r['Opportunity Type']||'—'}</td>
       <td style="color:var(--text2)">${r['Barrier Type']||'—'}</td><td>${bFU(r['Follow Up Priority'])}</td>
-      <td>${bSc(r['Potential Score'])}</td>
+      <td>${bSc(r['Activation Potential'])}</td>
+      <td>${bSc(r['Visit Outcome Score'])}</td>
       <td style="font-size:10px;color:var(--text2)">${r['Digital Maturity Stage']||'—'}</td>
       <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis" title="${(r['Notes']||'').replace(/"/g,'&quot;')}">${r['Notes']||'—'}</td>
     </tr>`).join('');
@@ -1119,7 +1134,8 @@ function openModal(custNumEnc, dateEnc){
     ['App Engaged',r['App Engaged']],['Tech Savvy Level',r['Tech Savvy Level']],
     ['Digital Behaviour',r['Digital Behaviour']],['Interest Level',r['Interest Level']],
     ['Opportunity Type',r['Opportunity Type']],['Barrier Type',r['Barrier Type']],
-    ['Follow-Up Priority',r['Follow Up Priority']],['Potential Score',(r['Potential Score']||0)+' / 100'],
+    ['Follow-Up Priority',r['Follow Up Priority']],['Activation Potential',(r['Activation Potential']||0)+' / 100'],
+    ['Visit Outcome Score',(r['Visit Outcome Score']||0)+' / 100'],
     ['Digital Maturity',r['Digital Maturity Stage']]
   ];
   document.getElementById('modal-grid').innerHTML=fields.map(([l,v])=>`<div class="modal-field"><label>${l}</label><span>${v||'—'}</span></div>`).join('');
@@ -1211,7 +1227,7 @@ function exportExcel(){
   const cols=['Date','Sales Rep','Customer Number','Company Name','RSM','ASM','Division',
     'Already Eshop Account','Opened During Visit','App Engaged','Tech Savvy Level',
     'Digital Behaviour','Interest Level','Opportunity Type','Barrier Type',
-    'Follow Up Priority','Potential Score','Digital Maturity Stage','Notes'];
+    'Follow Up Priority','Activation Potential','Visit Outcome Score','Digital Maturity Stage','Notes'];
   const esc=v=>String(v===undefined||v===null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   const cell=(v,r)=>`<c t="inlineStr"${r?' s="1"':''}><is><t>${esc(v)}</t></is></c>`;
   const row=(cells,r)=>`<row>${cells.map(v=>cell(v,r)).join('')}</row>`;
@@ -1230,7 +1246,7 @@ function exportExcel(){
   }</Table></Worksheet></Workbook>`;
   const blob=new Blob(['\uFEFF'+xmlss],{type:'application/vnd.ms-excel;charset=utf-8'});
   const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');a.href=url;a.download='Wurth_RideAlong_'+new Date().toISOString().slice(0,10)+'.xls';
+  const a=document.createElement('a');a.href=url;a.download='Wurth_RideAlong_'+new Date().toISOString().slice(0,10)+'.xml';
   document.body.appendChild(a);a.click();document.body.removeChild(a);
   setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
@@ -1248,10 +1264,12 @@ function exportPDF(){
   const highInt=filtered.filter(r=>r['Interest Level']==='High').length;
   const highFU=filtered.filter(r=>r['Follow Up Priority']==='High').length;
   const eproc=filtered.filter(r=>r['Opportunity Type']==='e-Procurement').length;
-  const scores=filtered.map(r=>+r['Potential Score']).filter(s=>s>0);
+  const scores=filtered.map(r=>+r['Activation Potential']).filter(s=>s>0);
   const avg=scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length):0;
+  const outcomes=filtered.map(r=>+r['Visit Outcome Score']).filter(s=>s>0);
+  const avgOutcome=outcomes.length?Math.round(outcomes.reduce((a,b)=>a+b,0)/outcomes.length):0;
   const topFU=filtered.filter(r=>r['Follow Up Priority']==='High')
-    .sort((a,b)=>(+b['Potential Score'])-(+a['Potential Score'])).slice(0,20);
+    .sort((a,b)=>(+b['Activation Potential'])-(+a['Activation Potential'])).slice(0,20);
   const barrierMap={};filtered.forEach(r=>{if(r['Barrier Type'])barrierMap[r['Barrier Type']]=(barrierMap[r['Barrier Type']]||0)+1;});
   const barrierRows=Object.entries(barrierMap).sort((a,b)=>b[1]-a[1]).slice(0,8);
 
@@ -1297,13 +1315,14 @@ tr:hover td{background:#fafafa;}
   <div class="kpi"><div class="kpi-val">${opened}</div><div class="kpi-lbl">Accounts Opened</div><div class="kpi-sub">${pct(opened,n)} of visits</div></div>
   <div class="kpi"><div class="kpi-val">${had}</div><div class="kpi-lbl">Had Account</div><div class="kpi-sub">${pct(had,n)} of visits</div></div>
   <div class="kpi"><div class="kpi-val">${highInt}</div><div class="kpi-lbl">High Interest</div><div class="kpi-sub">${pct(highInt,n)} of visits</div></div>
-  <div class="kpi"><div class="kpi-val">${avg}</div><div class="kpi-lbl">Avg Potential Score</div><div class="kpi-sub">out of 100</div></div>
+  <div class="kpi"><div class="kpi-val">${avg}</div><div class="kpi-lbl">Avg Activation</div><div class="kpi-sub">activation potential</div></div>
+  <div class="kpi"><div class="kpi-val">${avgOutcome}</div><div class="kpi-lbl">Avg Visit Score</div><div class="kpi-sub">visit outcome</div></div>
   <div class="kpi" style="border-top-color:#ffd166"><div class="kpi-val" style="color:#ffd166">${highFU}</div><div class="kpi-lbl">High Follow-Up</div></div>
   <div class="kpi" style="border-top-color:#9b5de5"><div class="kpi-val" style="color:#9b5de5">${eproc}</div><div class="kpi-lbl">e-Proc Leads</div></div>
 </div>
 <h2>High Follow-Up Priority — Top ${topFU.length} Customers</h2>
-<table><thead><tr><th>#</th><th>Customer</th><th>Company</th><th>Sales Rep</th><th>Interest</th><th>Behaviour</th><th>Barrier</th><th>Score</th><th>Last Visit</th></tr></thead><tbody>
-${topFU.map((r,i)=>`<tr><td style="color:#999">${i+1}</td><td style="font-family:monospace">${r['Customer Number']}</td><td style="font-weight:600">${r['Company Name']||'—'}</td><td>${r['Sales Rep']}</td><td>${r['Interest Level']||'—'}</td><td>${r['Digital Behaviour']||'—'}</td><td>${r['Barrier Type']||'—'}</td><td style="font-weight:700;color:#e63946">${r['Potential Score']}</td><td>${r['Date']}</td></tr>`).join('')}
+<table><thead><tr><th>#</th><th>Customer</th><th>Company</th><th>Sales Rep</th><th>Interest</th><th>Behaviour</th><th>Barrier</th><th>Activation</th><th>Visit Score</th><th>Last Visit</th></tr></thead><tbody>
+${topFU.map((r,i)=>`<tr><td style="color:#999">${i+1}</td><td style="font-family:monospace">${r['Customer Number']}</td><td style="font-weight:600">${r['Company Name']||'—'}</td><td>${r['Sales Rep']}</td><td>${r['Interest Level']||'—'}</td><td>${r['Digital Behaviour']||'—'}</td><td>${r['Barrier Type']||'—'}</td><td style="font-weight:700;color:#e63946">${r['Activation Potential']}</td><td style="font-weight:700;color:#118ab2">${r['Visit Outcome Score']}</td><td>${r['Date']}</td></tr>`).join('')}
 </tbody></table>
 <h2>Barrier Breakdown</h2>
 <table><thead><tr><th>Barrier Type</th><th>Count</th><th>Share</th><th></th></tr></thead><tbody>
@@ -1333,10 +1352,12 @@ function renderRepTable(){
     const hI=v.filter(r=>r['Interest Level']==='High').length;
     const hFU=v.filter(r=>r['Follow Up Priority']==='High').length;
     const ep=v.filter(r=>r['Opportunity Type']==='e-Procurement').length;
-    const sc=v.map(r=>+r['Potential Score']).filter(s=>s>0);
+    const sc=v.map(r=>+r['Activation Potential']).filter(s=>s>0);
     const avg=sc.length?Math.round(sc.reduce((a,b)=>a+b,0)/sc.length):0;
+    const oc=v.map(r=>+r['Visit Outcome Score']).filter(s=>s>0);
+    const avgOutcome=oc.length?Math.round(oc.reduce((a,b)=>a+b,0)/oc.length):0;
     const sr=n?Math.round((opened+hI)/n*100):0;
-    return{name:rep,visits:n,opened,app,highInt:hI,highFU:hFU,eproc:ep,avg,sr};
+    return{name:rep,visits:n,opened,app,highInt:hI,highFU:hFU,eproc:ep,avg,avgOutcome,sr};
   });
   data.sort((a,b)=>{let va=a[repSortCol],vb=b[repSortCol];if(typeof va==='string')return va.localeCompare(vb)*repSortDir;return(va-vb)*repSortDir;});
   document.getElementById('rep-tbody').innerHTML=data.map(d=>`
@@ -1349,10 +1370,11 @@ function renderRepTable(){
       <td style="text-align:center;color:${d.highFU>0?'var(--accent)':'var(--text3)'};font-weight:600">${d.highFU}</td>
       <td style="text-align:center;color:${d.eproc>0?'var(--purple)':'var(--text3)'};font-weight:600">${d.eproc}</td>
       <td style="text-align:center;font-weight:700;color:${d.avg>=60?'var(--green)':d.avg>=35?'var(--accent3)':'var(--accent)'}">${d.avg}</td>
+      <td style="text-align:center;font-weight:700;color:${d.avgOutcome>=50?'var(--green)':d.avgOutcome>=25?'var(--accent3)':'var(--accent)'}">${d.avgOutcome}</td>
       <td><div style="display:flex;align-items:center;gap:7px"><div style="flex:1;height:5px;background:var(--surface3);border-radius:3px"><div style="width:${d.sr}%;height:100%;background:var(--green);border-radius:3px"></div></div><span style="font-size:10px;color:var(--text2)">${d.sr}%</span></div></td>
     </tr>`).join('');
   document.querySelectorAll('.rep-table th').forEach(th=>th.classList.remove('rep-sort-asc','rep-sort-desc'));
-  const cols=['name','visits','opened','app','highInt','highFU','eproc','avg','sr'];
+  const cols=['name','visits','opened','app','highInt','highFU','eproc','avg','avgOutcome','sr'];
   const idx=cols.indexOf(repSortCol);if(idx>=0)document.querySelectorAll('.rep-table th')[idx].classList.add(repSortDir===1?'rep-sort-asc':'rep-sort-desc');
 }
 
@@ -1601,7 +1623,7 @@ function buildAlerts(){
       lastVisit:latest['Date'],daysSinceVisit:daysAgo,
       lastOrder:'—',daysSinceOrder:null,
       interest:latest['Interest Level']||'—',followUp:latest['Follow Up Priority']||'—',
-      score:+(latest['Potential Score']||0)
+      score:+(latest['Activation Potential']||0)
     });
   });
 
@@ -1633,7 +1655,7 @@ function buildAlerts(){
         lastOrder:o.dateStr,daysSinceOrder:daysAgo,
         interest:latestVisit?latestVisit['Interest Level']||'—':'—',
         followUp:latestVisit?latestVisit['Follow Up Priority']||'—':'—',
-        score:latestVisit?+(latestVisit['Potential Score']||0):0
+        score:latestVisit?+(latestVisit['Activation Potential']||0):0
       });
     });
   }
