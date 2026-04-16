@@ -1215,12 +1215,12 @@ function exportExcel(){
   try{
     if(typeof XLSX==='undefined')throw new Error('SheetJS not loaded');
     const wsData=[cols,...filtered.map(r=>cols.map(c=>(r[c]!==undefined&&r[c]!==null)?String(r[c]):''))];
-    const wb=XLSX.utils.book_new();
+    const wb={SheetNames:[],Sheets:{}};
     const ws=XLSX.utils.aoa_to_sheet(wsData);
     ws['!cols']=[{wpx:80},{wpx:110},{wpx:90},{wpx:160},{wpx:80},{wpx:80},{wpx:90},{wpx:70},{wpx:70},{wpx:55},{wpx:70},{wpx:110},{wpx:85},{wpx:110},{wpx:110},{wpx:75},{wpx:55},{wpx:130},{wpx:280}];
     ws['!freeze']={xSplit:0,ySplit:1,topLeftCell:'A2',activePane:'bottomLeft'};
     ws['!autofilter']={ref:'A1:S1'};
-    XLSX.utils.book_append_sheet(wb,'Visit Data',ws);
+    wb.SheetNames.push('Visit Data');wb.Sheets['Visit Data']=ws;
     const meta=[
       ['Report Generated',new Date().toLocaleString('el-GR')],
       ['Total Records',String(filtered.length)],
@@ -1231,7 +1231,7 @@ function exportExcel(){
       ['Date To',(document.getElementById('tf-date-to')||{}).value||'—'],
     ];
     const wsm=XLSX.utils.aoa_to_sheet(meta);
-    XLSX.utils.book_append_sheet(wb,'Report Info',wsm);
+    wb.SheetNames.push('Visit Data');wb.Sheets['Visit Data']=ws;
     const wbout=XLSX.write(wb,{bookType:'xlsx',type:'array'});
     const blob=new Blob([wbout],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
     const url=URL.createObjectURL(blob);
