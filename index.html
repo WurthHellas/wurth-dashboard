@@ -6,7 +6,7 @@
 <title>Würth Hellas — Ride-Along Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script src="https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
 <style>
 :root{--bg:#0d0f14;--surface:#13161e;--surface2:#1a1e2a;--surface3:#21263a;--border:#2a2f45;--accent:#e63946;--accent2:#ff6b6b;--accent3:#ffd166;--green:#06d6a0;--blue:#118ab2;--purple:#9b5de5;--text:#e8eaf0;--text2:#8892a4;--text3:#4a526a;--font-display:"Barlow Condensed",sans-serif;--font-body:"Barlow",sans-serif;--radius:10px;}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -1212,43 +1212,27 @@ function exportExcel(){
     'Already Eshop Account','Opened During Visit','App Engaged','Tech Savvy Level',
     'Digital Behaviour','Interest Level','Opportunity Type','Barrier Type',
     'Follow Up Priority','Potential Score','Digital Maturity Stage','Notes'];
-  try{
-    if(typeof XLSX==='undefined')throw new Error('SheetJS not loaded');
-    const wsData=[cols,...filtered.map(r=>cols.map(c=>(r[c]!==undefined&&r[c]!==null)?String(r[c]):''))];
-    const wb=XLSX.utils.book_new();wb.SheetNames.length=0;
-    const ws=XLSX.utils.aoa_to_sheet(wsData);
-    ws['!cols']=[{wpx:80},{wpx:110},{wpx:90},{wpx:160},{wpx:80},{wpx:80},{wpx:90},{wpx:70},{wpx:70},{wpx:55},{wpx:70},{wpx:110},{wpx:85},{wpx:110},{wpx:110},{wpx:75},{wpx:55},{wpx:130},{wpx:280}];
-    ws['!freeze']={xSplit:0,ySplit:1,topLeftCell:'A2',activePane:'bottomLeft'};
-    ws['!autofilter']={ref:'A1:S1'};
-    wb.SheetNames.push('Visit Data');wb.Sheets['Visit Data']=ws;
-    const meta=[
-      ['Report Generated',new Date().toLocaleString('el-GR')],
-      ['Total Records',String(filtered.length)],
-      ['RSM Filter',(document.getElementById('tf-rsm')||{}).value||'All'],
-      ['ASM Filter',(document.getElementById('tf-asm')||{}).value||'All'],
-      ['Rep Filter',(document.getElementById('tf-rep')||{}).value||'All'],
-      ['Date From',(document.getElementById('tf-date-from')||{}).value||'—'],
-      ['Date To',(document.getElementById('tf-date-to')||{}).value||'—'],
-    ];
-    const wsm=XLSX.utils.aoa_to_sheet(meta);
-    wb.SheetNames.push('Visit Data');wb.Sheets['Visit Data']=ws;
-    const wbout=XLSX.write(wb,{bookType:'xlsx',type:'array'});
-    const blob=new Blob([wbout],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement('a');a.href=url;a.download='Wurth_RideAlong_'+new Date().toISOString().slice(0,10)+'.xlsx';
-    document.body.appendChild(a);a.click();document.body.removeChild(a);
-    setTimeout(()=>URL.revokeObjectURL(url),1000);
-  }catch(err){
-    // Fallback: UTF-8 BOM CSV — Greek characters render correctly in Excel when opened
-    console.warn('XLSX export failed, falling back to CSV:',err);
-    const esc=v=>'"'+String(v===undefined||v===null?'':v).replace(/"/g,'""')+'"';
-    const rows=[cols.map(esc).join(','),...filtered.map(r=>cols.map(c=>esc(r[c])).join(','))];
-    const blob=new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8;'});
-    const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-    a.download='Wurth_RideAlong_'+new Date().toISOString().slice(0,10)+'.csv';
-    document.body.appendChild(a);a.click();document.body.removeChild(a);
-    URL.revokeObjectURL(a.href);
-  }
+  const esc=v=>String(v===undefined||v===null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const cell=(v,r)=>`<c t="inlineStr"${r?' s="1"':''}><is><t>${esc(v)}</t></is></c>`;
+  const row=(cells,r)=>`<row>${cells.map(v=>cell(v,r)).join('')}</row>`;
+  const dataRows=[row(cols,true),...filtered.map(r=>row(cols.map(c=>r[c]||''),false))].join('');
+  const sheet=`<?xml version="1.0" encoding="UTF-8"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><autoFilter ref="A1:S1"/><sheetData>${dataRows}</sheetData></worksheet>`;
+  const styles=`<?xml version="1.0" encoding="UTF-8"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts><font><b/><sz val="11"/></font><font><sz val="11"/></font></fonts><fills><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills><borders><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"><alignment horizontal="left"/></xf></cellXfs></styleSheet>`;
+  const wb=`<?xml version="1.0" encoding="UTF-8"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="Visit Data" sheetId="1" r:id="rId1"/></sheets></workbook>`;
+  const rels=`<?xml version="1.0" encoding="UTF-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`;
+  const ct=`<?xml version="1.0" encoding="UTF-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>`;
+  const drels=`<?xml version="1.0" encoding="UTF-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"></Relationships>`;
+
+  // Build zip using fflate (loaded inline as base64 is too large — use fetch trick)
+  // Fallback: generate as SpreadsheetML XML which Excel opens natively
+  const xmlss=`<?xml version="1.0" encoding="UTF-8"?><?mso-application progid="Excel.Sheet"?><Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"><Styles><Style ss:ID="h"><Font ss:Bold="1"/></Style></Styles><Worksheet ss:Name="Visit Data"><Table>${
+    [cols,...filtered.map(r=>cols.map(c=>r[c]||''))].map((row,i)=>`<Row>${row.map(v=>`<Cell${i===0?' ss:StyleID="h"':''}><Data ss:Type="String">${esc(v)}</Data></Cell>`).join('')}</Row>`).join('')
+  }</Table></Worksheet></Workbook>`;
+  const blob=new Blob(['\uFEFF'+xmlss],{type:'application/vnd.ms-excel;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='Wurth_RideAlong_'+new Date().toISOString().slice(0,10)+'.xls';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 
 // ── EXPORT PDF ───────────────────────────────────────────────────────────────
