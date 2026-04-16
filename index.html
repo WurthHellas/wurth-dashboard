@@ -496,7 +496,7 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
               <th onclick="sortBy('Follow Up Priority')">Follow-Up</th>
               <th onclick="sortBy('Activation Potential')">Activation <span class="tip" data-tip="Activation Potential (0–100): how worth investing in this customer digitally. Based on behaviour, interest, tech and barriers. +20 if converted to digital order within 45 days."><span class="tip-icon">i</span></span></th>
               <th onclick="sortBy('Visit Outcome Score')">Visit Score <span class="tip" data-tip="Visit Outcome Score (0–100): how productive this specific visit was. Rewards openings, orders placed, ERP conversations and booked follow-ups. Absent/N/A visits score 0."><span class="tip-icon">i</span></span></th>
-              <th onclick="sortBy('Digital Maturity Stage')">Maturity</th><th>Notes</th>
+              <th onclick="sortBy('Digital Maturity Stage')">Maturity</th><th onclick="sortBy('Converted')">Orders</th><th>Notes</th>
             </tr></thead><tbody id="table-body"></tbody></table>
           </div>
           <div class="pagination">
@@ -519,7 +519,7 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
               <th onclick="sortRep('visits')" class="rep-sort-desc">Visits</th>
               <th onclick="sortRep('opened')">Opened</th><th onclick="sortRep('app')">App</th>
               <th onclick="sortRep('highInt')">High Interest</th><th onclick="sortRep('highFU')">High Follow-Up</th>
-              <th onclick="sortRep('eproc')">e-Proc</th>
+              <th onclick="sortRep('eproc')">e-Proc</th><th onclick="sortRep('ordered')">Ordered</th>
               <th onclick="sortRep('avg')">Avg Activation <span class="tip" data-tip="Average Activation Potential across all visits by this rep (0–100)."><span class="tip-icon">i</span></span></th>
               <th onclick="sortRep('avgOutcome')">Avg Visit Score <span class="tip" data-tip="Average Visit Outcome Score across all visits by this rep (0–100). Absent/N/A visits excluded."><span class="tip-icon">i</span></span></th>
               <th onclick="sortRep('sr')">Success Rate</th>
@@ -1123,7 +1123,7 @@ function updateCharts(){
 function sortBy(col){
   if(sortCol===col)sortDir*=-1;else{sortCol=col;sortDir=1;}
   document.querySelectorAll('thead th').forEach(th=>th.classList.remove('sort-asc','sort-desc'));
-  const cols=['Date','Sales Rep','Customer Number','Company Name','RSM','ASM','Division','Already Eshop Account','Opened During Visit','App Engaged','Tech Savvy Level','Digital Behaviour','Interest Level','Opportunity Type','Barrier Type','Follow Up Priority','Activation Potential','Visit Outcome Score','Digital Maturity Stage','Notes'];
+  const cols=['Date','Sales Rep','Customer Number','Company Name','RSM','ASM','Division','Already Eshop Account','Opened During Visit','App Engaged','Tech Savvy Level','Digital Behaviour','Interest Level','Opportunity Type','Barrier Type','Follow Up Priority','Activation Potential','Visit Outcome Score','Digital Maturity Stage','Converted','Notes'];
   const idx=cols.indexOf(col);if(idx>=0)document.querySelectorAll('thead th')[idx].classList.add(sortDir===1?'sort-asc':'sort-desc');
   renderTable();
 }
@@ -1162,6 +1162,7 @@ function renderTable(){
       <td>${bSc(r['Activation Potential'])}</td>
       <td>${bSc(r['Visit Outcome Score'])}</td>
       <td style="font-size:10px;color:var(--text2)">${r['Digital Maturity Stage']||'—'}</td>
+      <td>${r['Converted']==='Yes'?'<span class="badge" style="background:rgba(6,214,160,.15);color:#06d6a0;border:1px solid rgba(6,214,160,.3)">✓ 45d</span>':r['Has Orders']==='Yes'?'<span class="badge" style="background:rgba(255,209,102,.15);color:#ffd166;border:1px solid rgba(255,209,102,.3)">~ Orders</span>':''}</td>
       <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis" title="${(r['Notes']||'').replace(/"/g,'&quot;')}">${r['Notes']||'—'}</td>
     </tr>`).join('');
   renderPagination('pagination-btns',currentPage,pages,p=>{currentPage=p;renderTable();});
@@ -1289,7 +1290,7 @@ function exportExcel(){
   const cols=['Date','Sales Rep','Customer Number','Company Name','RSM','ASM','Division',
     'Already Eshop Account','Opened During Visit','App Engaged','Tech Savvy Level',
     'Digital Behaviour','Interest Level','Opportunity Type','Barrier Type',
-    'Follow Up Priority','Activation Potential','Visit Outcome Score','Digital Maturity Stage','Notes'];
+    'Follow Up Priority','Activation Potential','Visit Outcome Score','Digital Maturity Stage','Converted','Has Orders','Notes'];
   const esc=v=>String(v===undefined||v===null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   const cell=(v,r)=>`<c t="inlineStr"${r?' s="1"':''}><is><t>${esc(v)}</t></is></c>`;
   const row=(cells,r)=>`<row>${cells.map(v=>cell(v,r)).join('')}</row>`;
@@ -1419,8 +1420,9 @@ function renderRepTable(){
     const avg=sc.length?Math.round(sc.reduce((a,b)=>a+b,0)/sc.length):0;
     const oc=v.map(r=>+r['Visit Outcome Score']).filter(s=>s>0);
     const avgOutcome=oc.length?Math.round(oc.reduce((a,b)=>a+b,0)/oc.length):0;
+    const ordered=new Set(v.filter(r=>r['Has Orders']==='Yes').map(r=>r['Customer Number'])).size;
     const sr=n?Math.round((opened+hI)/n*100):0;
-    return{name:rep,visits:n,opened,app,highInt:hI,highFU:hFU,eproc:ep,avg,avgOutcome,sr};
+    return{name:rep,visits:n,opened,app,highInt:hI,highFU:hFU,eproc:ep,avg,avgOutcome,ordered,sr};
   });
   data.sort((a,b)=>{let va=a[repSortCol],vb=b[repSortCol];if(typeof va==='string')return va.localeCompare(vb)*repSortDir;return(va-vb)*repSortDir;});
   document.getElementById('rep-tbody').innerHTML=data.map(d=>`
@@ -1432,12 +1434,13 @@ function renderRepTable(){
       <td style="text-align:center;color:var(--green);font-weight:600">${d.highInt}</td>
       <td style="text-align:center;color:${d.highFU>0?'var(--accent)':'var(--text3)'};font-weight:600">${d.highFU}</td>
       <td style="text-align:center;color:${d.eproc>0?'var(--purple)':'var(--text3)'};font-weight:600">${d.eproc}</td>
+      <td style="text-align:center;color:${d.ordered>0?'var(--green)':'var(--text3)'};font-weight:600">${d.ordered}</td>
       <td style="text-align:center;font-weight:700;color:${d.avg>=60?'var(--green)':d.avg>=35?'var(--accent3)':'var(--accent)'}">${d.avg}</td>
       <td style="text-align:center;font-weight:700;color:${d.avgOutcome>=50?'var(--green)':d.avgOutcome>=25?'var(--accent3)':'var(--accent)'}">${d.avgOutcome}</td>
       <td><div style="display:flex;align-items:center;gap:7px"><div style="flex:1;height:5px;background:var(--surface3);border-radius:3px"><div style="width:${d.sr}%;height:100%;background:var(--green);border-radius:3px"></div></div><span style="font-size:10px;color:var(--text2)">${d.sr}%</span></div></td>
     </tr>`).join('');
   document.querySelectorAll('.rep-table th').forEach(th=>th.classList.remove('rep-sort-asc','rep-sort-desc'));
-  const cols=['name','visits','opened','app','highInt','highFU','eproc','avg','avgOutcome','sr'];
+  const cols=['name','visits','opened','app','highInt','highFU','eproc','ordered','avg','avgOutcome','sr'];
   const idx=cols.indexOf(repSortCol);if(idx>=0)document.querySelectorAll('.rep-table th')[idx].classList.add(repSortDir===1?'rep-sort-asc':'rep-sort-desc');
 }
 
