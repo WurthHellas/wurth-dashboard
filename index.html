@@ -1446,6 +1446,10 @@ function closeRepDetail(){
   let activeRepDetail = null;
   let repDetailSortCol = 'Date';
   let repDetailSortDir = -1;
+  function closeRepDetail(){
+  activeRepDetail = null;
+  repDetailSortCol = 'Date';
+  repDetailSortDir = -1;
   document.getElementById('rep-detail-panel').style.display='none';
   document.querySelectorAll('#rep-tbody tr').forEach(tr=>tr.style.background='');
 }
@@ -1510,11 +1514,11 @@ function showRepDetail(name){
   renderRepDetailVisits();
   setTimeout(()=>panel.scrollIntoView({behavior:'smooth',block:'nearest'}),50);
 }
-function renderRepDetailVisits(){
   function sortRepDetail(col){
   if(repDetailSortCol===col)repDetailSortDir*=-1;else{repDetailSortCol=col;repDetailSortDir=col==='Date'?-1:1;}
   renderRepDetailVisits();
 }
+  function renderRepDetailVisits(){
   if(!activeRepDetail)return;
   const search=(document.getElementById('rep-detail-search')||{value:''}).value.toLowerCase();
   let v=filtered.filter(r=>r['Sales Rep']===activeRepDetail);
