@@ -1138,9 +1138,9 @@ function renderTable(){
   if(ts)rows=rows.filter(r=>Object.values(r).join(' ').toLowerCase().includes(ts));
   rows.sort((a,b)=>{
     let va=a[sortCol]||'',vb=b[sortCol]||'';
-    if(sortCol==='Activation Potential'||sortCol==='Visit Outcome Score'){va=+va;vb=+vb;}
-    if(sortCol==='Date'){va=pd(va)||new Date(0);vb=pd(vb)||new Date(0);}
-    return va<vb?-sortDir:va>vb?sortDir:0;
+  if(sortCol==='Activation Potential'||sortCol==='Visit Outcome Score'){va=+va;vb=+vb;}
+    if(sortCol==='Converted'){va=va==='Yes'?2:va==='No'?0:0;vb=vb==='Yes'?2:vb==='No'?0:0;}
+    if(sortCol==='Has Orders'){va=va==='Yes'?1:0;vb=vb==='Yes'?1:0;}
   });
   const total=rows.length,pages=Math.max(1,Math.ceil(total/PAGE_SIZE));
   if(currentPage>pages)currentPage=1;
