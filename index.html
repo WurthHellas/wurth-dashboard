@@ -449,8 +449,9 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
         <div class="kpi-card" style="--card-accent:var(--accent3)"><div class="kpi-label">Avg Order Value</div><div class="kpi-value" id="ord-kpi-avg">—</div><div class="kpi-sub">€ per order</div></div>
         <div class="kpi-card" style="--card-accent:var(--blue)"><div class="kpi-label">Converted</div><div class="kpi-value" id="ord-kpi-converted">—</div><div class="kpi-sub" id="ord-kpi-converted-pct">visit → order ≤45d</div></div>
         <div class="kpi-card" style="--card-accent:var(--green)"><div class="kpi-label">e-Shop Orders</div><div class="kpi-value" id="ord-kpi-eshop">—</div><div class="kpi-sub">channel 015</div></div>
-        <div class="kpi-card" style="--card-accent:var(--purple)"><div class="kpi-label">OCI / e-Proc</div><div class="kpi-value" id="ord-kpi-oci">—</div><div class="kpi-sub">channel 315</div></div>
+        <div class="kpi-card" style="--card-accent:var(--purple)"><div class="kpi-label">e-Procurement</div><div class="kpi-value" id="ord-kpi-eproc">—</div><div class="kpi-sub">channels 315 & 330</div></div>
         <div class="kpi-card" style="--card-accent:var(--accent2)"><div class="kpi-label">App Orders</div><div class="kpi-value" id="ord-kpi-app">—</div><div class="kpi-sub">channels 303 & 304</div></div>
+        <div class="kpi-card" style="--card-accent:var(--green)"><div class="kpi-label">% Autonomous</div><div class="kpi-value" id="ord-kpi-auto-pct">—</div><div class="kpi-sub">customer self-served</div></div>
       </div>
       <div class="charts-grid" style="grid-template-columns:1.2fr 0.8fr">
         <div class="chart-card"><div class="chart-title"><span class="dot" style="background:var(--blue)"></span>Interest Level</div><div style="height:200px"><canvas id="chart-interest"></canvas></div></div>
@@ -626,13 +627,17 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
           <div class="ord-kpi" style="--card-accent:var(--green)"><div class="ord-kpi-label">Total Digital Orders</div><div class="ord-kpi-value" id="ord-total">—</div><div class="ord-kpi-sub">all channels</div></div>
           <div class="ord-kpi" style="--card-accent:var(--accent3)"><div class="ord-kpi-label">Total Value</div><div class="ord-kpi-value" id="ord-value">—</div><div class="ord-kpi-sub">€ net</div></div>
           <div class="ord-kpi" style="--card-accent:var(--blue)"><div class="ord-kpi-label">Avg Order Value</div><div class="ord-kpi-value" id="ord-avg">—</div><div class="ord-kpi-sub">€ per order</div></div>
-          <div class="ord-kpi" style="--card-accent:var(--green)"><div class="ord-kpi-label">e-Shop (015)</div><div class="ord-kpi-value" id="ord-ch-eshop">—</div><div class="ord-kpi-sub">orders</div></div>
+           <div class="ord-kpi" style="--card-accent:var(--green)"><div class="ord-kpi-label">e-Shop (015)</div><div class="ord-kpi-value" id="ord-ch-eshop">—</div><div class="ord-kpi-sub">orders</div></div>
           <div class="ord-kpi" style="--card-accent:var(--purple)"><div class="ord-kpi-label">OCI (315)</div><div class="ord-kpi-value" id="ord-ch-oci">—</div><div class="ord-kpi-sub">orders</div></div>
+          <div class="ord-kpi" style="--card-accent:var(--accent3)"><div class="ord-kpi-label">Semi-auto (330)</div><div class="ord-kpi-value" id="ord-ch-semiauto">—</div><div class="ord-kpi-sub">orders</div></div>
           <div class="ord-kpi" style="--card-accent:var(--accent2)"><div class="ord-kpi-label">App (303/304)</div><div class="ord-kpi-value" id="ord-ch-app">—</div><div class="ord-kpi-sub">orders</div></div>
+          <div class="ord-kpi" style="--card-accent:var(--green)"><div class="ord-kpi-label">Autonomous</div><div class="ord-kpi-value" id="ord-ch-auto">—</div><div class="ord-kpi-sub">customer self-served</div></div>
+          <div class="ord-kpi" style="--card-accent:var(--accent)"><div class="ord-kpi-label">Assisted</div><div class="ord-kpi-value" id="ord-ch-asst">—</div><div class="ord-kpi-sub">backoffice input</div></div>
         </div>
-        <div class="charts-grid" style="grid-template-columns:1.5fr 0.5fr;margin-bottom:16px">
+         <div class="charts-grid" style="grid-template-columns:1.5fr 0.4fr 0.4fr;margin-bottom:16px">
           <div class="chart-card"><div class="chart-title"><span class="dot" style="background:var(--green)"></span>Orders Over Time</div><div style="height:185px"><canvas id="ord-chart-timeline"></canvas></div></div>
           <div class="chart-card"><div class="chart-title"><span class="dot" style="background:var(--purple)"></span>Channel Mix</div><div style="height:185px"><canvas id="ord-chart-channels"></canvas></div></div>
+          <div class="chart-card"><div class="chart-title"><span class="dot" style="background:var(--green)"></span>Order Source</div><div style="height:185px"><canvas id="ord-chart-source"></canvas></div></div>
         </div>
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
           <span style="font-size:11px;font-weight:600;color:var(--text2)">Show customers:</span>
@@ -654,7 +659,7 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
               <th onclick="sortOrd('rep')">Sales Rep</th><th onclick="sortOrd('rsm')">RSM</th><th onclick="sortOrd('asm')">ASM</th>
               <th onclick="sortOrd('totalOrders')" class="ord-sort-desc">Orders</th>
               <th onclick="sortOrd('totalValue')">Total Value €</th><th onclick="sortOrd('avgOrderValue')">Avg Value €</th>
-              <th onclick="sortOrd('eshop')">e-Shop</th><th onclick="sortOrd('oci')">OCI</th><th onclick="sortOrd('app')">App</th>
+              <th onclick="sortOrd('eshop')">e-Shop</th><th onclick="sortOrd('oci')">OCI</th><th onclick="sortOrd('semiauto')">Semi-auto</th><th onclick="sortOrd('app')">App</th><th onclick="sortOrd('autonomous')">Auto</th><th onclick="sortOrd('assisted')">Asst</th>
               <th onclick="sortOrd('convertedCustomers')">Converted</th><th onclick="sortOrd('uniqueCustomers')">Unique Custs</th>
             </tr></thead><tbody id="ord-rep-tbody"></tbody></table>
           </div>
@@ -1050,9 +1055,11 @@ function renderOverviewOrderKPIs(){
     const tot=fo.length,val=fo.reduce((s,o)=>s+o.netVal,0);
     document.getElementById('ord-kpi-total').textContent=tot.toLocaleString();
     document.getElementById('ord-kpi-avg').textContent='€'+(tot?Math.round(val/tot):0).toLocaleString();
-    document.getElementById('ord-kpi-eshop').textContent=fo.filter(o=>o.reason==='015'||o.reason==='15').length.toLocaleString();
-    document.getElementById('ord-kpi-oci').textContent=fo.filter(o=>o.reason==='315').length.toLocaleString();
+   const autoFo=fo.filter(o=>o.source==='Autonomous').length;
+    document.getElementById('ord-kpi-eshop').textContent=fo.filter(o=>o.reason==='015').length.toLocaleString();
+    document.getElementById('ord-kpi-eproc').textContent=fo.filter(o=>o.reason==='315'||o.reason==='330').length.toLocaleString();
     document.getElementById('ord-kpi-app').textContent=fo.filter(o=>o.reason==='303'||o.reason==='304').length.toLocaleString();
+    document.getElementById('ord-kpi-auto-pct').textContent=(fo.length?Math.round(autoFo/fo.length*100):0)+'%';
     const visitedCusts=new Set(ALL_DATA.filter(r=>{
       if(dFrom){const d=pd(r['Date']);if(!d||d<dFrom)return false;}
       if(dTo){const d=pd(r['Date']);if(!d||d>dTo)return false;}
@@ -1071,8 +1078,9 @@ function renderOverviewOrderKPIs(){
   document.getElementById('ord-kpi-converted').textContent=(ORD_KPI.convertedCustomers||0).toLocaleString();
   document.getElementById('ord-kpi-converted-pct').textContent=(ORD_KPI.visitedCustomers?Math.round((ORD_KPI.convertedCustomers||0)/ORD_KPI.visitedCustomers*100):0)+'% of visited customers';
   document.getElementById('ord-kpi-eshop').textContent=(ch['e-Shop']||0).toLocaleString();
-  document.getElementById('ord-kpi-oci').textContent=(ch['OCI/e-Procurement']||0).toLocaleString();
+  document.getElementById('ord-kpi-eproc').textContent=(ch['e-Procurement']||0).toLocaleString();
   document.getElementById('ord-kpi-app').textContent=(ch['App']||0).toLocaleString();
+  document.getElementById('ord-kpi-auto-pct').textContent=(ORD_KPI.autonomousPct||0)+'%';
 }
 
 function kpiFilter(cardId,field,value){
@@ -1680,9 +1688,14 @@ function renderOrdersSection(){
   document.getElementById('ord-total').textContent=tot.toLocaleString();
   document.getElementById('ord-value').textContent='€'+Math.round(val).toLocaleString();
   document.getElementById('ord-avg').textContent=tot?'€'+Math.round(val/tot).toLocaleString():'€0';
-  document.getElementById('ord-ch-eshop').textContent=fo.filter(o=>o.reason==='015'||o.reason==='15').length.toLocaleString();
+ document.getElementById('ord-ch-eshop').textContent=fo.filter(o=>o.reason==='015').length.toLocaleString();
   document.getElementById('ord-ch-oci').textContent=fo.filter(o=>o.reason==='315').length.toLocaleString();
+  document.getElementById('ord-ch-semiauto').textContent=fo.filter(o=>o.reason==='330').length.toLocaleString();
   document.getElementById('ord-ch-app').textContent=fo.filter(o=>o.reason==='303'||o.reason==='304').length.toLocaleString();
+  const autoCount=fo.filter(o=>o.source==='Autonomous').length;
+  const asstCount=fo.filter(o=>o.source==='Assisted').length;
+  document.getElementById('ord-ch-auto').textContent=autoCount.toLocaleString();
+  document.getElementById('ord-ch-asst').textContent=asstCount.toLocaleString();
   if(ORD_DATA.unmatchedCount>0)document.getElementById('ord-unmatched-note').textContent=`ℹ ${ORD_DATA.unmatchedCount} orders unmatched`;
   const tl=ORD_DATA.timeline.filter(t=>{if(!dFrom&&!dTo)return true;const[y,m]=t.month.split('-');const ms=new Date(+y,+m-1,1),me=new Date(+y,+m,0);if(dFrom&&me<dFrom)return false;if(dTo&&ms>dTo)return false;return true;});
   const mo=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -1690,9 +1703,12 @@ function renderOrdersSection(){
   const ctx=document.getElementById('ord-chart-timeline').getContext('2d');
   const g=ctx.createLinearGradient(0,0,0,150);g.addColorStop(0,'rgba(6,214,160,.3)');g.addColorStop(1,'rgba(6,214,160,0)');
   charts['ord-chart-timeline']=new Chart(ctx,{type:'line',data:{labels:tl.map(t=>{const[y,m]=t.month.split('-');return mo[+m]+' '+y.slice(2);}),datasets:[{label:'Orders',data:tl.map(t=>t.orders),borderColor:'#06d6a0',backgroundColor:g,borderWidth:2,tension:0.4,pointRadius:2,fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8892a4',font:{size:10},maxTicksLimit:12}},y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8892a4',font:{size:10}}}}}});
-  const eshop=fo.filter(o=>o.reason==='015'||o.reason==='15').length,oci=fo.filter(o=>o.reason==='315').length,appC=fo.filter(o=>o.reason==='303'||o.reason==='304').length;
+  const eshop=fo.filter(o=>o.reason==='015').length,eprocC=fo.filter(o=>o.reason==='315'||o.reason==='330').length,appC=fo.filter(o=>o.reason==='303'||o.reason==='304').length;
   if(charts['ord-chart-channels'])charts['ord-chart-channels'].destroy();
-  charts['ord-chart-channels']=new Chart(document.getElementById('ord-chart-channels'),{type:'doughnut',data:{labels:['e-Shop','OCI','App'],datasets:[{data:[eshop,oci,appC],backgroundColor:['#06d6a0','#9b5de5','#ff6b6b'],borderWidth:1,borderColor:'#13161e'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{position:'bottom',labels:{color:'#8892a4',font:{size:10},boxWidth:10,padding:8}}}}});
+  charts['ord-chart-channels']=new Chart(document.getElementById('ord-chart-channels'),{type:'doughnut',data:{labels:['e-Shop','e-Procurement','App'],datasets:[{data:[eshop,eprocC,appC],backgroundColor:['#06d6a0','#9b5de5','#ff6b6b'],borderWidth:1,borderColor:'#13161e'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{position:'bottom',labels:{color:'#8892a4',font:{size:10},boxWidth:10,padding:8}}}}});
+  const autoC=fo.filter(o=>o.source==='Autonomous').length,asstC=fo.filter(o=>o.source==='Assisted').length;
+  if(charts['ord-chart-source'])charts['ord-chart-source'].destroy();
+  charts['ord-chart-source']=new Chart(document.getElementById('ord-chart-source'),{type:'doughnut',data:{labels:['Autonomous','Assisted','Unknown'],datasets:[{data:[autoC,asstC,fo.length-autoC-asstC],backgroundColor:['#06d6a0','#ffd166','#4a526a'],borderWidth:1,borderColor:'#13161e'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{position:'bottom',labels:{color:'#8892a4',font:{size:10},boxWidth:10,padding:8}}}}});
   renderOrdRepTable();renderOrdCustTable();
   renderOverviewOrderKPIs();
 }
@@ -1717,10 +1733,10 @@ function renderOrdRepTable(){
     <td style="text-align:center;font-weight:700;color:var(--green)">${r.totalOrders.toLocaleString()}</td>
     <td style="text-align:center;font-weight:600">€${r.totalValue.toLocaleString()}</td>
     <td style="text-align:center">€${r.avgOrderValue.toLocaleString()}</td>
-    <td style="text-align:center;color:var(--green)">${r.eshop}</td><td style="text-align:center;color:var(--purple)">${r.oci}</td><td style="text-align:center;color:var(--accent2)">${r.app}</td>
+   <td style="text-align:center;color:var(--green)">${r.eshop}</td><td style="text-align:center;color:var(--purple)">${r.oci}</td><td style="text-align:center;color:var(--accent3)">${r.semiauto||0}</td><td style="text-align:center;color:var(--accent2)">${r.app}</td><td style="text-align:center;color:var(--green);font-weight:600">${r.autonomous||0}</td><td style="text-align:center;color:var(--accent)">${r.assisted||0}</td>
     <td style="text-align:center;color:var(--blue);font-weight:600">${r.convertedCustomers}</td>
     <td style="text-align:center">${r.uniqueCustomers}</td></tr>`).join('')
-    :'<tr><td colspan="11" style="text-align:center;padding:24px;color:var(--text3)">No data</td></tr>';
+    :'<tr><td colspan="14" style="text-align:center;padding:24px;color:var(--text3)">No data</td></tr>';
 }
 function sortOrdCust(col){if(ordCustSortCol===col)ordCustSortDir*=-1;else{ordCustSortCol=col;ordCustSortDir=(col==='custNum'||col==='name'||col==='rep'||col==='division')?1:-1;}ordCustPage=1;renderOrdCustTable();}
 function renderOrdCustTable(){
