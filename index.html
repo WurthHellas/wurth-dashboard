@@ -838,14 +838,28 @@ function ebizByRepLookup(){
   return map;
 }
 function renderEBizSnapshotKPIs(){
-  if(!EBIZ_DATA||!EBIZ_DATA.companyKpis||!EBIZ_DATA.latestMonth)return;
-  const ck=EBIZ_DATA.companyKpis;
-  document.getElementById('ebiz-kpi-regcust').textContent=Math.round(ck.regCust||0).toLocaleString();
-  document.getElementById('ebiz-kpi-month').textContent=EBIZ_DATA.latestMonth;
-  document.getElementById('ebiz-kpi-active').textContent=Math.round(ck.activeLM||0).toLocaleString();
-  document.getElementById('ebiz-kpi-orders').textContent=Math.round(ck.ordersTotal||0).toLocaleString()+' / '+Math.round(ck.ordersEshop||0).toLocaleString();
-  document.getElementById('ebiz-kpi-turnover').textContent='€'+Math.round(ck.turnoverLM||0).toLocaleString();
-  const share=ck.eshopSharePct||0;
+  if(!EBIZ_DATA||!EBIZ_DATA.latestMonth)return;
+  const rsm=(document.getElementById('tf-rsm')||{}).value||'';
+  const asm=(document.getElementById('tf-asm')||{}).value||'';
+  const rep=(document.getElementById('tf-rep')||{}).value||'';
+  const rows=(EBIZ_DATA.currentMonth||[]).filter(r=>{
+    if(rsm&&r.rsm!==rsm)return false;
+    if(asm&&r.asm!==asm)return false;
+    if(rep&&normRep(r.rep)!==normRep(rep))return false;
+    return true;
+  });
+  const ck={regCust:0,activeLM:0,ordersTotal:0,ordersEshop:0,turnoverLM:0,eshopTurnover:0};
+  rows.forEach(r=>{
+    ck.regCust+=r.regCust;ck.activeLM+=r.activeLM;ck.ordersTotal+=r.ordersTotal;
+    ck.ordersEshop+=r.ordersEshop;ck.turnoverLM+=r.turnoverLM;ck.eshopTurnover+=r.eshopTurnover;
+  });
+  ck.eshopSharePct=ck.turnoverLM>0?Math.round(ck.eshopTurnover/ck.turnoverLM*10000)/100:0;
+  document.getElementById('ebiz-kpi-regcust').textContent=Math.round(ck.regCust).toLocaleString();
+  document.getElementById('ebiz-kpi-month').textContent=EBIZ_DATA.latestMonth+((rsm||asm||rep)?' · filtered':'');
+  document.getElementById('ebiz-kpi-active').textContent=Math.round(ck.activeLM).toLocaleString();
+  document.getElementById('ebiz-kpi-orders').textContent=Math.round(ck.ordersTotal).toLocaleString()+' / '+Math.round(ck.ordersEshop).toLocaleString();
+  document.getElementById('ebiz-kpi-turnover').textContent='€'+Math.round(ck.turnoverLM).toLocaleString();
+  const share=ck.eshopSharePct;
   document.getElementById('ebiz-kpi-share').textContent=share+'%';
   const ok=share>=14.5;
   document.getElementById('ebiz-kpi-share-badge').innerHTML=`<span class="badge ${ok?'by':'bni'}">${ok?'▲':'▼'} vs 14.5% target</span>`;
@@ -1027,6 +1041,7 @@ function applyFilters(){
   if(COV_DATA.length)renderCovTable();
   if(ORD_DATA)renderOrdersSection();
   renderOverviewOrderKPIs();
+  renderEBizSnapshotKPIs();
   buildAlerts();
 }
 
