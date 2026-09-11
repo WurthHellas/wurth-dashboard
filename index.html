@@ -1216,6 +1216,12 @@ function mkLine(id,labels,data,color){
   g.addColorStop(1,color?color+'00':'rgba(230,57,70,0)');
   charts[id]=new Chart(ctx,{type:'line',data:{labels,datasets:[{data,borderColor:color||'#e63946',backgroundColor:g,borderWidth:2,tension:0.45,cubicInterpolationMode:'monotone',pointRadius:3,pointHoverRadius:6,pointHitRadius:14,pointBackgroundColor:color||'#e63946',fill:true}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{backgroundColor:'#1e2235',borderColor:'#2a2f45',borderWidth:1,padding:9,displayColors:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8892a4',font:{size:10},maxTicksLimit:12}},y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8892a4',font:{size:10}}}}}});
 }
+function weekKey(d){
+  const day=(d.getDay()+6)%7;
+  const monday=new Date(d.getFullYear(),d.getMonth(),d.getDate()-day);
+  const y=monday.getFullYear(),m=('0'+(monday.getMonth()+1)).slice(-2),dd=('0'+monday.getDate()).slice(-2);
+  return{key:y+'-'+m+'-'+dd,label:dd+'/'+m};
+}
 function updateCharts(){
   const iV=['High','Medium','Pending','Not Interested','N/A'],iC=['#06d6a0','#ffd166','#118ab2','#e63946','#4a526a'];
   const iM={};iV.forEach(v=>iM[v]=0);filtered.forEach(r=>{if(iM[r['Interest Level']]!==undefined)iM[r['Interest Level']]++;});
@@ -1231,9 +1237,9 @@ function updateCharts(){
   const oV=['e-Shop Order','New Registration','App Engagement','Re-Engagement','Quote Request','e-Procurement'],oC=['#06d6a0','#118ab2','#ffd166','#9b5de5','#f4a261','#e63946'];
   const oP=oV.map((o,i)=>({o,c:filtered.filter(r=>r['Opportunity Type']===o).length,col:oC[i]})).filter(x=>x.c>0).sort((a,b)=>b.c-a.c);
   mkBarH('chart-opps',oP.map(x=>x.o),oP.map(x=>x.c),oP.map(x=>x.col));
-  const monthly={};filtered.forEach(r=>{if(!r['Date'])return;const p=r['Date'].split('/');if(p.length<3)return;const k=p[2]+'-'+p[1];monthly[k]=(monthly[k]||0)+1;});
-  const tK=Object.keys(monthly).sort(),mo=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  mkLine('chart-timeline',tK.map(k=>{const[y,m]=k.split('-');return mo[+m]+' '+y.slice(2);}),tK.map(k=>monthly[k]),'#e63946');
+  const weekly={};filtered.forEach(r=>{const d=pd(r['Date']);if(!d)return;const wk=weekKey(d);if(!weekly[wk.key])weekly[wk.key]={label:wk.label,count:0};weekly[wk.key].count++;});
+  const wK=Object.keys(weekly).sort();
+  mkLine('chart-timeline',wK.map(k=>weekly[k].label),wK.map(k=>weekly[k].count),'#e63946');
   const beV=['Active User','Browser Only','New Activation','Dormant Account','Non-Digital'],beC=['#06d6a0','#118ab2','#ffd166','#9b5de5','#e63946'];
   const beP=beV.map((b,i)=>({b,c:filtered.filter(r=>r['Digital Behaviour']===b).length,col:beC[i]})).filter(x=>x.c>0);
   mkBarH('chart-behaviour',beP.map(x=>x.b),beP.map(x=>x.c),beP.map(x=>x.col));
@@ -1826,12 +1832,12 @@ function renderOrdersSection(){
   document.getElementById('ord-ch-auto').textContent=autoCount.toLocaleString();
   document.getElementById('ord-ch-asst').textContent=asstCount.toLocaleString();
   if(ORD_DATA.unmatchedCount>0)document.getElementById('ord-unmatched-note').textContent=`ℹ ${ORD_DATA.unmatchedCount} orders unmatched`;
-  const tl=ORD_DATA.timeline.filter(t=>{if(!dFrom&&!dTo)return true;const[y,m]=t.month.split('-');const ms=new Date(+y,+m-1,1),me=new Date(+y,+m,0);if(dFrom&&me<dFrom)return false;if(dTo&&ms>dTo)return false;return true;});
-  const mo=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+   const weeklyOrd={};fo.forEach(o=>{const d=pd(o.date);if(!d)return;const wk=weekKey(d);if(!weeklyOrd[wk.key])weeklyOrd[wk.key]={label:wk.label,count:0};weeklyOrd[wk.key].count++;});
+  const wOK=Object.keys(weeklyOrd).sort();
   if(charts['ord-chart-timeline'])charts['ord-chart-timeline'].destroy();
   const ctx=document.getElementById('ord-chart-timeline').getContext('2d');
   const g=ctx.createLinearGradient(0,0,0,150);g.addColorStop(0,'rgba(6,214,160,.3)');g.addColorStop(1,'rgba(6,214,160,0)');
-  charts['ord-chart-timeline']=new Chart(ctx,{type:'line',data:{labels:tl.map(t=>{const[y,m]=t.month.split('-');return mo[+m]+' '+y.slice(2);}),datasets:[{label:'Orders',data:tl.map(t=>t.orders),borderColor:'#06d6a0',backgroundColor:g,borderWidth:2,tension:0.45,cubicInterpolationMode:'monotone',pointRadius:3,pointHoverRadius:6,pointHitRadius:14,pointBackgroundColor:'#06d6a0',fill:true}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{backgroundColor:'#1e2235',borderColor:'#2a2f45',borderWidth:1,padding:9,displayColors:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8892a4',font:{size:10},maxTicksLimit:12}},y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8892a4',font:{size:10}}}}}});
+  charts['ord-chart-timeline']=new Chart(ctx,{type:'line',data:{labels:wOK.map(k=>weeklyOrd[k].label),datasets:[{label:'Orders',data:wOK.map(k=>weeklyOrd[k].count),borderColor:'#06d6a0',backgroundColor:g,borderWidth:2,tension:0.45,cubicInterpolationMode:'monotone',pointRadius:3,pointHoverRadius:6,pointHitRadius:14,pointBackgroundColor:'#06d6a0',fill:true}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{backgroundColor:'#1e2235',borderColor:'#2a2f45',borderWidth:1,padding:9,displayColors:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8892a4',font:{size:10},maxTicksLimit:12}},y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8892a4',font:{size:10}}}}}});
   const eshop=fo.filter(o=>o.reason==='015').length,eprocC=fo.filter(o=>o.reason==='315'||o.reason==='330').length,appC=fo.filter(o=>o.reason==='303'||o.reason==='304').length;
   if(charts['ord-chart-channels'])charts['ord-chart-channels'].destroy();
   charts['ord-chart-channels']=new Chart(document.getElementById('ord-chart-channels'),{type:'doughnut',data:{labels:['e-Shop','e-Procurement','App'],datasets:[{data:[eshop,eprocC,appC],backgroundColor:['#06d6a0','#9b5de5','#ff6b6b'],borderWidth:1,borderColor:'#13161e'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{position:'bottom',labels:{color:'#8892a4',font:{size:10},boxWidth:10,padding:8}}}}});
