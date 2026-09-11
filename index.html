@@ -295,8 +295,8 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
   .btn,.pagination,.pagination-btns,.drill-panel,.table-controls,.modal-close{display:none!important;}
   .app{display:block;}.main{padding:0;}
   .tab-content{display:block!important;}
-  #tab-fielddata > *:not(.print-visible){display:none;}
-  #tab-overview,#tab-operations,#tab-alerts,#tab-fielddata .sub-toggle{display:none!important;}
+  #tab-activity > *:not(.print-visible){display:none;}
+  #tab-snapshot,#tab-people,#tab-alerts,#tab-activity .sub-toggle{display:none!important;}
   .print-section{display:block!important;}
   table,thead,tbody,tr,th,td{color:#000;background:#fff;border-color:#ccc;}
   .kpi-card,.chart-card,.table-section,.cov-kpi,.alert-kpi,.ord-kpi{border:1px solid #ccc;background:#fff;}
@@ -421,27 +421,19 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
     <button class="filter-toggle" onclick="openDrawer()">⚙ Filters <span class="filter-count" id="filter-count">0</span></button>
 
     <div class="tabs">
-      <div class="tab active" onclick="switchTab('overview')">Overview</div>
-      <div class="tab" onclick="switchTab('fielddata')">Field Data</div>
-      <div class="tab" onclick="switchTab('operations')">Operations</div>
+      <div class="tab active" onclick="switchTab('snapshot')">Snapshot</div>
+      <div class="tab" onclick="switchTab('people')">People</div>
+      <div class="tab" onclick="switchTab('activity')">Activity</div>
       <div class="tab" onclick="switchTab('alerts')">Alerts <span class="tab-badge" id="alert-badge">0</span></div>
     </div>
 
-    <!-- ── OVERVIEW ──────────────────────────────────────────────────────── -->
-    <div id="tab-overview" class="tab-content active">
+    <!-- ── SNAPSHOT ──────────────────────────────────────────────────────── -->
+    <div id="tab-snapshot" class="tab-content active">
       <div class="section-divider">📊 Visit Metrics</div>
       <div class="kpi-grid">
         <div class="kpi-card" style="--card-accent:var(--accent)"><div class="kpi-label">Total Visits</div><div class="kpi-value" id="kpi-total">—</div><div class="kpi-sub">filtered records</div></div>
         <div class="kpi-card" style="--card-accent:#a78bfa"><div class="kpi-label">Sales Reps</div><div class="kpi-value" id="kpi-reps">—</div><div class="kpi-sub">with ride-alongs</div></div>
         <div class="kpi-card" style="--card-accent:#38bdf8"><div class="kpi-label">Customers Visited</div><div class="kpi-value" id="kpi-customers">—</div><div class="kpi-sub">unique accounts</div></div>
-        <div class="kpi-card clickable" id="kpicard-opened" style="--card-accent:var(--green)" onclick="kpiFilter('kpicard-opened','Opened During Visit','Yes')"><div class="kpi-label">Accounts Opened</div><div class="kpi-value" id="kpi-opened">—</div><div class="kpi-sub" id="kpi-opened-pct">—</div><div class="kpi-click-hint">▶ click to filter</div></div>
-        <div class="kpi-card clickable" id="kpicard-had" style="--card-accent:#06d6a0" onclick="kpiFilter('kpicard-had','Already Eshop Account','Yes')"><div class="kpi-label">Had Account</div><div class="kpi-value" id="kpi-had">—</div><div class="kpi-sub" id="kpi-had-pct">—</div><div class="kpi-click-hint">▶ click to filter</div></div>
-        <div class="kpi-card clickable" id="kpicard-app" style="--card-accent:var(--blue)" onclick="kpiFilter('kpicard-app','App Engaged','Yes')"><div class="kpi-label">App Engaged</div><div class="kpi-value" id="kpi-app">—</div><div class="kpi-sub" id="kpi-app-pct">—</div><div class="kpi-click-hint">▶ click to filter</div></div>
-        <div class="kpi-card clickable" id="kpicard-highfu" style="--card-accent:var(--accent3)" onclick="kpiFilter('kpicard-highfu','Follow Up Priority','High')"><div class="kpi-label">High Follow-Up</div><div class="kpi-value" id="kpi-highfu">—</div><div class="kpi-sub">priority leads</div><div class="kpi-click-hint">▶ click to filter</div></div>
-        <div class="kpi-card clickable" id="kpicard-eproc" style="--card-accent:var(--purple)" onclick="kpiFilter('kpicard-eproc','Opportunity Type','e-Procurement')"><div class="kpi-label">e-Proc Leads</div><div class="kpi-value" id="kpi-eproc">—</div><div class="kpi-sub">integration opps</div><div class="kpi-click-hint">▶ click to filter</div></div>
-        <div class="kpi-card" style="--card-accent:var(--accent)"><div class="kpi-label">Avg Activation <span class="tip" data-tip="How digitally ready and worth investing in each customer is, based on behaviour, interest, tech level and barriers. Boosted +20 if they placed a digital order within 45 days of a visit."><span class="tip-icon">i</span></span></div><div class="kpi-value" id="kpi-avg-score">—</div><div class="kpi-sub">activation potential</div></div>
-        <div class="kpi-card" style="--card-accent:var(--purple)"><div class="kpi-label">Avg Visit Outcome <span class="tip" data-tip="How productive each individual visit was digitally. Rewards account openings, orders placed, ERP/OCI conversations and follow-ups booked. N/A and absent visits score 0 and are excluded from averages."><span class="tip-icon">i</span></span></div><div class="kpi-value" id="kpi-avg-outcome">—</div><div class="kpi-sub">visit outcome score</div></div>
-        <div class="kpi-card clickable" id="kpicard-highint" style="--card-accent:var(--green)" onclick="kpiFilter('kpicard-highint','Interest Level','High')"><div class="kpi-label">High Interest</div><div class="kpi-value" id="kpi-high-int">—</div><div class="kpi-sub" id="kpi-high-int-pct">—</div><div class="kpi-click-hint">▶ click to filter</div></div>
       </div>
       <div class="section-divider">🛒 Order Metrics <span id="ord-kpi-status" style="font-weight:400;font-size:10px;color:var(--text3);margin-left:6px"></span></div>
       <div class="kpi-grid">
@@ -453,30 +445,111 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
         <div class="kpi-card" style="--card-accent:var(--accent2)"><div class="kpi-label">App Orders</div><div class="kpi-value" id="ord-kpi-app">—</div><div class="kpi-sub">channels 303 & 304</div></div>
         <div class="kpi-card" style="--card-accent:var(--green)"><div class="kpi-label">% Autonomous</div><div class="kpi-value" id="ord-kpi-auto-pct">—</div><div class="kpi-sub">customer self-served</div></div>
       </div>
+      <div class="section-divider">🌐 eBusiness <span id="ebiz-kpi-status" style="font-weight:400;font-size:10px;color:var(--text3);margin-left:6px"></span></div>
+      <div class="kpi-grid">
+        <div class="kpi-card" style="--card-accent:var(--blue)"><div class="kpi-label">Registered Customers</div><div class="kpi-value" id="ebiz-kpi-regcust">—</div><div class="kpi-sub" id="ebiz-kpi-month">—</div></div>
+        <div class="kpi-card" style="--card-accent:var(--green)"><div class="kpi-label">Active Last Month</div><div class="kpi-value" id="ebiz-kpi-active">—</div><div class="kpi-sub">of registered base</div></div>
+        <div class="kpi-card" style="--card-accent:var(--accent3)"><div class="kpi-label">Orders — Total / e-Shop</div><div class="kpi-value" id="ebiz-kpi-orders">—</div><div class="kpi-sub" id="ebiz-kpi-orders-sub">last month</div></div>
+        <div class="kpi-card" style="--card-accent:var(--purple)"><div class="kpi-label">Turnover LM</div><div class="kpi-value" id="ebiz-kpi-turnover">—</div><div class="kpi-sub">€ last month</div></div>
+        <div class="kpi-card" style="--card-accent:var(--green)"><div class="kpi-label">e-Shop Share <span class="tip" data-tip="e-Shop turnover as a % of total turnover last month, recomputed server-side. Company target is 14.5%."><span class="tip-icon">i</span></span></div><div class="kpi-value" id="ebiz-kpi-share">—</div><div class="kpi-sub" id="ebiz-kpi-share-badge">—</div></div>
+      </div>
       <div class="charts-grid" style="grid-template-columns:1.2fr 0.8fr">
         <div class="chart-card"><div class="chart-title"><span class="dot" style="background:var(--blue)"></span>Interest Level</div><div style="height:200px"><canvas id="chart-interest"></canvas></div></div>
         <div class="chart-card"><div class="chart-title"><span class="dot" style="background:var(--green)"></span>Digital Maturity</div><div style="height:200px"><canvas id="chart-maturity"></canvas></div></div>
       </div>
       <div class="charts-grid" style="grid-template-columns:1fr 1fr;margin-top:14px">
         <div class="chart-card"><div class="chart-title"><span class="dot" style="background:var(--accent3)"></span>Top Barriers</div><div style="height:200px"><canvas id="chart-barriers"></canvas></div></div>
-        <div class="chart-card"><div class="chart-title"><span class="dot" style="background:var(--purple)"></span>Opportunity Types</div><div style="height:200px"><canvas id="chart-opps"></canvas></div></div>
-      </div>
-      <div class="chart-card" style="margin-top:14px"><div class="chart-title"><span class="dot"></span>Visits Over Time</div><div style="height:165px"><canvas id="chart-timeline"></canvas></div></div>
-      <div class="charts-grid" style="grid-template-columns:1fr 1fr;margin-top:14px">
-        <div class="chart-card"><div class="chart-title"><span class="dot" style="background:var(--accent)"></span>Digital Behaviour</div><div style="height:185px"><canvas id="chart-behaviour"></canvas></div></div>
-        <div class="chart-card"><div class="chart-title"><span class="dot" style="background:var(--green)"></span>Follow-Up Priority</div><div style="height:185px"><canvas id="chart-followup"></canvas></div></div>
+        <div class="chart-card"><div class="chart-title"><span class="dot" style="background:var(--accent)"></span>Digital Behaviour</div><div style="height:200px"><canvas id="chart-behaviour"></canvas></div></div>
       </div>
     </div>
 
-    <!-- ── FIELD DATA (Visit Table + Rep Summary toggle) ────────────────── -->
-    <div id="tab-fielddata" class="tab-content">
+    <!-- ── PEOPLE (unified rep performance + eBiz) ─────────────────────── -->
+    <div id="tab-people" class="tab-content">
+      <div class="section-divider">🎯 Interest & Follow-Up</div>
+      <div class="kpi-grid">
+        <div class="kpi-card" style="--card-accent:var(--accent)"><div class="kpi-label">Avg Activation <span class="tip" data-tip="How digitally ready and worth investing in each customer is, based on behaviour, interest, tech level and barriers. Boosted +20 if they placed a digital order within 45 days of a visit."><span class="tip-icon">i</span></span></div><div class="kpi-value" id="kpi-avg-score">—</div><div class="kpi-sub">activation potential</div></div>
+        <div class="kpi-card" style="--card-accent:var(--purple)"><div class="kpi-label">Avg Visit Outcome <span class="tip" data-tip="How productive each individual visit was digitally. Rewards account openings, orders placed, ERP/OCI conversations and follow-ups booked. N/A and absent visits score 0 and are excluded from averages."><span class="tip-icon">i</span></span></div><div class="kpi-value" id="kpi-avg-outcome">—</div><div class="kpi-sub">visit outcome score</div></div>
+        <div class="kpi-card clickable" id="kpicard-highint" style="--card-accent:var(--green)" onclick="kpiFilter('kpicard-highint','Interest Level','High')"><div class="kpi-label">High Interest</div><div class="kpi-value" id="kpi-high-int">—</div><div class="kpi-sub" id="kpi-high-int-pct">—</div><div class="kpi-click-hint">▶ click to filter</div></div>
+        <div class="kpi-card clickable" id="kpicard-highfu" style="--card-accent:var(--accent3)" onclick="kpiFilter('kpicard-highfu','Follow Up Priority','High')"><div class="kpi-label">High Follow-Up</div><div class="kpi-value" id="kpi-highfu">—</div><div class="kpi-sub">priority leads</div><div class="kpi-click-hint">▶ click to filter</div></div>
+      </div>
+      <div class="table-section">
+        <div class="table-header">
+          <h3>Rep Performance <span style="font-size:11px;font-weight:400;color:var(--text3);margin-left:6px">Ride-along + eBusiness · Click a rep to expand details</span></h3>
+          <button class="btn btn-reset-inline" onclick="resetAllFilters()">✕ Reset All</button>
+        </div>
+        <div class="table-wrap">
+          <table class="rep-table"><thead><tr>
+            <th onclick="sortRep('name')">Sales Rep</th>
+            <th onclick="sortRep('division')">Division <span class="tip" data-tip="From eBiz History — reference only, not filterable here."><span class="tip-icon">i</span></span></th>
+            <th onclick="sortRep('visits')" class="rep-sort-desc">Visits</th>
+            <th onclick="sortRep('opened')">Opened</th><th onclick="sortRep('app')">App</th>
+            <th onclick="sortRep('highInt')">High Interest</th><th onclick="sortRep('highFU')">High Follow-Up</th>
+            <th onclick="sortRep('eproc')">e-Proc</th><th onclick="sortRep('ordered')">Ordered</th>
+            <th onclick="sortRep('avg')">Avg Activation <span class="tip" data-tip="Average Activation Potential across all visits by this rep (0–100)."><span class="tip-icon">i</span></span></th>
+            <th onclick="sortRep('avgOutcome')">Avg Visit Score <span class="tip" data-tip="Average Visit Outcome Score across all visits by this rep (0–100). Absent/N/A visits excluded."><span class="tip-icon">i</span></span></th>
+            <th onclick="sortRep('sr')">Success Rate</th>
+            <th onclick="sortRep('regCust')">Reg. Customers <span class="tip" data-tip="From eBiz History, latest month."><span class="tip-icon">i</span></span></th>
+            <th onclick="sortRep('activeLM')">Active LM</th>
+            <th onclick="sortRep('turnoverLM')">Turnover LM €</th>
+            <th onclick="sortRep('eshopShare')">e-Shop Share % <span class="tip" data-tip="e-Shop turnover as % of this rep's total turnover, latest month. Company target: 14.5%."><span class="tip-icon">i</span></span></th>
+          </tr></thead><tbody id="rep-tbody"></tbody></table>
+        </div>
+      </div>
+      <div id="rep-detail-panel" style="display:none" class="rep-detail-panel">
+        <div class="rep-detail-header">
+          <h3 id="rep-detail-name">—</h3>
+          <button class="btn btn-reset-inline" onclick="closeRepDetail()">✕ Close</button>
+        </div>
+        <div class="rep-detail-kpis" id="rep-detail-kpis"></div>
+        <div class="rep-detail-breakdowns">
+          <div class="rep-detail-breakdown">
+            <div class="rep-breakdown-title">Interest Distribution</div>
+            <div id="rep-detail-interest"></div>
+          </div>
+          <div class="rep-detail-breakdown">
+            <div class="rep-breakdown-title">Barrier Breakdown</div>
+            <div id="rep-detail-barriers"></div>
+          </div>
+        </div>
+        <div style="padding:0">
+          <div style="padding:12px 17px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+            <span style="font-family:var(--font-display);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3)">Visit Records</span>
+            <input class="drill-search" id="rep-detail-search" placeholder="Search…" oninput="renderRepDetailVisits()" style="width:160px">
+          </div>
+          <div class="table-wrap">
+            <table class="rep-mini-table">
+             <thead><tr id="rep-detail-thead">
+                <th onclick="sortRepDetail('Date')">Date</th><th onclick="sortRepDetail('Customer Number')">Customer #</th><th onclick="sortRepDetail('Company Name')">Company</th><th onclick="sortRepDetail('Interest Level')">Interest</th>
+                <th onclick="sortRepDetail('Digital Behaviour')">Behaviour</th><th onclick="sortRepDetail('Barrier Type')">Barrier</th><th onclick="sortRepDetail('Follow Up Priority')">Follow-Up</th><th onclick="sortRepDetail('Activation Potential')">Activation</th><th onclick="sortRepDetail('Visit Outcome Score')">Visit Score</th>
+              </tr></thead>
+              <tbody id="rep-detail-visits-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ACTIVITY (Visits + Coverage + Orders) ────────────────────────── -->
+    <div id="tab-activity" class="tab-content">
       <div class="sub-toggle">
-        <button class="sub-btn active" id="fd-btn-visits" onclick="switchFieldData('visits')">Visit Records</button>
-        <button class="sub-btn" id="fd-btn-reps" onclick="switchFieldData('reps')">Rep Summary</button>
+        <button class="sub-btn active" id="act-btn-visits" onclick="switchActivity('visits')">Visits</button>
+        <button class="sub-btn" id="act-btn-coverage" onclick="switchActivity('coverage')">Coverage</button>
+        <button class="sub-btn" id="act-btn-orders" onclick="switchActivity('orders')">Orders</button>
       </div>
 
-      <!-- Visit Records -->
-      <div id="fd-visits">
+      <!-- Visits -->
+      <div id="act-visits">
+        <div class="kpi-grid">
+          <div class="kpi-card clickable" id="kpicard-opened" style="--card-accent:var(--green)" onclick="kpiFilter('kpicard-opened','Opened During Visit','Yes')"><div class="kpi-label">Accounts Opened</div><div class="kpi-value" id="kpi-opened">—</div><div class="kpi-sub" id="kpi-opened-pct">—</div><div class="kpi-click-hint">▶ click to filter</div></div>
+          <div class="kpi-card clickable" id="kpicard-had" style="--card-accent:#06d6a0" onclick="kpiFilter('kpicard-had','Already Eshop Account','Yes')"><div class="kpi-label">Had Account</div><div class="kpi-value" id="kpi-had">—</div><div class="kpi-sub" id="kpi-had-pct">—</div><div class="kpi-click-hint">▶ click to filter</div></div>
+          <div class="kpi-card clickable" id="kpicard-app" style="--card-accent:var(--blue)" onclick="kpiFilter('kpicard-app','App Engaged','Yes')"><div class="kpi-label">App Engaged</div><div class="kpi-value" id="kpi-app">—</div><div class="kpi-sub" id="kpi-app-pct">—</div><div class="kpi-click-hint">▶ click to filter</div></div>
+          <div class="kpi-card clickable" id="kpicard-eproc" style="--card-accent:var(--purple)" onclick="kpiFilter('kpicard-eproc','Opportunity Type','e-Procurement')"><div class="kpi-label">e-Proc Leads</div><div class="kpi-value" id="kpi-eproc">—</div><div class="kpi-sub">integration opps</div><div class="kpi-click-hint">▶ click to filter</div></div>
+        </div>
+        <div class="charts-grid" style="grid-template-columns:1fr 1fr">
+          <div class="chart-card"><div class="chart-title"><span class="dot" style="background:var(--purple)"></span>Opportunity Types</div><div style="height:185px"><canvas id="chart-opps"></canvas></div></div>
+          <div class="chart-card"><div class="chart-title"><span class="dot" style="background:var(--green)"></span>Follow-Up Priority</div><div style="height:185px"><canvas id="chart-followup"></canvas></div></div>
+        </div>
+        <div class="chart-card" style="margin-top:14px;margin-bottom:14px"><div class="chart-title"><span class="dot"></span>Visits Over Time</div><div style="height:165px"><canvas id="chart-timeline"></canvas></div></div>
         <div class="table-section">
           <div class="table-header">
             <h3>Visit Records <span id="table-count-label" style="color:var(--text2);font-size:12px;font-weight:400"></span></h3>
@@ -507,70 +580,8 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
         </div>
       </div>
 
-      <!-- Rep Summary -->
-      <div id="fd-reps" style="display:none">
-        <div class="table-section">
-          <div class="table-header">
-            <h3>Sales Rep Performance <span style="font-size:11px;font-weight:400;color:var(--text3);margin-left:6px">Click a rep to expand details</span></h3>
-            <button class="btn btn-reset-inline" onclick="resetAllFilters()">✕ Reset All</button>
-          </div>
-          <div class="table-wrap">
-            <table class="rep-table"><thead><tr>
-              <th onclick="sortRep('name')">Sales Rep</th>
-              <th onclick="sortRep('visits')" class="rep-sort-desc">Visits</th>
-              <th onclick="sortRep('opened')">Opened</th><th onclick="sortRep('app')">App</th>
-              <th onclick="sortRep('highInt')">High Interest</th><th onclick="sortRep('highFU')">High Follow-Up</th>
-              <th onclick="sortRep('eproc')">e-Proc</th><th onclick="sortRep('ordered')">Ordered</th>
-              <th onclick="sortRep('avg')">Avg Activation <span class="tip" data-tip="Average Activation Potential across all visits by this rep (0–100)."><span class="tip-icon">i</span></span></th>
-              <th onclick="sortRep('avgOutcome')">Avg Visit Score <span class="tip" data-tip="Average Visit Outcome Score across all visits by this rep (0–100). Absent/N/A visits excluded."><span class="tip-icon">i</span></span></th>
-              <th onclick="sortRep('sr')">Success Rate</th>
-            </tr></thead><tbody id="rep-tbody"></tbody></table>
-          </div>
-        </div>
-        <div id="rep-detail-panel" style="display:none" class="rep-detail-panel">
-          <div class="rep-detail-header">
-            <h3 id="rep-detail-name">—</h3>
-            <button class="btn btn-reset-inline" onclick="closeRepDetail()">✕ Close</button>
-          </div>
-          <div class="rep-detail-kpis" id="rep-detail-kpis"></div>
-          <div class="rep-detail-breakdowns">
-            <div class="rep-detail-breakdown">
-              <div class="rep-breakdown-title">Interest Distribution</div>
-              <div id="rep-detail-interest"></div>
-            </div>
-            <div class="rep-detail-breakdown">
-              <div class="rep-breakdown-title">Barrier Breakdown</div>
-              <div id="rep-detail-barriers"></div>
-            </div>
-          </div>
-          <div style="padding:0">
-            <div style="padding:12px 17px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-              <span style="font-family:var(--font-display);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3)">Visit Records</span>
-              <input class="drill-search" id="rep-detail-search" placeholder="Search…" oninput="renderRepDetailVisits()" style="width:160px">
-            </div>
-            <div class="table-wrap">
-              <table class="rep-mini-table">
-               <thead><tr id="rep-detail-thead">
-                  <th onclick="sortRepDetail('Date')">Date</th><th onclick="sortRepDetail('Customer Number')">Customer #</th><th onclick="sortRepDetail('Company Name')">Company</th><th onclick="sortRepDetail('Interest Level')">Interest</th>
-                  <th onclick="sortRepDetail('Digital Behaviour')">Behaviour</th><th onclick="sortRepDetail('Barrier Type')">Barrier</th><th onclick="sortRepDetail('Follow Up Priority')">Follow-Up</th><th onclick="sortRepDetail('Activation Potential')">Activation</th><th onclick="sortRepDetail('Visit Outcome Score')">Visit Score</th>
-                </tr></thead>
-                <tbody id="rep-detail-visits-tbody"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── OPERATIONS (Coverage + Orders toggle) ────────────────────────── -->
-    <div id="tab-operations" class="tab-content">
-      <div class="sub-toggle">
-        <button class="sub-btn active" id="op-btn-coverage" onclick="switchOperations('coverage')">Coverage</button>
-        <button class="sub-btn" id="op-btn-orders" onclick="switchOperations('orders')">Orders</button>
-      </div>
-
       <!-- Coverage -->
-      <div id="op-coverage">
+      <div id="act-coverage" style="display:none">
         <div class="cov-kpi-row">
           <div class="cov-kpi" style="--card-accent:var(--accent)"><div class="cov-kpi-label">Total Customers</div><div class="cov-kpi-value" id="cov-kpi-total">—</div><div class="cov-kpi-sub">in Customers sheet</div></div>
           <div class="cov-kpi" style="--card-accent:var(--green)"><div class="cov-kpi-label">Visited</div><div class="cov-kpi-value" id="cov-kpi-visited">—</div><div class="cov-kpi-sub">at least once</div></div>
@@ -622,7 +633,7 @@ tbody td{padding:7px 10px;font-size:12px;white-space:nowrap;max-width:155px;over
       </div>
 
       <!-- Orders -->
-      <div id="op-orders" style="display:none">
+      <div id="act-orders" style="display:none">
         <div class="ord-kpi-row">
           <div class="ord-kpi" style="--card-accent:var(--green)"><div class="ord-kpi-label">Total Digital Orders</div><div class="ord-kpi-value" id="ord-total">—</div><div class="ord-kpi-sub">all channels</div></div>
           <div class="ord-kpi" style="--card-accent:var(--accent3)"><div class="ord-kpi-label">Total Value</div><div class="ord-kpi-value" id="ord-value">—</div><div class="ord-kpi-sub">€ net</div></div>
@@ -779,6 +790,7 @@ let ordCustSortCol='orders',ordCustSortDir=-1,ordCustPage=1;
 let ORD_KPI=null,ordVisitFilter='all';
 let _hierarchy={rsmSet:new Set(),asmByRsm:{},repByAsm:{}};
 let alertRows=[],alertType='all',alertSortCol='daysSinceVisit',alertSortDir=-1,alertPage=1;
+let EBIZ_DATA=null;
 const PAGE_SIZE=25,DRILL_SIZE=50,ORD_CUST_SIZE=25,AL_PAGE_SIZE=50;
 
 window.addEventListener('DOMContentLoaded',()=>{attachSidebarListeners();fetchLive();});
@@ -802,7 +814,41 @@ async function fetchLive(){
     fetchCoverageSummary();
     fetchOrderKPIs();
     fetchOrdersData();
+    fetchEBizStats();
   }catch(e){setStatus('err','✗ '+e.message);}
+}
+
+async function fetchEBizStats(){
+  const statusEl=document.getElementById('ebiz-kpi-status');
+  if(statusEl)statusEl.textContent='loading…';
+  try{
+    const r=await fetch(SCRIPT_URL+'?action=ebiz_stats');
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    EBIZ_DATA=await r.json();
+    renderEBizSnapshotKPIs();
+    renderRepTable();
+    if(statusEl)statusEl.textContent='';
+  }catch(e){if(statusEl)statusEl.textContent='⚠ '+e.message;}
+}
+
+function normRep(name){return String(name||'').replace(/,/g,' ').replace(/\s+/g,' ').trim().toUpperCase();}
+function ebizByRepLookup(){
+  const map={};
+  if(EBIZ_DATA&&EBIZ_DATA.byRep)EBIZ_DATA.byRep.forEach(r=>{map[normRep(r.rep)]=r;});
+  return map;
+}
+function renderEBizSnapshotKPIs(){
+  if(!EBIZ_DATA||!EBIZ_DATA.companyKpis||!EBIZ_DATA.latestMonth)return;
+  const ck=EBIZ_DATA.companyKpis;
+  document.getElementById('ebiz-kpi-regcust').textContent=Math.round(ck.regCust||0).toLocaleString();
+  document.getElementById('ebiz-kpi-month').textContent=EBIZ_DATA.latestMonth;
+  document.getElementById('ebiz-kpi-active').textContent=Math.round(ck.activeLM||0).toLocaleString();
+  document.getElementById('ebiz-kpi-orders').textContent=Math.round(ck.ordersTotal||0).toLocaleString()+' / '+Math.round(ck.ordersEshop||0).toLocaleString();
+  document.getElementById('ebiz-kpi-turnover').textContent='€'+Math.round(ck.turnoverLM||0).toLocaleString();
+  const share=ck.eshopSharePct||0;
+  document.getElementById('ebiz-kpi-share').textContent=share+'%';
+  const ok=share>=14.5;
+  document.getElementById('ebiz-kpi-share-badge').innerHTML=`<span class="badge ${ok?'by':'bni'}">${ok?'▲':'▼'} vs 14.5% target</span>`;
 }
 
 async function fetchCoverageSummary(){
@@ -1406,17 +1452,18 @@ ${barrierRows.map(([b,c])=>`<tr><td>${b}</td><td style="font-weight:700">${c}</t
 }
 
 // ── REP PERFORMANCE ──────────────────────────────────────────────────────────
-function filterByRep(name){document.getElementById('tf-rep').value=name;refreshRepOptions(name);applyFilters();switchTab('fielddata');switchFieldData('visits');}
+function filterByRep(name){document.getElementById('tf-rep').value=name;refreshRepOptions(name);applyFilters();switchTab('activity');switchActivity('visits');}
 function sortRep(col){
-  if(repSortCol===col)repSortDir*=-1;else{repSortCol=col;repSortDir=col==='name'?1:-1;}
+  if(repSortCol===col)repSortDir*=-1;else{repSortCol=col;repSortDir=(col==='name'||col==='division')?1:-1;}
   document.querySelectorAll('.rep-table th').forEach(th=>th.classList.remove('rep-sort-asc','rep-sort-desc'));
-  const cols=['name','visits','opened','app','highInt','highFU','eproc','avg','sr'];
+  const cols=['name','division','visits','opened','app','highInt','highFU','eproc','ordered','avg','avgOutcome','sr','regCust','activeLM','turnoverLM','eshopShare'];
   const idx=cols.indexOf(col);if(idx>=0)document.querySelectorAll('.rep-table th')[idx].classList.add(repSortDir===1?'rep-sort-asc':'rep-sort-desc');
   renderRepTable();
 }
 function renderRepTable(){
   if(activeRepDetail){const stillExists=filtered.some(r=>r['Sales Rep']===activeRepDetail);if(!stillExists)closeRepDetail();}
   const reps=[...new Set(filtered.map(r=>r['Sales Rep']).filter(Boolean))];
+  const ebizMap=ebizByRepLookup();
   const data=reps.map(rep=>{
     const v=filtered.filter(r=>r['Sales Rep']===rep),n=v.length;
     const opened=v.filter(r=>r['Opened During Visit']==='Yes').length;
@@ -1430,12 +1477,23 @@ function renderRepTable(){
     const avgOutcome=oc.length?Math.round(oc.reduce((a,b)=>a+b,0)/oc.length):0;
     const ordered=new Set(v.filter(r=>r['Has Orders']==='Yes').map(r=>r['Customer Number'])).size;
     const sr=n?Math.round((opened+hI)/n*100):0;
-    return{name:rep,visits:n,opened,app,highInt:hI,highFU:hFU,eproc:ep,avg,avgOutcome,ordered,sr};
+    const eb=ebizMap[normRep(rep)]||null;
+    return{name:rep,visits:n,opened,app,highInt:hI,highFU:hFU,eproc:ep,avg,avgOutcome,ordered,sr,
+      division:eb?Object.keys(eb.divisions).join(', '):'—',
+      regCust:eb?eb.total.regCust:null,activeLM:eb?eb.total.activeLM:null,
+      turnoverLM:eb?eb.total.turnoverLM:null,eshopShare:eb?eb.total.eshopSharePct:null};
   });
-  data.sort((a,b)=>{let va=a[repSortCol],vb=b[repSortCol];if(typeof va==='string')return va.localeCompare(vb)*repSortDir;return(va-vb)*repSortDir;});
+  data.sort((a,b)=>{
+    let va=a[repSortCol],vb=b[repSortCol];
+    if(va===null||va===undefined)va=repSortDir===1?-Infinity:Infinity;
+    if(vb===null||vb===undefined)vb=repSortDir===1?-Infinity:Infinity;
+    if(typeof va==='string')return va.localeCompare(vb)*repSortDir;
+    return(va-vb)*repSortDir;
+  });
   document.getElementById('rep-tbody').innerHTML=data.map(d=>`
     <tr style="cursor:pointer" data-rep="${d.name.replace(/"/g,'&quot;')}" onclick="showRepDetail('${d.name.replace(/'/g,"\\'")}')">
       <td style="font-weight:600">${d.name} <span style="font-size:10px;color:var(--text3);margin-left:4px">▸</span></td>
+      <td style="color:var(--text2);font-size:11px">${d.division}</td>
       <td style="text-align:center;font-weight:700">${d.visits}</td>
       <td style="text-align:center"><span style="color:var(--green);font-weight:600">${d.opened}</span><span style="color:var(--text3);font-size:10px"> (${d.visits?Math.round(d.opened/d.visits*100):0}%)</span></td>
       <td style="text-align:center">${d.app}</td>
@@ -1446,9 +1504,13 @@ function renderRepTable(){
       <td style="text-align:center;font-weight:700;color:${d.avg>=60?'var(--green)':d.avg>=35?'var(--accent3)':'var(--accent)'}">${d.avg}</td>
       <td style="text-align:center;font-weight:700;color:${d.avgOutcome>=50?'var(--green)':d.avgOutcome>=25?'var(--accent3)':'var(--accent)'}">${d.avgOutcome}</td>
       <td><div style="display:flex;align-items:center;gap:7px"><div style="flex:1;height:5px;background:var(--surface3);border-radius:3px"><div style="width:${d.sr}%;height:100%;background:var(--green);border-radius:3px"></div></div><span style="font-size:10px;color:var(--text2)">${d.sr}%</span></div></td>
+      <td style="text-align:center">${d.regCust!=null?Math.round(d.regCust).toLocaleString():'—'}</td>
+      <td style="text-align:center">${d.activeLM!=null?Math.round(d.activeLM).toLocaleString():'—'}</td>
+      <td style="text-align:center">${d.turnoverLM!=null?'€'+Math.round(d.turnoverLM).toLocaleString():'—'}</td>
+      <td style="text-align:center;font-weight:700;color:${d.eshopShare==null?'var(--text3)':d.eshopShare>=14.5?'var(--green)':'var(--accent)'}">${d.eshopShare!=null?d.eshopShare+'%':'—'}</td>
     </tr>`).join('');
   document.querySelectorAll('.rep-table th').forEach(th=>th.classList.remove('rep-sort-asc','rep-sort-desc'));
-  const cols=['name','visits','opened','app','highInt','highFU','eproc','ordered','avg','avgOutcome','sr'];
+  const cols=['name','division','visits','opened','app','highInt','highFU','eproc','ordered','avg','avgOutcome','sr','regCust','activeLM','turnoverLM','eshopShare'];
   const idx=cols.indexOf(repSortCol);if(idx>=0)document.querySelectorAll('.rep-table th')[idx].classList.add(repSortDir===1?'rep-sort-asc':'rep-sort-desc');
 }
 
@@ -1949,32 +2011,27 @@ function renderAlerts(){
 
 
 function switchTab(name){
-  const names=['overview','fielddata','operations','alerts'];
+  const names=['snapshot','people','activity','alerts'];
   document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',names[i]===name));
   document.querySelectorAll('.tab-content').forEach(tc=>tc.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
-  if(name==='fielddata')renderTable();
-  if(name==='operations'){
-    if(COV_DATA.length===0)fetchCoverageSummary();
+  if(name==='people')renderRepTable();
+  if(name==='activity'){
+    renderTable();
+    updateCharts();
+    if(COV_DATA.length===0)fetchCoverageSummary();else renderCovTable();
     if(ORD_DATA)renderOrdersSection();
   }
   if(name==='alerts')buildAlerts();
 }
-function switchFieldData(view){
-  ['visits','reps'].forEach(v=>{
-    document.getElementById('fd-'+v).style.display=v===view?'block':'none';
-    document.getElementById('fd-btn-'+v).classList.toggle('active',v===view);
+function switchActivity(view){
+  ['visits','coverage','orders'].forEach(v=>{
+    document.getElementById('act-'+v).style.display=v===view?'block':'none';
+    document.getElementById('act-btn-'+v).classList.toggle('active',v===view);
   });
-  if(view==='visits'){closeRepDetail&&closeRepDetail();renderTable();}
-  if(view==='reps')renderRepTable();
-}
-function switchOperations(view){
-  ['coverage','orders'].forEach(v=>{
-    document.getElementById('op-'+v).style.display=v===view?'block':'none';
-    document.getElementById('op-btn-'+v).classList.toggle('active',v===view);
-  });
-  if(view==='orders'&&ORD_DATA)renderOrdersSection();
+  if(view==='visits'){renderTable();updateCharts();}
   if(view==='coverage')renderCovTable();
+  if(view==='orders'&&ORD_DATA)renderOrdersSection();
 }
 </script>
 </body>
