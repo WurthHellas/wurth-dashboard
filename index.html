@@ -837,12 +837,28 @@ function ebizByRepLookup(){
   if(EBIZ_DATA&&EBIZ_DATA.byRep)EBIZ_DATA.byRep.forEach(r=>{map[normRep(r.rep)]=r;});
   return map;
 }
+function ebizMonthsInRange(dFrom,dTo){
+  if(!EBIZ_DATA||!EBIZ_DATA.months||!EBIZ_DATA.months.length)return[];
+  if(!dFrom&&!dTo)return[EBIZ_DATA.months[EBIZ_DATA.months.length-1]];
+  return EBIZ_DATA.months.filter(m=>{
+    const[y,mo]=m.split('-').map(Number);
+    const mStart=new Date(y,mo-1,1),mEnd=new Date(y,mo,0);
+    if(dFrom&&mEnd<dFrom)return false;
+    if(dTo&&mStart>dTo)return false;
+    return true;
+  });
+}
 function renderEBizSnapshotKPIs(){
   if(!EBIZ_DATA||!EBIZ_DATA.latestMonth)return;
   const rsm=(document.getElementById('tf-rsm')||{}).value||'';
   const asm=(document.getElementById('tf-asm')||{}).value||'';
   const rep=(document.getElementById('tf-rep')||{}).value||'';
-  const rows=(EBIZ_DATA.currentMonth||[]).filter(r=>{
+  const dFrom=pd((document.getElementById('tf-date-from')||{value:''}).value);
+  const dTo=pd((document.getElementById('tf-date-to')||{value:''}).value);
+  const months=ebizMonthsInRange(dFrom,dTo);
+  const monthSet=new Set(months);
+  const rows=(EBIZ_DATA.history||[]).filter(r=>{
+    if(!monthSet.has(r.month))return false;
     if(rsm&&r.rsm!==rsm)return false;
     if(asm&&r.asm!==asm)return false;
     if(rep&&normRep(r.rep)!==normRep(rep))return false;
@@ -854,8 +870,10 @@ function renderEBizSnapshotKPIs(){
     ck.ordersEshop+=r.ordersEshop;ck.turnoverLM+=r.turnoverLM;ck.eshopTurnover+=r.eshopTurnover;
   });
   ck.eshopSharePct=ck.turnoverLM>0?Math.round(ck.eshopTurnover/ck.turnoverLM*10000)/100:0;
+  const filterNote=(rsm||asm||rep)?' · filtered':'';
+  const monthLabel=months.length===0?'no data':months.length===1?months[0]+filterNote:months[0]+' → '+months[months.length-1]+' (combined)'+filterNote;
   document.getElementById('ebiz-kpi-regcust').textContent=Math.round(ck.regCust).toLocaleString();
-  document.getElementById('ebiz-kpi-month').textContent=EBIZ_DATA.latestMonth+((rsm||asm||rep)?' · filtered':'');
+  document.getElementById('ebiz-kpi-month').textContent=monthLabel;
   document.getElementById('ebiz-kpi-active').textContent=Math.round(ck.activeLM).toLocaleString();
   document.getElementById('ebiz-kpi-orders').textContent=Math.round(ck.ordersTotal).toLocaleString()+' / '+Math.round(ck.ordersEshop).toLocaleString();
   document.getElementById('ebiz-kpi-turnover').textContent='€'+Math.round(ck.turnoverLM).toLocaleString();
