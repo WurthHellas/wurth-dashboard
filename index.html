@@ -848,6 +848,20 @@ function ebizMonthsInRange(dFrom,dTo){
     return true;
   });
 }
+function ebizActiveCustomerCount(rangeStart,rangeEnd,rsm,asm,rep){
+  if(!ORD_DATA||!ORD_DATA.allOrders)return null;
+  const set=new Set();
+  ORD_DATA.allOrders.forEach(o=>{
+    const d=pd(o.date);if(!d)return;
+    if(rangeStart&&d<rangeStart)return;
+    if(rangeEnd&&d>rangeEnd)return;
+    if(rsm&&o.rsm!==rsm)return;
+    if(asm&&o.asm!==asm)return;
+    if(rep&&o.salesRep!==rep)return;
+    set.add(o.custNum);
+  });
+  return set.size;
+}
 function renderEBizSnapshotKPIs(){
   if(!EBIZ_DATA||!EBIZ_DATA.latestMonth)return;
   const rsm=(document.getElementById('tf-rsm')||{}).value||'';
@@ -875,16 +889,23 @@ function renderEBizSnapshotKPIs(){
   ck.eshopSharePct=ck.turnoverLM>0?Math.round(ck.eshopTurnover/ck.turnoverLM*10000)/100:0;
 
   const snapRows=(EBIZ_DATA.history||[]).filter(r=>r.month===latestInRange&&matchFilters(r));
-  let regCust=0,activeLM=0;
-  snapRows.forEach(r=>{regCust+=r.regCust;activeLM+=r.activeLM;});
+  let regCust=0;
+  snapRows.forEach(r=>{regCust+=r.regCust;});
+
+  let rangeStart=dFrom,rangeEnd=dTo;
+  if(!rangeStart&&!rangeEnd&&latestInRange){
+    const[y,mo]=latestInRange.split('-').map(Number);
+    rangeStart=new Date(y,mo-1,1);rangeEnd=new Date(y,mo,0);
+  }
+  const activeCount=ebizActiveCustomerCount(rangeStart,rangeEnd,rsm,asm,rep);
 
   const filterNote=(rsm||asm||rep)?' · filtered':'';
   const periodLabel=months.length===0?'no data':months.length===1?months[0]:months[0]+' → '+months[months.length-1];
 
   document.getElementById('ebiz-kpi-regcust').textContent=Math.round(regCust).toLocaleString();
   document.getElementById('ebiz-kpi-month').textContent=(latestInRange?'as of '+latestInRange:'—')+filterNote;
-  document.getElementById('ebiz-kpi-active').textContent=Math.round(activeLM).toLocaleString();
-  document.getElementById('ebiz-kpi-active-sub').textContent=latestInRange?'as of '+latestInRange:'of registered base';
+  document.getElementById('ebiz-kpi-active').textContent=activeCount!=null?activeCount.toLocaleString():'—';
+  document.getElementById('ebiz-kpi-active-sub').textContent=(activeCount!=null?'distinct, ':'loading orders… ')+periodLabel+filterNote;
   document.getElementById('ebiz-kpi-orders').textContent=Math.round(ck.ordersTotal).toLocaleString()+' / '+Math.round(ck.ordersEshop).toLocaleString();
   document.getElementById('ebiz-kpi-orders-sub').textContent=periodLabel;
   document.getElementById('ebiz-kpi-turnover').textContent='€'+Math.round(ck.turnoverLM).toLocaleString();
@@ -931,6 +952,7 @@ async function fetchOrdersData(){
     if(!r.ok)throw new Error('HTTP '+r.status);
     ORD_DATA=await r.json();
     renderOrdersSection();
+    renderEBizSnapshotKPIs();
     buildAlerts();
   }catch(e){document.getElementById('ord-total').textContent='⚠ '+e.message;}
 }
