@@ -1049,6 +1049,7 @@ function updateFilterBadge(){const n=countActiveFilters(),el=document.getElement
 
 // ── DATE PARSE ──────────────────────────────────────────────────────────────
 const pd=s=>{if(!s)return null;const p=s.split('/');return p.length===3?new Date(+p[2],+p[1]-1,+p[0]):null;};
+const fmtDay=s=>{const d=pd(s);return d?d.toLocaleDateString('en-GB',{weekday:'short'})+' '+s:(s||'—');};
 const daysBetween=(d1,d2)=>Math.floor((d2-d1)/86400000);
 
 // ── FILTERS ─────────────────────────────────────────────────────────────────
