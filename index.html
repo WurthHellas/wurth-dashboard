@@ -1127,6 +1127,7 @@ function updateKPIs(){
   const scores=filtered.map(r=>+r['Activation Potential']).filter(s=>s>0);
   const avg=scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length):0;
   const outcomes=filtered.map(r=>+r['Visit Outcome Score']).filter(s=>s>0);
+  
   const avgOutcome=outcomes.length?Math.round(outcomes.reduce((a,b)=>a+b,0)/outcomes.length):0;
   const highInt=filtered.filter(r=>r['Interest Level']==='High').length;
   const repsSet=new Set(filtered.map(r=>r['Sales Rep']).filter(Boolean));
@@ -1276,7 +1277,7 @@ function renderTable(){
   document.getElementById('table-count-label').textContent='('+total+' records)';
   document.getElementById('table-body').innerHTML=rows.slice(start,end).map((r,i)=>`
     <tr onclick="openModal('${encodeURIComponent(r['Customer Number'])}','${encodeURIComponent(r['Date'])}')">
-      <td>${r['Date']}</td><td title="${r['Sales Rep']}">${r['Sales Rep']}</td>
+      <td style="white-space:nowrap">${fmtDay(r['Date'])}</td><td title="${r['Sales Rep']}">${r['Sales Rep']}</td>
       <td style="font-family:monospace;font-size:11px">${r['Customer Number']}</td>
       <td style="font-weight:500" title="${r['Company Name']||''}">${r['Company Name']||'—'}</td>
       <td style="color:var(--text2)">${r['RSM']||'—'}</td><td style="color:var(--text2)">${r['ASM']||'—'}</td>
@@ -1316,7 +1317,7 @@ function openModal(custNumEnc, dateEnc){
   if(!r)return;
 
   document.getElementById('modal-title').textContent=r['Company Name']||'Customer '+custNum;
-  document.getElementById('modal-sub').textContent=custNum+'  ·  '+r['Sales Rep']+'  ·  '+r['Date'];
+  document.getElementById('modal-sub').textContent=custNum+'  ·  '+r['Sales Rep']+'  ·  '+fmtDay(r['Date']);
 
   const fields=[
     ['Company Name',r['Company Name']],['RSM',r['RSM']],['ASM',r['ASM']],['Division',r['Division']],
@@ -1680,7 +1681,7 @@ function showRepDetail(name){
   });
   document.getElementById('rep-detail-visits-tbody').innerHTML=v.length
     ?v.map(r=>`<tr onclick="openModal('${encodeURIComponent(r['Customer Number'])}','${encodeURIComponent(r['Date'])}')">
-      <td style="white-space:nowrap">${r['Date']}</td>
+      <td style="white-space:nowrap">${fmtDay(r['Date'])}</td>
       <td style="font-family:monospace;font-size:10px">${r['Customer Number']}</td>
       <td style="font-weight:500;max-width:160px;overflow:hidden;text-overflow:ellipsis" title="${(r['Company Name']||'').replace(/"/g,'&quot;')}">${r['Company Name']||'—'}</td>
       <td>${bInt(r['Interest Level'])}</td>
