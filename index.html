@@ -1068,7 +1068,7 @@ function applyFilters(){
   filtered=ALL_DATA.filter(r=>{
     if(rsm&&r['RSM']!==rsm)return false;
     if(asm&&r['ASM']!==asm)return false;
-    if(rep&&r['Sales Rep']!==rep)return false;
+    if(rep&&normRep(r['Sales Rep'])!==normRep(rep))return false;
     if(already&&r['Already Eshop Account']!==already)return false;
     if(opened&&r['Opened During Visit']!==opened)return false;
     if(app&&r['App Engaged']!==app)return false;
@@ -1178,7 +1178,7 @@ function renderOverviewOrderKPIs(){
     const visitedCusts=new Set(ALL_DATA.filter(r=>{
       if(dFrom){const d=pd(r['Date']);if(!d||d<dFrom)return false;}
       if(dTo){const d=pd(r['Date']);if(!d||d>dTo)return false;}
-      if(rsm&&r['RSM']!==rsm)return false;if(asm&&r['ASM']!==asm)return false;if(rep&&r['Sales Rep']!==rep)return false;
+      if(rsm&&r['RSM']!==rsm)return false;if(asm&&r['ASM']!==asm)return false;if(rep&&normRep(r['Sales Rep'])!==normRep(rep))return false;
       return true;
     }).map(r=>r['Customer Number']).filter(Boolean));
     const converted=new Set(fo.filter(o=>visitedCusts.has(o.custNum)).map(o=>o.custNum)).size;
@@ -1931,7 +1931,7 @@ function buildAlerts(){
     // Apply hierarchy filter
     if(rsm&&latest['RSM']!==rsm)return;
     if(asm&&latest['ASM']!==asm)return;
-    if(rep&&latest['Sales Rep']!==rep)return;
+    if(rep&&normRep(latest['Sales Rep'])!==normRep(rep))return;
     const latestDate=pd(latest['Date']);
     if(!latestDate)return;
     const daysAgo=daysBetween(latestDate,now);
